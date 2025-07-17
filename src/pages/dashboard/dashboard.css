@@ -1,0 +1,13 @@
+.dash-main {
+  width: 100vw;
+  height: 100vh;
+  background-color: #fff; /* Black background for testing */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
