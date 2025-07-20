@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Landing from '../pages/landing/landing';
 import Dash from '../pages/dashboard/dashboard';
+import Payment from '../components/payment/payment';
 
 const App = () => {
     return (
@@ -8,7 +9,7 @@ const App = () => {
             <Router>
                 <Routes>
                     <Route path='/' element={<Landing />} />
-                    <Route path='/test' element={<Dash />} />
+                    <Route path='/test' element={<Payment />} />
                 </Routes>
             </Router>
         </div>
