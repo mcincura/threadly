@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import * as THREE from 'three';
 import './landing.css';
 import Section2 from '../../components/LandingSection2/section2'
+import Payment from '../../components/payment/payment';
 
 const Landing = () => {
     const threeRef = useRef();
@@ -11,6 +12,24 @@ const Landing = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [isSection2, setIsSection2] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
+    const section3Ref = useRef();
+    const section3ContentRef = useRef();
+    const [isSection3, setIsSection3] = useState(false);
+    const [hasExpandedSection3, setHasExpandedSection3] = useState(false); // optional fine control
+
+    const scrollToSection2 = () => {
+        window.scrollTo({
+            top: window.innerHeight * 0.5,
+            behavior: 'smooth'
+        });
+    };
+
+    const scrollToSection3 = () => {
+        window.scrollTo({
+            top: window.innerHeight * 2.5,
+            behavior: 'smooth'
+        });
+    };
 
     // Detect mobile device
     useEffect(() => {
@@ -23,10 +42,14 @@ const Landing = () => {
         return () => window.removeEventListener('resize', checkIsMobile);
     }, []);
 
-    // section 2 true/false 
+    // section 2 & 3 true/false 
     useEffect(() => {
         console.log(`isSection2 updated to ${isSection2}`);
     }, [isSection2]);
+
+    useEffect(() => {
+        console.log(`isSection3 updated to: ${isSection3}`);
+    }, [isSection3]);
 
     //SECTION2 ANIMATION
     useEffect(() => {
@@ -74,9 +97,11 @@ const Landing = () => {
                 // Content fade-in
                 if (progress >= 1) {
                     section2ContentRef.current.style.opacity = 1;
+                    section2ContentRef.current.style.display = "flex";
                     setIsSection2(true);
                 } else {
                     section2ContentRef.current.style.opacity = 0;
+                    section2ContentRef.current.style.display = "none";
                     setIsSection2(false);
                 }
             }
@@ -85,6 +110,65 @@ const Landing = () => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, [isMobile]);
+
+    // SECTION3 ANIMATION
+    useEffect(() => {
+        if (!isSection3) return; // Only animate if Section3 is active
+
+        const handleScroll = () => {
+            const scrollY = window.scrollY;
+            const startScroll = window.innerHeight * 2;
+            const maxScroll = window.innerHeight * 0.5;
+            const rawProgress = (scrollY - startScroll) / maxScroll;
+            const progress = Math.min(Math.max(rawProgress, 0), 1);
+
+            if (section3Ref.current && section3ContentRef.current) {
+                let heightPercent, widthPercent;
+
+                if (isMobile) {
+                    if (progress < 0.5) {
+                        const widthProgress = progress / 0.5;
+                        widthPercent = 100 * widthProgress;
+                        heightPercent = 2;
+                    } else {
+                        widthPercent = 100;
+                        const heightProgress = (progress - 0.5) / 0.5;
+                        heightPercent = 20 + 80 * heightProgress;
+                    }
+                } else {
+                    if (progress < 0.5) {
+                        const heightProgress = progress / 0.5;
+                        heightPercent = 100 * heightProgress;
+                        widthPercent = 0.5;
+                    } else {
+                        heightPercent = 100;
+                        const widthProgress = (progress - 0.5) / 0.5;
+                        widthPercent = 0.5 + 99.5 * widthProgress;
+                    }
+                }
+
+                section3Ref.current.style.height = `${heightPercent}vh`;
+                section3Ref.current.style.width = `${widthPercent}vw`;
+
+                if (progress >= 1) {
+                    document.body.style.setProperty('--scrollbar-track-color', '#121212');
+                }
+
+                if (progress >= 1) {
+                    section3ContentRef.current.style.opacity = 1;
+                    setHasExpandedSection3(true);
+                } else {
+                    section3ContentRef.current.style.opacity = 0;
+                    setHasExpandedSection3(false);
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Run once in case user scrolls quickly
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [isSection3, isMobile]);
 
     //SECTION2 COMPONENT
     useEffect(() => {
@@ -110,6 +194,14 @@ const Landing = () => {
             window.removeEventListener('scroll', handleScrollProgress);
         };
     }, [isSection2]);
+
+    // Trigger setIsSection3 when scrollProgress reaches 1
+    useEffect(() => {
+        if (scrollProgress === 1) {
+            setIsSection3(true);
+            console.log(isSection3);
+        }
+    }, [scrollProgress]);
 
     //THREE.JS
     useEffect(() => {
@@ -325,7 +417,7 @@ const Landing = () => {
                         transition={{ duration: 1.2 }}>
                         <motion.button
                             className="cta-button ghost"
-                            onClick={() => document.getElementById('section-2')?.scrollIntoView({ behavior: 'smooth' })}
+                            onClick={scrollToSection2}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 1.2 }}>
@@ -333,7 +425,7 @@ const Landing = () => {
                         </motion.button>
                         <motion.button
                             className="cta-button solid"
-                            onClick={() => document.getElementById('section-3')?.scrollIntoView({ behavior: 'smooth' })}
+                            onClick={scrollToSection3}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 1.2 }}>
@@ -351,6 +443,15 @@ const Landing = () => {
                     />
                 </div>
             </div>
+            <div ref={section3Ref} className="landing-section-3" id="section-3">
+                <div ref={section3ContentRef} className="landing-section-3-content">
+                    <Payment
+                        hasExpandedSection3={hasExpandedSection3}
+                        isMobile={isMobile}
+                    />
+                </div>
+            </div>
+
             <div className="scroll-buffer"></div>
         </div>
     );

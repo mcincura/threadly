@@ -48,13 +48,12 @@ body {
   box-shadow: none;
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
+@media only screen and (max-width: 768px) {
   ::-webkit-scrollbar {
-    width: 6px;
+    display: none; /* Hide scrollbar for Chrome, Safari, Opera */
   }
-
-  ::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0);
+  body {
+    -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
   }
 }

@@ -1,225 +1,460 @@
-import { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import * as THREE from 'three';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, useGLTF } from '@react-three/drei';
-import './section2.css'
-import { ContactShadows } from '@react-three/drei';
+import './landing.css';
+import Section2 from '../../components/LandingSection2/section2'
+import Payment from '../../components/payment/payment';
 
-const PhoneModel = ({ isSection2, scrollProgress, isMobile }) => {
-    const { scene } = useGLTF('/iphone2.glb');
-    const ref = useRef();
-    const videoRef = useRef(document.createElement('video'));
+const Landing = () => {
+    const threeRef = useRef();
+    const section2Ref = useRef();
+    const section2ContentRef = useRef();
+    const [isMobile, setIsMobile] = useState(false);
+    const [isSection2, setIsSection2] = useState(false);
+    const [scrollProgress, setScrollProgress] = useState(0);
+    const section3Ref = useRef();
+    const section3ContentRef = useRef();
+    const [isSection3, setIsSection3] = useState(false);
+    const [hasExpandedSection3, setHasExpandedSection3] = useState(false); // optional fine control
 
-    const [animationDone, setAnimationDone] = useState(false);
-    const [startAnimation, setStartAnimation] = useState(false);
-    const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-    const [spinning, setSpinning] = useState(false);
-
-    const spinRef = useRef(0);
-    const prevScroll = useRef(0);
-
-    const videoSources = [
-        '/video1.mp4',
-        '/video2.mp4',
-        '/video3.mp4',
-        '/video4.mp4',
-    ];
-
-    const thresholds = [0, 0.25, 0.5, 0.75];
-
-    const targetPosition = new THREE.Vector3(0, 0, 0);
-    const targetRotation = new THREE.Euler(0.1, 0.25, 0);
-
-    // Load initial video texture
-    useEffect(() => {
-        const video = videoRef.current;
-        video.src = videoSources[0];
-        video.crossOrigin = 'anonymous';
-        video.loop = true;
-        video.muted = true;
-        video.playsInline = true;
-        video.load();
-        video.play().catch((err) => console.warn('Autoplay blocked:', err));
-
-        const videoTexture = new THREE.VideoTexture(video);
-        videoTexture.minFilter = THREE.LinearFilter;
-        videoTexture.magFilter = THREE.LinearFilter;
-        videoTexture.generateMipmaps = false;
-        videoTexture.colorSpace = THREE.SRGBColorSpace;
-
-        scene.traverse((child) => {
-            if (child.isMesh) {
-                child.castShadow = true;
-                child.receiveShadow = false;
-
-                if (child.name === 'Body_Wallpaper_0') {
-                    child.material.map = videoTexture;
-                    child.material.needsUpdate = true;
-                }
-            }
+    const scrollToSection2 = () => {
+        window.scrollTo({
+            top: window.innerHeight * 0.5,
+            behavior: 'smooth'
         });
-    }, [scene]);
-
-    // Entrance animation
-    useEffect(() => {
-        if (isSection2 && ref.current) {
-            ref.current.position.set(2, 2, 0);
-            ref.current.rotation.set(-1.5, -5, 0);
-            setAnimationDone(false);
-            setStartAnimation(false);
-
-            const timeout = setTimeout(() => {
-                setStartAnimation(true);
-            }, 200);
-
-            return () => clearTimeout(timeout);
-        }
-    }, [isSection2]);
-
-    // Scroll threshold detection
-    useEffect(() => {
-        if (!animationDone || spinning) return;
-
-        // Round scrollProgress to nearest hundredth
-        const roundedScroll = Math.round(scrollProgress * 100) / 100;
-
-        if (thresholds.includes(roundedScroll) && roundedScroll !== prevScroll.current) {
-            const newIndex = thresholds.indexOf(roundedScroll);
-            if (newIndex !== currentVideoIndex) {
-                setSpinning(true);
-                spinRef.current = 0;
-            }
-        }
-
-        prevScroll.current = roundedScroll;
-    }, [scrollProgress, animationDone, spinning]);
-
-    useFrame(() => {
-        if (!ref.current) return;
-
-        // Entrance animation
-        if (!animationDone && startAnimation) {
-            const lerpFactor = 0.03;
-
-            ref.current.position.lerp(targetPosition, lerpFactor);
-            ref.current.rotation.x = THREE.MathUtils.lerp(ref.current.rotation.x, targetRotation.x, lerpFactor);
-            ref.current.rotation.y = THREE.MathUtils.lerp(ref.current.rotation.y, targetRotation.y, lerpFactor);
-            ref.current.rotation.z = THREE.MathUtils.lerp(ref.current.rotation.z, targetRotation.z, lerpFactor);
-
-            const dist = ref.current.position.distanceTo(targetPosition);
-            const rotDiff =
-                Math.abs(ref.current.rotation.x - targetRotation.x) +
-                Math.abs(ref.current.rotation.y - targetRotation.y) +
-                Math.abs(ref.current.rotation.z - targetRotation.z);
-
-            if (dist < 0.01 && rotDiff < 0.01) {
-                setAnimationDone(true);
-                ref.current.position.copy(targetPosition);
-                ref.current.rotation.copy(targetRotation);
-            }
-        }
-
-        // Spin + jump animation
-        if (spinning) {
-            const speed = 0.05;
-            spinRef.current += speed;
-
-            // Rotate
-            ref.current.rotation.y += speed;
-
-            // Jump arc using sine
-            const jumpHeight = 0.2;
-            const progress = spinRef.current / (2 * Math.PI); // 0 to 1
-            const yJump = Math.sin(progress * Math.PI) * jumpHeight;
-            ref.current.position.y = targetPosition.y + yJump;
-
-            if (spinRef.current >= Math.PI && currentVideoIndex !== thresholds.indexOf(prevScroll.current)) {
-                // Midway: switch video
-                const newIndex = thresholds.indexOf(prevScroll.current);
-                const video = videoRef.current;
-                video.src = videoSources[newIndex];
-                video.load();
-                video.play().catch(() => { });
-                setCurrentVideoIndex(newIndex);
-            }
-
-            if (spinRef.current >= 2 * Math.PI) {
-                // End of spin
-                ref.current.rotation.y = targetRotation.y;
-                ref.current.position.y = targetPosition.y;
-                setSpinning(false);
-            }
-        }
-    });
-
-    return <primitive ref={ref} object={scene} scale={2} />;
-};
-
-const Section2 = ({ isSection2, scrollProgress, isMobile }) => {
-    // Define the threshold text content
-    const contentMap = [
-        {
-            title: 'Section 2.1',
-            description: 'DESCRIPTION1',
-        },
-        {
-            title: 'Section 2.2',
-            description: 'DESCRIPTION2',
-        },
-        {
-            title: 'Section 2.3',
-            description: 'DESCRIPTION3',
-        },
-        {
-            title: 'Section 2.4',
-            description: 'DESCRIPTION4',
-        },
-    ];
-
-    // Determine the current content index based on scrollProgress
-    const getIndexFromProgress = (progress) => {
-        if (progress < 0.25) return 0;
-        if (progress < 0.5) return 1;
-        if (progress < 0.75) return 2;
-        if (progress >= 0.75 && progress <= 1) return 3;
     };
 
-    const currentIndex = getIndexFromProgress(scrollProgress);
-    const { title, description } = contentMap[currentIndex];
+    const scrollToSection3 = () => {
+        window.scrollTo({
+            top: window.innerHeight * 2.5,
+            behavior: 'smooth'
+        });
+    };
+
+    // Detect mobile device
+    useEffect(() => {
+        const checkIsMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        checkIsMobile();
+        window.addEventListener('resize', checkIsMobile);
+        return () => window.removeEventListener('resize', checkIsMobile);
+    }, []);
+
+    // section 2 & 3 true/false 
+    useEffect(() => {
+        console.log(`isSection2 updated to ${isSection2}`);
+    }, [isSection2]);
+
+    useEffect(() => {
+        console.log(`isSection3 updated to: ${isSection3}`);
+    }, [isSection3]);
+
+    //SECTION2 ANIMATION
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollY = window.scrollY;
+            const maxScroll = window.innerHeight * 0.5;  // Half page scroll
+            const progress = Math.min(scrollY / maxScroll, 1);
+
+            if (section2Ref.current && section2ContentRef.current) {
+                let heightPercent, widthPercent;
+
+                if (isMobile) {
+                    // Mobile logic: expand width first, then height
+                    if (progress < 0.5) {
+                        const widthProgress = progress / 0.5;
+                        widthPercent = 100 * widthProgress; // Expand from 30% to 100%
+                        heightPercent = 2; // Keep short at first
+                    } else {
+                        widthPercent = 100;
+                        const heightProgress = (progress - 0.5) / 0.5;
+                        heightPercent = 20 + 80 * heightProgress; // Expand from 20% to 100%
+                    }
+                } else {
+                    // Desktop logic (existing)
+                    if (progress < 0.5) {
+                        const heightProgress = progress / 0.5;
+                        heightPercent = 100 * heightProgress;
+                        widthPercent = 0.5;
+                    } else {
+                        heightPercent = 100;
+                        const widthProgress = (progress - 0.5) / 0.5;
+                        widthPercent = 0.5 + 99.5 * widthProgress;
+                    }
+                }
+
+                section2Ref.current.style.height = `${heightPercent}vh`;
+                section2Ref.current.style.width = `${widthPercent}vw`;
+
+                if (progress < 1) {
+                    document.body.style.setProperty('--scrollbar-track-color', '#121212');
+                } else {
+                    document.body.style.setProperty('--scrollbar-track-color', '#ffffff');
+                }
+
+                // Content fade-in
+                if (progress >= 1) {
+                    section2ContentRef.current.style.opacity = 1;
+                    section2ContentRef.current.style.display = "flex";
+                    setIsSection2(true);
+                } else {
+                    section2ContentRef.current.style.opacity = 0;
+                    section2ContentRef.current.style.display = "none";
+                    setIsSection2(false);
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [isMobile]);
+
+    // SECTION3 ANIMATION
+    useEffect(() => {
+        if (!isSection3) return; // Only animate if Section3 is active
+
+        const handleScroll = () => {
+            const scrollY = window.scrollY;
+            const startScroll = window.innerHeight * 2;
+            const maxScroll = window.innerHeight * 0.5;
+            const rawProgress = (scrollY - startScroll) / maxScroll;
+            const progress = Math.min(Math.max(rawProgress, 0), 1);
+
+            if (section3Ref.current && section3ContentRef.current) {
+                let heightPercent, widthPercent;
+
+                if (isMobile) {
+                    if (progress < 0.5) {
+                        const widthProgress = progress / 0.5;
+                        widthPercent = 100 * widthProgress;
+                        heightPercent = 2;
+                    } else {
+                        widthPercent = 100;
+                        const heightProgress = (progress - 0.5) / 0.5;
+                        heightPercent = 20 + 80 * heightProgress;
+                    }
+                } else {
+                    if (progress < 0.5) {
+                        const heightProgress = progress / 0.5;
+                        heightPercent = 100 * heightProgress;
+                        widthPercent = 0.5;
+                    } else {
+                        heightPercent = 100;
+                        const widthProgress = (progress - 0.5) / 0.5;
+                        widthPercent = 0.5 + 99.5 * widthProgress;
+                    }
+                }
+
+                section3Ref.current.style.height = `${heightPercent}vh`;
+                section3Ref.current.style.width = `${widthPercent}vw`;
+
+                if (progress >= 1) {
+                    document.body.style.setProperty('--scrollbar-track-color', '#121212');
+                }
+
+                if (progress >= 1) {
+                    section3ContentRef.current.style.opacity = 1;
+                    setHasExpandedSection3(true);
+                } else {
+                    section3ContentRef.current.style.opacity = 0;
+                    setHasExpandedSection3(false);
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Run once in case user scrolls quickly
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [isSection3, isMobile]);
+
+    //SECTION2 COMPONENT
+    useEffect(() => {
+        if (!isSection2) return; // Only run when Section2 is active
+
+        const handleScrollProgress = () => {
+            const scrollY = window.scrollY;
+            const sectionScrollStart = section2Ref.current?.offsetTop || 0;
+            const scrollIntoSection = scrollY - sectionScrollStart;
+
+            // 1.5 * viewport height
+            const maxScroll = window.innerHeight * 1.5;
+
+            // Calculate normalized progress (0 to 1)
+            const progress = Math.min(Math.max(scrollIntoSection / maxScroll, 0), 1);
+            setScrollProgress(Number(progress.toFixed(4)));
+        };
+
+        window.addEventListener('scroll', handleScrollProgress);
+        handleScrollProgress(); // Run once on mount
+
+        return () => {
+            window.removeEventListener('scroll', handleScrollProgress);
+        };
+    }, [isSection2]);
+
+    // Trigger setIsSection3 when scrollProgress reaches 1
+    useEffect(() => {
+        if (scrollProgress === 1) {
+            setIsSection3(true);
+            console.log(isSection3);
+        }
+    }, [scrollProgress]);
+
+    //THREE.JS
+    useEffect(() => {
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        // Handle responsive resizing
+        const handleResize = () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        };
+
+        window.addEventListener('resize', handleResize);
+        threeRef.current.appendChild(renderer.domElement);
+
+        const stars = [];
+        const geometry = new THREE.SphereGeometry(0.1, 24, 24);
+        const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+
+        for (let i = 0; i < 500; i++) {
+            const star = new THREE.Mesh(geometry, material);
+
+            // Target position
+            const targetPos = {
+                x: (Math.random() - 0.5) * 100,
+                y: (Math.random() - 0.5) * 100,
+                z: -Math.random() * 100,
+            };
+            // Start at center
+            star.position.set(0, 0, 0);
+            star.userData.target = targetPos;
+
+            scene.add(star);
+            stars.push(star);
+        }
+
+        camera.position.z = 5;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 512;
+        canvas.height = 512;
+        const ctx = canvas.getContext('2d');
+
+        // Create a radial gradient for mist glow
+        const gradient = ctx.createRadialGradient(256, 256, 20, 256, 256, 256);
+        gradient.addColorStop(0, 'rgba(37, 6, 117, 1)');
+        gradient.addColorStop(0.5, 'rgba(43, 9, 100, 0.34)');
+        gradient.addColorStop(1, 'rgba(8, 8, 89, 0.3)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 512, 512);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        const mistMaterial = new THREE.SpriteMaterial({
+            map: texture,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+        });
+
+        const mist = new THREE.Sprite(mistMaterial);
+        mist.position.set(0, 0, 0); // Centered in front of camera
+        mist.scale.set(isMobile ? 5 : 25, isMobile ? 5 : 25, 1);; // Controls visual size
+        scene.add(mist);
+
+        // Haze background mist (larger and darker)
+        const hazeCanvas = document.createElement('canvas');
+        hazeCanvas.width = 512;
+        hazeCanvas.height = 512;
+        const hazeCtx = hazeCanvas.getContext('2d');
+
+        const hazeGradient = hazeCtx.createRadialGradient(256, 256, 50, 256, 256, 256);
+        hazeGradient.addColorStop(0, 'rgba(80, 30, 120, 0.15)');
+        hazeGradient.addColorStop(0.7, 'rgba(20, 10, 50, 0.05)');
+        hazeGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        hazeCtx.fillStyle = hazeGradient;
+        hazeCtx.fillRect(0, 0, 512, 512);
+
+        const hazeTexture = new THREE.CanvasTexture(hazeCanvas);
+        const hazeMaterial = new THREE.SpriteMaterial({
+            map: hazeTexture,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+        });
+
+        const haze = new THREE.Sprite(hazeMaterial);
+        haze.position.set(0, 0, -1); // Slightly behind the main mist
+        haze.scale.set(isMobile ? 10 : 45, isMobile ? 10 : 45, 1) // Bigger than the main mist
+        scene.add(haze);
+
+        let lastTime = 0;
+        let targetScale = isMobile ? 5 : 25;
+        let targetOpacity = 0.3;
+        let targetRotation = 0;
+        let targetOffset = { x: 0, y: 0 };
+
+        const explosionDuration = 1; // seconds
+        const startTime = performance.now();
+
+        const animate = (time) => {
+            requestAnimationFrame(animate);
+
+            const t = time * 0.001;
+            const elapsed = (time - startTime) / 1000;
+            const progress = Math.min(elapsed / explosionDuration, 1);
+
+            // Animate stars outward
+            stars.forEach((star) => {
+                const target = star.userData.target;
+
+                // Compute explosion movement
+                const explodedX = target.x * progress;
+                const explodedY = target.y * progress;
+                const explodedZ = target.z * progress;
+
+                if (!star.userData.exploded) {
+                    star.position.set(explodedX, explodedY, explodedZ);
+
+                    if (progress >= 1) {
+                        star.userData.exploded = true;
+                    }
+                }
+
+                // Immediately start floating regardless of explosion state
+                if (progress >= 1 || star.userData.exploded) {
+                    // Tiny X/Y drift (optional)
+                    star.position.x += (Math.random() - 0.5) * 0.005;
+                    star.position.y += (Math.random() - 0.5) * 0.005;
+
+                    // Forward floating motion
+                    star.position.z += 0.1;
+
+                    if (star.position.z > 5) {
+                        star.position.z = -100;
+                    }
+                }
+            });
+
+            // Randomize targets every few seconds
+            if (t - lastTime > 2) {
+                targetScale = (isMobile ? 4 : 24) + Math.random() * (isMobile ? 2 : 4);
+                targetOpacity = 0.25 + Math.random() * 0.15;
+                targetRotation = Math.random() * 2 * Math.PI;
+                targetOffset = {
+                    x: (Math.random() - 0.5) * 0.2,
+                    y: (Math.random() - 0.5) * 0.2,
+                };
+                lastTime = t;
+            }
+
+            // Smooth transitions (easing)
+            mist.scale.x += (targetScale - mist.scale.x) * 0.02;
+            mist.scale.y = mist.scale.x;
+
+            mist.material.opacity += (targetOpacity - mist.material.opacity) * 0.02;
+
+            mist.rotation.z += (targetRotation - mist.rotation.z) * 0.002;
+
+            mist.position.x += (targetOffset.x - mist.position.x) * 0.01;
+            mist.position.y += (targetOffset.y - mist.position.y) * 0.01;
+
+            // Haze stays more stable, just slow rotate
+            haze.rotation.z += 0.0005;
+
+            renderer.render(scene, camera);
+        };
+
+        animate();
+
+        return () => {
+            window.removeEventListener('resize', handleResize); // Clean up
+
+            if (threeRef.current) {
+                while (threeRef.current.firstChild) {
+                    threeRef.current.removeChild(threeRef.current.firstChild);
+                }
+            }
+        };
+
+    }, []);
 
     return (
-        <div className="section2-main">
-            <div className="section2-phone">
-                <Canvas camera={{ position: [0, 0, -2] }} shadows>
-                    <ambientLight intensity={0.5} />
-                    <directionalLight
-                        position={[2, 6, -3]}
-                        intensity={1}
-                        castShadow
-                        shadow-mapSize-width={4096}
-                        shadow-mapSize-height={4096}
-                    />
-                    <PhoneModel
+        <div className="landing-main">
+            <div className="landing-section1">
+                <div className="three-bg-wrapper">
+                    <div ref={threeRef} className="three-bg" />
+                </div>
+                <div className="landing-text">
+                    <motion.h1
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        Automate Your Threads Growth
+                    </motion.h1>
+                    <motion.h3
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1.2 }}
+                    >
+                        Manage multiple accounts, post with AI, engage automatically, and grow faster
+                    </motion.h3>
+                    <motion.div className='cta-buttons'
+                        initial={{ opacity: 0, y: 60 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1.2 }}>
+                        <motion.button
+                            className="cta-button ghost"
+                            onClick={scrollToSection2}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1.2 }}>
+                            Learn More
+                        </motion.button>
+                        <motion.button
+                            className="cta-button solid"
+                            onClick={scrollToSection3}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1.2 }}>
+                            Start Now
+                        </motion.button>
+                    </motion.div>
+                </div>
+            </div>
+            <div ref={section2Ref} className="landing-section-2" id="section-2">
+                <div ref={section2ContentRef} className="landing-section-2-content">
+                    <Section2
                         isSection2={isSection2}
                         scrollProgress={scrollProgress}
                         isMobile={isMobile}
                     />
-                    <ContactShadows
-                        position={[0, -1.1, 0]}
-                        opacity={0.7}
-                        scale={3}
-                        blur={3}
-                        far={9}
+                </div>
+            </div>
+            <div ref={section3Ref} className="landing-section-3" id="section-3">
+                <div ref={section3ContentRef} className="landing-section-3-content">
+                    <Payment
+                        hasExpandedSection3={hasExpandedSection3}
+                        isMobile={isMobile}
                     />
-                    <Environment preset="studio" />
-                </Canvas>
+                </div>
             </div>
-            <div className="section2-text">
-                <h1>{title}</h1>
-                <p>{description}</p>
-            </div>
+
+            <div className="scroll-buffer"></div>
         </div>
     );
 };
 
-export default Section2;
+export default Landing;

@@ -1,5 +1,4 @@
 {
-  "homepage": "https://mcincura.github.io/threadly",
   "name": "threadly",
   "version": "1.0.0",
   "main": "index.js",
@@ -28,7 +27,11 @@
     "three": "^0.178.0"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",

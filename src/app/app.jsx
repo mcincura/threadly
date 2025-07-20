@@ -5,7 +5,6 @@ import {
   useLocation,
 } from 'react-router-dom';
 import Landing from '../pages/landing/landing';
-import Dash from '../pages/dashboard/dashboard';
 import Payment from '../components/payment/payment';
 
 const App = () => {

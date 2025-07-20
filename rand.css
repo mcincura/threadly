@@ -1,5 +1,6 @@
 .landing-main {
   background-color: #121212;
+  position: relative;
   overflow-x: hidden;
 }
 
@@ -7,7 +8,7 @@
   position: fixed;
   height: 100vh;
   width: 100vw;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .three-bg {
@@ -26,15 +27,15 @@
 
 .landing-text {
   position: fixed;
+  z-index: 1;
+  text-align: center;
+  color: white;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  text-align: center;
-  color: #fff;
+  align-items: center;
   height: 100vh;
   width: 100vw;
-  z-index: 1;
 }
 
 .landing-text h1 {
@@ -118,8 +119,8 @@
 }
 
 .landing-section-2-content {
-  display: none;
-  opacity: 1;
+  display: flex;
+  opacity: 0;
   transition: opacity 0.3s ease;
   color: #121212;
   height: 100vh;

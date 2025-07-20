@@ -6,7 +6,7 @@ import './section2.css';
 import { ContactShadows } from '@react-three/drei';
 
 const PhoneModel = ({ isSection2, scrollProgress, isMobile }) => {
-  const { scene } = useGLTF('./iphone2.glb');
+  const { scene } = useGLTF('/iphone2.glb');
   const ref = useRef();
   const videoRef = useRef(document.createElement('video'));
 
@@ -20,10 +20,10 @@ const PhoneModel = ({ isSection2, scrollProgress, isMobile }) => {
   const prevScroll = useRef(0);
 
   const videoSources = [
-    './video1.mp4',
-    './video2.mp4',
-    './video3.mp4',
-    './video4.mp4',
+    './assets/videos/video1.mp4',
+    './assets/videos/video2.mp4',
+    './assets/videos/video3.mp4',
+    './assets/videos/video4.mp4',
   ];
 
   const thresholds = [0.0, 0.25, 0.5, 0.75];
@@ -155,7 +155,7 @@ const PhoneModel = ({ isSection2, scrollProgress, isMobile }) => {
         const video = videoRef.current;
         video.src = videoSources[desiredVideoIndex];
         video.load();
-        video.play().catch(() => {});
+        video.play().catch(() => { });
         setCurrentVideoIndex(desiredVideoIndex);
       }
 
