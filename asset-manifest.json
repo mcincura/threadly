@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/threadly/static/css/main.da2d22be.css",
-    "main.js": "/threadly/static/js/main.560ba0d4.js",
+    "main.css": "/threadly/static/css/main.fafe846e.css",
+    "main.js": "/threadly/static/js/main.090f57c0.js",
     "index.html": "/threadly/index.html",
-    "main.da2d22be.css.map": "/threadly/static/css/main.da2d22be.css.map",
-    "main.560ba0d4.js.map": "/threadly/static/js/main.560ba0d4.js.map"
+    "main.fafe846e.css.map": "/threadly/static/css/main.fafe846e.css.map",
+    "main.090f57c0.js.map": "/threadly/static/js/main.090f57c0.js.map"
   },
   "entrypoints": [
-    "static/css/main.da2d22be.css",
-    "static/js/main.560ba0d4.js"
+    "static/css/main.fafe846e.css",
+    "static/js/main.090f57c0.js"
   ]
 }
