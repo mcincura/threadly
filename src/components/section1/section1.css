@@ -1,0 +1,100 @@
+.section1-main{
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background-color: #fff;
+}
+
+.three-bg-wrapper {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+.three-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.landing-text {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  height: 100vh;
+  width: 100vw;
+  z-index: 1;
+}
+
+.landing-text h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.landing-text h3 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #fff;
+}
+
+.cta-buttons {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cta-button {
+  padding: 0.9rem 2rem;
+  min-width: 160px;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(193, 113, 255, 0.5);
+  position: relative;
+  z-index: 1;
+}
+
+.cta-button.ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.cta-button.ghost:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.cta-button.solid {
+  background: linear-gradient(135deg, #ac40ff, #883cf3);
+  color: white;
+  box-shadow: 0 0 20px rgba(193, 113, 255, 0.5);
+}
+
+.cta-button.solid:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 30px rgba(155, 39, 245, 0.7);
+}

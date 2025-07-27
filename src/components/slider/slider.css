@@ -1,0 +1,102 @@
+.slideC {
+  position: relative;
+  perspective: 100vw;
+  transform-style: preserve-3d;
+  width: 30vw;
+  height: 30vh;
+  margin: 0 auto;
+}
+
+.slide {
+  width: 30vw;
+  height: 30vh;
+  transition:
+    transform 500ms ease 0s,
+    opacity 500ms ease 0s,
+    visibility 500ms ease 0s;
+  position: absolute;
+  top: 0;
+  border-radius: 12px;
+}
+
+/* 3D reflection effect */
+.reflection {
+  position: absolute;
+  width: 100%;
+  height: 60px;
+  bottom: -60px;
+  border-radius: 12px;
+  transition:
+    transform 500ms ease 0s,
+    opacity 500ms ease 0s,
+    visibility 500ms ease 0s;
+}
+
+.slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sliderContent {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  padding: 30px;
+  align-items: flex-start;
+  font-family:
+    "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.sliderContent h2 {
+  margin: 16px 0;
+}
+.sliderContent p {
+  margin: 0;
+  margin-bottom: 16px;
+}
+
+.btns {
+  padding-top: 100px;
+}
+
+.btns .btn {
+  cursor: pointer;
+}
+
+.btns .btn:last-child {
+  margin-left: 40px;
+}
+
+/* Modal Styles */
+.slider-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  cursor: pointer;
+}
+
+.slider-modal-content {
+  width: 90vw;
+  height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slider-modal-content img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+}

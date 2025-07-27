@@ -1,0 +1,56 @@
+.section3-main {
+  height: 100dvh;
+  width: 100vw;
+  background: #0f0f0f;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.section3-mobile-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.section3-title-mobile {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #b455fc, #883cf3);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.section3-content-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 5vh;
+  align-items: center;
+}
+
+.stats-cards-mobile {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.stat-card-mobile {
+  background: #1a1a1a;
+  border: 1px solid #2e2e2e;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(180, 85, 252, 0.2);
+  transition: transform 0.3s ease;
+}

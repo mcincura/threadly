@@ -1,0 +1,49 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+h2 {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+h3 {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Set default scrollbar track color using CSS variable */
+body {
+  --scrollbar-track-color: #121212; /* Dark by default */
+}
+
+/* Scrollbar Base Style */
+::-webkit-scrollbar {
+  width: 0.4vw;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8f2fea;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a243fb;
+}
+
+/* Scrollbar Track using variable */
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+  box-shadow: none;
+}
