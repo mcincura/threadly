@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/mcincura.github.io/threadly/static/css/main.632a4afd.css",
-    "main.js": "/mcincura.github.io/threadly/static/js/main.73ff242c.js",
-    "index.html": "/mcincura.github.io/threadly/index.html",
-    "main.632a4afd.css.map": "/mcincura.github.io/threadly/static/css/main.632a4afd.css.map",
-    "main.73ff242c.js.map": "/mcincura.github.io/threadly/static/js/main.73ff242c.js.map"
+    "main.css": "/threadly/static/css/main.00c4c2ec.css",
+    "main.js": "/threadly/static/js/main.fbe5b159.js",
+    "index.html": "/threadly/index.html",
+    "main.00c4c2ec.css.map": "/threadly/static/css/main.00c4c2ec.css.map",
+    "main.fbe5b159.js.map": "/threadly/static/js/main.fbe5b159.js.map"
   },
   "entrypoints": [
-    "static/css/main.632a4afd.css",
-    "static/js/main.73ff242c.js"
+    "static/css/main.00c4c2ec.css",
+    "static/js/main.fbe5b159.js"
   ]
 }
