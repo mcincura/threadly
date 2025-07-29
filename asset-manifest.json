@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/threadly/static/css/main.5e343adf.css",
-    "main.js": "/threadly/static/js/main.b2742502.js",
+    "main.js": "/threadly/static/js/main.95e682c2.js",
     "index.html": "/threadly/index.html",
     "main.5e343adf.css.map": "/threadly/static/css/main.5e343adf.css.map",
-    "main.b2742502.js.map": "/threadly/static/js/main.b2742502.js.map"
+    "main.95e682c2.js.map": "/threadly/static/js/main.95e682c2.js.map"
   },
   "entrypoints": [
     "static/css/main.5e343adf.css",
-    "static/js/main.b2742502.js"
+    "static/js/main.95e682c2.js"
   ]
 }
