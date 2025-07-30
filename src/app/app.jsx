@@ -9,7 +9,7 @@ import Section2 from '../components/section2/section2';
 const App = () => {
     return (
         <div className="App">
-            <Router basename='threadly'>
+            <Router>
                 <Routes>
                     <Route path="/" element={<Landing />} />
                 </Routes>

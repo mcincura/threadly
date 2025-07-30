@@ -1,0 +1,28 @@
+.spotlight-svg {
+  animation: spotlight 1s ease 0.75s 1 forwards;
+  pointer-events: none;
+  position: absolute;
+  top: -52%;
+  left: 19%;
+  z-index: 1;
+  height: 169%;
+  width: 138%;
+  opacity: 0;
+}
+
+@media (min-width: 1024px) {
+  .spotlight-svg {
+    width: 84%;
+  }
+}
+
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
+}

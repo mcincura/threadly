@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import CountUp from 'react-countup';
 import Slider from '../slider/slider';
 import { CardSpotlightDemo } from './cardSpotlight/cardSpotlightDemo';
+import { Spotlight } from '../ui/spotlight';
 
 const Section3 = ({ isMobile, isSection3 }) => {
 
@@ -74,6 +75,7 @@ const Section3 = ({ isMobile, isSection3 }) => {
                     </div>
                 ) : (
                     <>
+                        <Spotlight />
                         <h1 className='section3-title'>Growth.</h1>
                         <div className="section3-content-wrapper">
                             <div className="card-demo-container-wrapper">

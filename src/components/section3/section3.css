@@ -17,7 +17,7 @@
   text-align: center;
   margin-bottom: 2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #ffffff, #883cf3);
+  background: linear-gradient(135deg, #883cf3, #883cf3);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

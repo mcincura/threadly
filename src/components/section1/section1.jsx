@@ -8,7 +8,7 @@ const Section1 = ({ isMobile }) => {
     // CTA BUTTONS SCROLL ACTIONS
     const scrollToSection2 = () => {
         window.scrollTo({
-            top: window.innerHeight * 0.710,
+            top: window.innerHeight * 0.6,
             behavior: 'smooth'
         });
     };

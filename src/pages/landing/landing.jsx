@@ -3,7 +3,6 @@ import Section1 from '../../components/section1/section1';
 import Section2 from '../../components/section2/section2';
 import Section3 from '../../components/section3/section3';
 import Section4 from '../../components/section4/section4';
-import { TracingBeam } from '../../components/tracingScroll/tracingBeam';
 import './landing.css'
 
 const Landing = () => {
@@ -19,7 +18,6 @@ const Landing = () => {
     const [section3Locked, setSection3Locked] = useState(false);
     const [phone2Locked, setPhone2Locked] = useState(false);
     const [phone3Locked, setPhone3Locked] = useState(false);
-    const [phone4Locked, setPhone4Locked] = useState(false);
 
     //SCROLL VARIABLES
     const section2Ref = useRef();
@@ -63,9 +61,8 @@ const Landing = () => {
 
         const section2Start = window.innerHeight * 0.6;
         const section3Start = window.innerHeight * 2.6;
-        const section2phone2 = window.innerHeight * 0.975
-        const section2phone3 = window.innerHeight * 1.35
-        const section2phone4 = window.innerHeight * 1.725
+        const section2phone2 = window.innerHeight * 1.1
+        const section2phone3 = window.innerHeight * 1.6
 
         if (scrollY <= section2Start && section2Locked) {
             setSection2Locked(false);
@@ -75,8 +72,6 @@ const Landing = () => {
             setPhone2Locked(false);
         } else if (scrollY <= section2phone3 && phone3Locked) {
             setPhone3Locked(false);
-        } else if (scrollY <= section2phone4 && phone4Locked) {
-            setPhone4Locked(false);
         }
     }, [scrollY])
 
@@ -85,11 +80,10 @@ const Landing = () => {
 
         if (!isMobile) return;
 
-        const section2Lock = window.innerHeight * 0.701;
-        const section3Lock = window.innerHeight * 2.601;
-        const phone2Lock = window.innerHeight * 0.98;
-        const phone3Lock = window.innerHeight * 1.36;
-        const phone4Lock = window.innerHeight * 1.73;
+        const section2Lock = window.innerHeight * 0.61;
+        const section3Lock = window.innerHeight * 2.61;
+        const phone2Lock = window.innerHeight * 1.11;
+        const phone3Lock = window.innerHeight * 1.61;
 
         if (scrollY >= section2Lock && !section2Locked) {
             setJustActivated(true);
@@ -112,12 +106,6 @@ const Landing = () => {
         } else if (scrollY >= phone3Lock && !phone3Locked) {
             setJustActivated(true);
             setPhone3Locked(true);
-            setTimeout(() => {
-                setJustActivated(false);
-            }, 500);
-        } else if (scrollY >= phone4Lock && !phone4Locked) {
-            setJustActivated(true);
-            setPhone4Locked(true);
             setTimeout(() => {
                 setJustActivated(false);
             }, 500);
@@ -289,9 +277,9 @@ const Landing = () => {
             let startScroll
 
             if (isMobile) {
-                startScroll = window.innerHeight * 2.8;
+                startScroll = window.innerHeight * 2.9;
             } else {
-                startScroll = window.innerHeight * 2.8;
+                startScroll = window.innerHeight * 2.9;
             }
             const maxScroll = window.innerHeight * 0.5;
             const rawProgress = (scrollY - startScroll) / maxScroll;
@@ -351,7 +339,7 @@ const Landing = () => {
 
         const handleScrollProgress = () => {
             const scrollY = window.scrollY;
-            const sectionScrollStart = section2Ref.current?.offsetTop || 0;
+            const sectionScrollStart = window.innerHeight * 0.6 || section2Ref.current?.offsetTop;
             const scrollIntoSection = scrollY - sectionScrollStart;
 
             let maxScroll;
@@ -362,13 +350,12 @@ const Landing = () => {
                 maxScroll = window.innerHeight * 1.5;
             }
 
-            // Calculate normalized progress (0 to 1)
             const progress = Math.min(Math.max(scrollIntoSection / maxScroll, 0), 1);
             setScrollProgress(Number(progress.toFixed(4)));
         };
 
         window.addEventListener('scroll', handleScrollProgress);
-        handleScrollProgress(); // Run once on mount
+        handleScrollProgress();
 
         return () => {
             window.removeEventListener('scroll', handleScrollProgress);
@@ -378,77 +365,43 @@ const Landing = () => {
 
     return (
         <div className={isMobile ? "landing-main-mobile" : "landing-main"}>
-
-            {!isMobile && (
-                <div className={`desktop-scroll ${isSection2 && !isSection3 ? 'expanded' : ''}`}>
-                    <div className={`scroll-dot ${!isSection2 ? 'active' : ''}`}></div>
-
-                    <div className="scroll-dot-wrapper">
-                        <div className={`scroll-dot ${isSection2 && !isSection3 ? 'active' : ''}`}></div>
-                        <div className={`progress-dots-wrapper ${isSection2 && !isSection3 ? 'expanded' : ''}`}>
-                            {[0, 1, 2, 3].map((i) => {
-                                const dotProgress = (i + 1) * 0.25;
-                                const isActive = scrollProgress >= i * 0.25 && scrollProgress < dotProgress;
-                                const finalDot = i === 3 && scrollProgress >= 0.75;
-                                const isExpanded = isSection2 && !isSection3;
-
-                                return (
-                                    <div
-                                        key={i}
-                                        className={`progress-dot ${isExpanded ? 'expand' : ''} ${isActive || finalDot ? 'active' : ''}`}
-                                    ></div>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    <div className={`scroll-dot ${isSection3 && !isSection4 ? 'active' : ''}`}></div>
-                    <div className={`scroll-dot ${isSection4 ? 'active' : ''}`}></div>
-                </div>
-
+            {isIOS && justActivated && (
+                <div className="ios-scroll-lock"></div>
             )}
 
-            <TracingBeam className='landing-tracing-beam'>
-
-                {isIOS && justActivated && (
-                    <div className="ios-scroll-lock"></div>
-                )}
-
-                <div className="landing-section1">
-                    <div className="landing-section1-content">
-                        <Section1 isMobile={isMobile} />
-                    </div>
+            <div className="landing-section1">
+                <div className="landing-section1-content">
+                    <Section1 isMobile={isMobile} />
                 </div>
+            </div>
 
-                <div className="landing-section2" ref={section2Ref}>
-                    <div className="landing-section2-content" ref={section2ContentRef}>
-                        <Section2
-                            isMobile={isMobile}
-                            isSection2={isSection2}
-                            scrollProgress={scrollProgress}
-                        />
-                    </div>
+            <div className="landing-section2" ref={section2Ref}>
+                <div className="landing-section2-content" ref={section2ContentRef}>
+                    <Section2
+                        isMobile={isMobile}
+                        isSection2={isSection2}
+                        scrollProgress={scrollProgress}
+                    />
                 </div>
+            </div>
 
-                <div className="landing-section3" ref={section3Ref}>
-                    <div className="landing-section3-content" ref={section3ContentRef}>
-                        <Section3
-                            isMobile={isMobile}
-                            isSection3={isSection3}
-                        />
-                    </div>
+            <div className="landing-section3" ref={section3Ref}>
+                <div className="landing-section3-content" ref={section3ContentRef}>
+                    <Section3
+                        isMobile={isMobile}
+                        isSection3={isSection3}
+                    />
                 </div>
+            </div>
 
-                <div className="landing-section4" ref={section4Ref}>
-                    <div className="landing-section4-content" ref={section4ContentRef}>
-                        <Section4
-                            isSection4={isSection4}
-                            isMobile={isMobile}
-                        />
-                    </div>
+            <div className="landing-section4" ref={section4Ref}>
+                <div className="landing-section4-content" ref={section4ContentRef}>
+                    <Section4
+                        isSection4={isSection4}
+                        isMobile={isMobile}
+                    />
                 </div>
-            </TracingBeam>
-
+            </div>
         </div >
     )
 }
