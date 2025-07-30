@@ -1,0 +1,24 @@
+.canvas-reveal-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #121212;
+}
+
+.canvas-reveal-inner {
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-reveal-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #0a0a0a, transparent 84%);
+}
+
+.canvas-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}

@@ -1,29 +1,55 @@
 .landing-main {
   background-color: #121212;
+  height: 450vh;
   overflow-x: hidden;
 }
 
-.landing-section1 {
-  position: fixed;
-  z-index: 1;
-  height: 100vh;
-  width: 100vw;
-  background-color: aqua;
-  overflow: hidden;
+.landing-main-mobile {
+  background-color: #121212;
+  height: 450vh;
+  overflow-x: hidden;
 }
 
-.landing-section2 {
+.landing-tracing-beam {
+  z-index: 1000;
+}
+
+.landing-section1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: fixed;
   top: 50%;
   left: 50%;
-  background: #fff;
   transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #121212;
-  z-index: 2;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 
+  z-index: 1;
+}
+
+.landing-section1-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: aquamarine;
+  width: 100%;
+  height: 100%;
+}
+
+.landing-section2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  background-color: #fff;
+
+  z-index: 2;
   height: 0;
   width: 0;
 }
@@ -32,24 +58,24 @@
   display: none;
   align-items: center;
   justify-content: center;
-  opacity: 1;
+  opacity: 0;
   color: #121212;
   height: 100%;
   width: 100%;
 }
 
 .landing-section3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #121212;
-  color: #fff;
-  z-index: 3;
+  overflow: hidden;
+  background-color: #121212;
 
+  z-index: 3;
   height: 0;
   width: 0;
 }
@@ -58,24 +84,24 @@
   display: none;
   align-items: center;
   justify-content: center;
-  opacity: 1;
-  color: #fff;
+  opacity: 0;
+  color: #121212;
   height: 100%;
   width: 100%;
 }
 
 .landing-section4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: fixed;
   top: 50%;
   left: 50%;
-  background: #391d55;
   transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #121212;
-  z-index: 4;
+  overflow: hidden;
+  background-color: #391d55;
 
+  z-index: 4;
   height: 0;
   width: 0;
 }
@@ -90,15 +116,8 @@
   width: 100%;
 }
 
-.scroll-buffer-mobile {
-  height: 310vh;
-}
+/*   MISC    */
 
-.scroll-buffer-desktop {
-  height: 450vh;
-}
-
-/* Update in landing.css */
 .landing-section2,
 .landing-section3,
 .landing-section4 {
@@ -110,12 +129,110 @@
 .landing-section2-content,
 .landing-section3-content,
 .landing-section4-content {
-  transition: opacity 0.3s ease-out;
+  transition: opacity 0.6s ease-out;
 }
 
-.scroll-lock {
-  overflow: hidden;
+/*   IOS SCROLL LOCK   */
+
+.ios-scroll-lock {
   position: fixed;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: transparent;
+  z-index: 100000;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+/*   DESKTOP SCROLL ELEMENT   */
+
+.desktop-scroll {
+  background-color: #121212;
+  position: fixed;
+  top: 50%;
+  left: 1%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-block: 1rem;
+  padding-inline: 0.5rem;
+  border-radius: 0.4rem;
+  gap: 0.8rem;
+  transition:
+    top 0.8s ease,
+    transform 0.8s ease;
+}
+
+.desktop-scroll.expanded {
+  /* Keep same properties */
+  top: 50%;
+  left: 1%;
+  transform: translateY(-50%);
+}
+
+.scroll-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #888;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+.scroll-dot.active {
+  background-color: #fff;
+  transform: scale(1.3);
+}
+
+.scroll-dot-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.progress-dots-wrapper {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  opacity: 0;
+}
+
+.progress-dots-wrapper.expanded {
+  display: flex;
+  opacity: 1;
+}
+
+.progress-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #bbb;
+  animation: dot-fade-in 0.5s ease forwards;
+}
+
+.progress-dot.active {
+  background-color: #fff;
+  transform: scale(1.5);
+  box-shadow: 0 0 4px #fff;
+}
+
+@keyframes dot-fade-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

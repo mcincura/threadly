@@ -3,6 +3,7 @@ import './section3.css'
 import { motion } from 'framer-motion';
 import CountUp from 'react-countup';
 import Slider from '../slider/slider';
+import { CardSpotlightDemo } from './cardSpotlight/cardSpotlightDemo';
 
 const Section3 = ({ isMobile, isSection3 }) => {
 
@@ -73,8 +74,21 @@ const Section3 = ({ isMobile, isSection3 }) => {
                     </div>
                 ) : (
                     <>
-                        <h1 className='section3-title'>Growth That Doesn’t Sleep.</h1>
-
+                        <h1 className='section3-title'>Growth.</h1>
+                        <div className="section3-content-wrapper">
+                            <div className="card-demo-container-wrapper">
+                                <div className="card-demo-container">
+                                    <CardSpotlightDemo />
+                                </div>
+                            </div>
+                            <motion.div className="section3-carousel-desktop"
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 1.2 }}
+                            >
+                                <Slider images={screenshots} activeSlide={3} isMobile={isMobile} />
+                            </motion.div>
+                        </div>
                     </>
                 )
             }

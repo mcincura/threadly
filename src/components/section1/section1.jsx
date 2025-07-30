@@ -8,15 +8,22 @@ const Section1 = ({ isMobile }) => {
     // CTA BUTTONS SCROLL ACTIONS
     const scrollToSection2 = () => {
         window.scrollTo({
-            top: window.innerHeight * 0.501,
+            top: window.innerHeight * 0.710,
             behavior: 'smooth'
         });
     };
     const scrollToSection3 = () => {
-        window.scrollTo({
-            top: window.innerHeight * 3,
-            behavior: 'smooth'
-        });
+        if (isMobile) {
+            window.scrollTo({
+                top: window.innerHeight * 2.701,
+                behavior: 'smooth'
+            });
+        } else {
+            window.scrollTo({
+                top: window.innerHeight * 3.701,
+                behavior: 'smooth'
+            });
+        }
     };
 
     // THREE.JS ANIMATION

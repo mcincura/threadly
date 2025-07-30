@@ -13,21 +13,34 @@
 }
 
 .section3-title {
-  font-size: 3rem;
+  font-size: 5vw;
   text-align: center;
   margin-bottom: 2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #b455fc, #883cf3);
+  background: linear-gradient(135deg, #ffffff, #883cf3);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.section3-title-mobile {
-  font-size: 3rem;
-  text-align: center;
-  margin-bottom: 2rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #b455fc, #883cf3);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.section3-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10vw;
+}
+
+.card-demo-container-wrapper {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-demo-container {
+  width: auto;
+  position: relative;
+}
+
+.section3-carousel-desktop {
+  width: 50%;
 }

@@ -3,11 +3,25 @@ import Section1 from '../../components/section1/section1';
 import Section2 from '../../components/section2/section2';
 import Section3 from '../../components/section3/section3';
 import Section4 from '../../components/section4/section4';
+import { TracingBeam } from '../../components/tracingScroll/tracingBeam';
 import './landing.css'
 
 const Landing = () => {
 
+    const [scrollY, setScrollY] = useState(window.scrollY);
     const [isMobile, setIsMobile] = useState(false);
+    const [justActivated, setJustActivated] = useState(false);
+    const [scrollProgress, setScrollProgress] = useState(0);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    //SCROLL LOCK VARIABLES
+    const [section2Locked, setSection2Locked] = useState(false);
+    const [section3Locked, setSection3Locked] = useState(false);
+    const [phone2Locked, setPhone2Locked] = useState(false);
+    const [phone3Locked, setPhone3Locked] = useState(false);
+    const [phone4Locked, setPhone4Locked] = useState(false);
+
+    //SCROLL VARIABLES
     const section2Ref = useRef();
     const section2ContentRef = useRef();
     const [isSection2, setIsSection2] = useState(false);
@@ -17,84 +31,21 @@ const Landing = () => {
     const section4Ref = useRef();
     const section4ContentRef = useRef();
     const [isSection4, setIsSection4] = useState(false);
-    const [scrollProgress, setScrollProgress] = useState(0);
 
-    //NEW: VARIABLES FOR SCROLL LOCKING
-    const [justActivated, setJustActivated] = useState(false);
-    const prevSection2 = useRef(false);
-    const prevSection3 = useRef(false);
-    const prevSection4 = useRef(false);
-
-    //NEW: JUST ACTIVATED FLAG FOR SECTIONS
-    const triggerJustActivated = () => {
-        setJustActivated(true);
-        setTimeout(() => setJustActivated(false), 500);
-    };
-
-    //NEW: SECTION MONITORING
+    //_______HELPER: TRACK SCROLL
     useEffect(() => {
-        if (!prevSection2.current && isSection2) {
-            triggerJustActivated();
-        }
-        if (!prevSection3.current && isSection3) {
-            triggerJustActivated();
-        }
-        if (!prevSection4.current && isSection4) {
-            triggerJustActivated();
-        }
-
-        // Update previous states after the check
-        prevSection2.current = isSection2;
-        prevSection3.current = isSection3;
-        prevSection4.current = isSection4;
-    }, [isSection2, isSection3, isSection4]);
-
-    // NEW: SCROLL LOCKING MECHANISM
-    useEffect(() => {
-        const html = document.documentElement;
-        const body = document.body;
-        const preventTouchMove = (e) => {
-            if (justActivated) e.preventDefault();
+        const handleScroll = () => {
+            setScrollY(window.scrollY);
         };
 
-        if (justActivated) {
-            // Lock scroll on both html and body
-            html.style.overflow = 'hidden';
-            body.style.overflow = 'hidden';
+        // Add scroll event listener
+        window.addEventListener('scroll', handleScroll);
 
-            // iOS-specific fixes
-            html.style.touchAction = 'none';
-            body.style.touchAction = 'none';
-            document.addEventListener('touchmove', preventTouchMove, { passive: false });
-        } else {
-            // Restore default styles
-            html.style.overflow = '';
-            body.style.overflow = '';
-            html.style.touchAction = '';
-            body.style.touchAction = '';
-            document.removeEventListener('touchmove', preventTouchMove);
-        }
+        // Cleanup: Remove event listener on unmount
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
-        return () => {
-            // Cleanup
-            html.style.overflow = '';
-            body.style.overflow = '';
-            html.style.touchAction = '';
-            body.style.touchAction = '';
-            document.removeEventListener('touchmove', preventTouchMove);
-        };
-    }, [justActivated]);
-
-    //DEBUG FOR NEW FUNCTIONS FOR SCROLL LOCK
-    useEffect(() => {
-        if (justActivated) {
-            console.log("justActivated triggered!");
-        } else {
-            console.log(justActivated);
-        }
-    }, [justActivated]);
-
-    //MOBILE DEVICE DETECTION
+    //_______HELPER: MOBILE DEVICE DETECTION
     useEffect(() => {
         const checkIsMobile = () => {
             setIsMobile(window.innerWidth <= 768);
@@ -105,43 +56,111 @@ const Landing = () => {
         return () => window.removeEventListener('resize', checkIsMobile);
     }, [])
 
-    //TRACK SCROLL PROGRESS IN S2
+    //-------RESET SCROLL LOCK-------
+
     useEffect(() => {
-        if (!isSection2) return;
 
-        const handleScrollProgress = () => {
-            const scrollY = window.scrollY;
-            const sectionScrollStart = section2Ref.current?.offsetTop || 0;
-            const scrollIntoSection = scrollY - sectionScrollStart;
 
-            let maxScroll;
+        const section2Start = window.innerHeight * 0.6;
+        const section3Start = window.innerHeight * 2.6;
+        const section2phone2 = window.innerHeight * 0.975
+        const section2phone3 = window.innerHeight * 1.35
+        const section2phone4 = window.innerHeight * 1.725
 
-            if (isMobile) {
-                maxScroll = window.innerHeight * 0.2;
+        if (scrollY <= section2Start && section2Locked) {
+            setSection2Locked(false);
+        } else if (scrollY <= section3Start && section3Locked) {
+            setSection3Locked(false);
+        } else if (scrollY <= section2phone2 && phone2Locked) {
+            setPhone2Locked(false);
+        } else if (scrollY <= section2phone3 && phone3Locked) {
+            setPhone3Locked(false);
+        } else if (scrollY <= section2phone4 && phone4Locked) {
+            setPhone4Locked(false);
+        }
+    }, [scrollY])
+
+    //-------ACTIVATE SCROLL LOCK-------
+    useEffect(() => {
+
+        if (!isMobile) return;
+
+        const section2Lock = window.innerHeight * 0.701;
+        const section3Lock = window.innerHeight * 2.601;
+        const phone2Lock = window.innerHeight * 0.98;
+        const phone3Lock = window.innerHeight * 1.36;
+        const phone4Lock = window.innerHeight * 1.73;
+
+        if (scrollY >= section2Lock && !section2Locked) {
+            setJustActivated(true);
+            setSection2Locked(true);
+            setTimeout(() => {
+                setJustActivated(false);
+            }, 500);
+        } else if (scrollY >= section3Lock && !section3Locked) {
+            setJustActivated(true);
+            setSection3Locked(true);
+            setTimeout(() => {
+                setJustActivated(false);
+            }, 500);
+        } else if (scrollY >= phone2Lock && !phone2Locked) {
+            setJustActivated(true);
+            setPhone2Locked(true);
+            setTimeout(() => {
+                setJustActivated(false);
+            }, 500);
+        } else if (scrollY >= phone3Lock && !phone3Locked) {
+            setJustActivated(true);
+            setPhone3Locked(true);
+            setTimeout(() => {
+                setJustActivated(false);
+            }, 500);
+        } else if (scrollY >= phone4Lock && !phone4Locked) {
+            setJustActivated(true);
+            setPhone4Locked(true);
+            setTimeout(() => {
+                setJustActivated(false);
+            }, 500);
+        }
+    }, [scrollY]);
+
+    //-------SCROLL LOCK-------
+    useEffect(() => {
+
+        const html = document.documentElement;
+        const body = document.body;
+
+        if (justActivated) {
+            if (isIOS) {
+                const scrollBack = () => window.scrollTo(0, scrollY);
+                window.addEventListener('scroll', scrollBack);
+
+                setTimeout(() => {
+                    window.removeEventListener('scroll', scrollBack);
+                }, 1000);
             } else {
-                maxScroll = window.innerHeight * 1.5;
+                html.style.overflow = 'hidden';
+                body.style.overflow = 'hidden';
+                console.log("locked scroll");
+                setTimeout(() => {
+                    html.style.overflow = '';
+                    body.style.overflow = '';
+                    console.log("reset locked scroll");
+                }, 1000);
             }
+        }
 
-            // Calculate normalized progress (0 to 1)
-            const progress = Math.min(Math.max(scrollIntoSection / maxScroll, 0), 1);
-            setScrollProgress(Number(progress.toFixed(4)));
-        };
+    }, [justActivated]);
 
-        window.addEventListener('scroll', handleScrollProgress);
-        handleScrollProgress(); // Run once on mount
-
-        return () => {
-            window.removeEventListener('scroll', handleScrollProgress);
-        };
-
-    }, [isSection2, isMobile])
-
-    //SCROLL ANIMATION S1 -> S2
+    //*******SCROLL ANIMATION S1 -> S2*******
     useEffect(() => {
         const handleScroll = () => {
+
             const scrollY = window.scrollY;
+            const startScroll = window.innerHeight * 0.1;
             const maxScroll = window.innerHeight * 0.5;
-            const progress = Math.min(scrollY / maxScroll, 1);
+            const rawProgress = (scrollY - startScroll) / maxScroll;
+            const progress = Math.min(Math.max(rawProgress, 0), 1);
 
             if (section2Ref.current && section2ContentRef.current) {
                 let heightPercent, widthPercent;
@@ -154,22 +173,22 @@ const Landing = () => {
                     } else {
                         widthPercent = 100;
                         const heightProgress = (progress - 0.5) / 0.5;
-                        heightPercent = 20 + 80 * heightProgress; // Expand from 20% to 100%
+                        heightPercent = 2 + 98 * heightProgress; // Expand from 20% to 100%
                     }
                 } else {
                     // Desktop logic
                     if (progress < 0.5) {
                         const heightProgress = progress / 0.5;
                         heightPercent = 100 * heightProgress;
-                        widthPercent = 0.5;
+                        widthPercent = 1;
                     } else {
                         heightPercent = 100;
                         const widthProgress = (progress - 0.5) / 0.5;
-                        widthPercent = 0.5 + 99.5 * widthProgress;
+                        widthPercent = 1 + 99 * widthProgress;
                     }
                 }
 
-                section2Ref.current.style.height = `${heightPercent}vh`;
+                section2Ref.current.style.height = `${heightPercent}lvh`;
                 section2Ref.current.style.width = `${widthPercent}vw`;
 
                 // TRACK COLOR CHANGE TO MATCH BG
@@ -196,15 +215,16 @@ const Landing = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [isMobile])
 
-    //SCROLL ANIMATION S2 -> S3
+    //*******SCROLL ANIMATION S2 -> S3*******
     useEffect(() => {
         const handleScroll = () => {
+
             const scrollY = window.scrollY;
 
             let startScroll
 
             if (isMobile) {
-                startScroll = window.innerHeight * 0.8;
+                startScroll = window.innerHeight * 2;
             } else {
                 startScroll = window.innerHeight * 2;
             }
@@ -237,7 +257,7 @@ const Landing = () => {
                     }
                 }
 
-                section3Ref.current.style.height = `${heightPercent}vh`;
+                section3Ref.current.style.height = `${heightPercent}lvh`;
                 section3Ref.current.style.width = `${widthPercent}vw`;
 
                 if (progress >= 1) {
@@ -260,15 +280,16 @@ const Landing = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [isMobile])
 
-    //SCROLL ANIMATION S3 -> S4
+    //*******SCROLL ANIMATION S3 -> S4*******
     useEffect(() => {
         const handleScroll = () => {
+
             const scrollY = window.scrollY;
 
             let startScroll
 
             if (isMobile) {
-                startScroll = window.innerHeight * 1.6;
+                startScroll = window.innerHeight * 2.8;
             } else {
                 startScroll = window.innerHeight * 2.8;
             }
@@ -301,7 +322,7 @@ const Landing = () => {
                     }
                 }
 
-                section4Ref.current.style.height = `${heightPercent}vh`;
+                section4Ref.current.style.height = `${heightPercent}lvh`;
                 section4Ref.current.style.width = `${widthPercent}vw`;
 
                 if (progress >= 1) {
@@ -324,40 +345,111 @@ const Landing = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [isMobile])
 
+    //'''''''TRACK SCROLL PROGRESS IN S2'''''''
+    useEffect(() => {
+        if (!isSection2) return;
+
+        const handleScrollProgress = () => {
+            const scrollY = window.scrollY;
+            const sectionScrollStart = section2Ref.current?.offsetTop || 0;
+            const scrollIntoSection = scrollY - sectionScrollStart;
+
+            let maxScroll;
+
+            if (isMobile) {
+                maxScroll = window.innerHeight * 1.5;
+            } else {
+                maxScroll = window.innerHeight * 1.5;
+            }
+
+            // Calculate normalized progress (0 to 1)
+            const progress = Math.min(Math.max(scrollIntoSection / maxScroll, 0), 1);
+            setScrollProgress(Number(progress.toFixed(4)));
+        };
+
+        window.addEventListener('scroll', handleScrollProgress);
+        handleScrollProgress(); // Run once on mount
+
+        return () => {
+            window.removeEventListener('scroll', handleScrollProgress);
+        };
+
+    }, [isSection2, isMobile])
+
     return (
-        <div className="landing-main">
-            <div className="landing-section1">
-                <div className="landing-section1-content">
-                    <Section1 isMobile={isMobile} />
+        <div className={isMobile ? "landing-main-mobile" : "landing-main"}>
+
+            {!isMobile && (
+                <div className={`desktop-scroll ${isSection2 && !isSection3 ? 'expanded' : ''}`}>
+                    <div className={`scroll-dot ${!isSection2 ? 'active' : ''}`}></div>
+
+                    <div className="scroll-dot-wrapper">
+                        <div className={`scroll-dot ${isSection2 && !isSection3 ? 'active' : ''}`}></div>
+                        <div className={`progress-dots-wrapper ${isSection2 && !isSection3 ? 'expanded' : ''}`}>
+                            {[0, 1, 2, 3].map((i) => {
+                                const dotProgress = (i + 1) * 0.25;
+                                const isActive = scrollProgress >= i * 0.25 && scrollProgress < dotProgress;
+                                const finalDot = i === 3 && scrollProgress >= 0.75;
+                                const isExpanded = isSection2 && !isSection3;
+
+                                return (
+                                    <div
+                                        key={i}
+                                        className={`progress-dot ${isExpanded ? 'expand' : ''} ${isActive || finalDot ? 'active' : ''}`}
+                                    ></div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className={`scroll-dot ${isSection3 && !isSection4 ? 'active' : ''}`}></div>
+                    <div className={`scroll-dot ${isSection4 ? 'active' : ''}`}></div>
                 </div>
-            </div>
-            <div className="landing-section2" ref={section2Ref}>
-                <div className="landing-section2-content" ref={section2ContentRef}>
-                    <Section2
-                        isMobile={isMobile}
-                        isSection2={isSection2}
-                        scrollProgress={scrollProgress}
-                    />
+
+            )}
+
+            <TracingBeam className='landing-tracing-beam'>
+
+                {isIOS && justActivated && (
+                    <div className="ios-scroll-lock"></div>
+                )}
+
+                <div className="landing-section1">
+                    <div className="landing-section1-content">
+                        <Section1 isMobile={isMobile} />
+                    </div>
                 </div>
-            </div>
-            <div className="landing-section3" ref={section3Ref}>
-                <div className="landing-section3-content" ref={section3ContentRef}>
-                    <Section3
-                        isMobile={isMobile}
-                        isSection3={isSection3}
-                    />
+
+                <div className="landing-section2" ref={section2Ref}>
+                    <div className="landing-section2-content" ref={section2ContentRef}>
+                        <Section2
+                            isMobile={isMobile}
+                            isSection2={isSection2}
+                            scrollProgress={scrollProgress}
+                        />
+                    </div>
                 </div>
-            </div>
-            <div className="landing-section4" ref={section4Ref}>
-                <div className="landing-section4-content" ref={section4ContentRef}>
-                    <Section4
-                        isSection4={isSection4}
-                        isMobile={isMobile}
-                    />
+
+                <div className="landing-section3" ref={section3Ref}>
+                    <div className="landing-section3-content" ref={section3ContentRef}>
+                        <Section3
+                            isMobile={isMobile}
+                            isSection3={isSection3}
+                        />
+                    </div>
                 </div>
-            </div>
-            {isMobile ? (<div className='scroll-buffer-mobile' />) : (<div className="scroll-buffer-desktop" />)}
-        </div>
+
+                <div className="landing-section4" ref={section4Ref}>
+                    <div className="landing-section4-content" ref={section4ContentRef}>
+                        <Section4
+                            isSection4={isSection4}
+                            isMobile={isMobile}
+                        />
+                    </div>
+                </div>
+            </TracingBeam>
+
+        </div >
     )
 }
 

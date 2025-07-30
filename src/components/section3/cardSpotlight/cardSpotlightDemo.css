@@ -1,0 +1,26 @@
+.stat-container {
+  color: #e5e5e5; /* Tailwind: text-neutral-200 */ /* Tailwind: mt-4 */
+  position: relative;
+  z-index: 20;
+  display: grid;
+  gap: 3vw;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  grid-template-rows: repeat(2, auto); /* 2 rows */
+}
+
+.stat-box {
+  min-width: 8vw;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 3vw;
+  font-weight: bold;
+  color: #883cf3;
+}
+
+.stat-title {
+  margin-top: 0.5rem;
+  font-size: 1vw;
+  color: #555;
+}
