@@ -1,0 +1,84 @@
+{
+  "data": {
+    "xigTextAppViewer": {
+      "__typename": "Viewer",
+      "text_app_account_insights": {
+        "data": {
+          "interaction_trends": {
+            "total_like_trends": [
+                { "date": "2025-07-24", "value": 800 },
+                { "date": "2025-07-25", "value": 859 },
+                { "date": "2025-07-26", "value": 914 },
+                { "date": "2025-07-27", "value": 788 },
+                { "date": "2025-07-28", "value": 835 },
+                { "date": "2025-07-29", "value": 755 },
+                { "date": "2025-07-30", "value": 822 }
+            ],
+            "total_quote_trends": [
+                { "date": "2025-07-24", "value": 29 },
+                { "date": "2025-07-25", "value": 33 },
+                { "date": "2025-07-26", "value": 37 },
+                { "date": "2025-07-27", "value": 29 },
+                { "date": "2025-07-28", "value": 25 },
+                { "date": "2025-07-29", "value": 17 },
+                { "date": "2025-07-30", "value": 21 }
+            ],
+            "total_reply_trends": [
+                { "date": "2025-07-24", "value": 230 },
+                { "date": "2025-07-25", "value": 246 },
+                { "date": "2025-07-26", "value": 266 },
+                { "date": "2025-07-27", "value": 290 },
+                { "date": "2025-07-28", "value": 202 },
+                { "date": "2025-07-29", "value": 226 },
+                { "date": "2025-07-30", "value": 255 }
+            ],
+            "total_repost_trends": [
+                { "date": "2025-07-24", "value": 52 },
+                { "date": "2025-07-25", "value": 56 },
+                { "date": "2025-07-26", "value": 60 },
+                { "date": "2025-07-27", "value": 68 },
+                { "date": "2025-07-28", "value": 45 },
+                { "date": "2025-07-29", "value": 52 },
+                { "date": "2025-07-30", "value": 56 }
+            ],
+            "follower_like_trends": [
+              {"date": "2025-07-29", "value": 1}
+            ],
+            "follower_quote_trends": [],
+            "follower_reply_trends": [],
+            "follower_repost_trends": []
+          },
+          "engagement_summary": {
+            "likes": [
+              {"label": "ALL", "value": 5773},
+              {"label": "FOLLOWER", "value": 2286},
+              {"label": "NON_FOLLOWER", "value": 2563}
+            ],
+            "quotes": [
+              {"label": "ALL", "value": 191},
+              {"label": "FOLLOWER", "value": 63},
+              {"label": "NON_FOLLOWER", "value": 52}
+            ],
+            "replies": [
+              {"label": "ALL", "value": 1715},
+              {"label": "FOLLOWER", "value": 523},
+              {"label": "NON_FOLLOWER", "value": 929}
+            ],
+            "reposts": [
+              {"label": "ALL", "value": 389},
+              {"label": "FOLLOWER", "value": 131},
+              {"label": "NON_FOLLOWER", "value": 232}
+            ]
+          }
+        }
+      }
+    }
+  },
+  "extensions": {
+    "server_metadata": {
+      "request_start_time_ms": 1753982884178,
+      "time_at_flush_ms": 1753982884569
+    },
+    "is_final": true
+  }
+}

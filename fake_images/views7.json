@@ -1,0 +1,63 @@
+{
+  "data": {
+    "xigTextAppViewer": {
+      "__typename": "Viewer",
+      "text_app_account_insights": {
+        "data": {
+          "view_trends": {
+            "total_view_trends": [
+                { "date": "2025-07-25", "value": 15200 },
+                { "date": "2025-07-26", "value": 15500 },
+                { "date": "2025-07-27", "value": 11000 },
+                { "date": "2025-07-28", "value": 13000 },
+                { "date": "2025-07-29", "value": 15400 },
+                { "date": "2025-07-30", "value": 12200 }
+            ],
+            "follower_view_trends": [],
+            "views_traffic_sources": [
+              {
+                "label": "LOGGED_OUT",
+                "value": 6804
+              },
+              {
+                "label": "THREADS_PROFILE",
+                "value": 30618
+              },
+              {
+                "label": "THREADS_ACTIVITY_FEED",
+                "value": 22206
+              },
+              {
+                "label": "THREADS_PERMALINK",
+                "value": 3472
+              }
+            ]
+          },
+          "engagement_summary": {
+            "views": [
+              {
+                "label": "ALL",
+                "value": 82300
+              },
+              {
+                "label": "FOLLOWER",
+                "value": 122936
+              },
+              {
+                "label": "NON_FOLLOWER",
+                "value": 140559
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "extensions": {
+    "server_metadata": {
+      "request_start_time_ms": 1753978516721,
+      "time_at_flush_ms": 1753978516976
+    },
+    "is_final": true
+  }
+}

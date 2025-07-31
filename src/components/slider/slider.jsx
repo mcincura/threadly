@@ -107,7 +107,7 @@ const Slider = ({ images = [], activeSlide = 0, isMobile = false }) => {
                         <div
                             className="reflection"
                             style={{
-                                background: `linear-gradient(to bottom, rgba(255,255,255,0.1), transparent)`,
+                                background: `linear-gradient(to bottom, rgba(129, 129, 129, 0.1), transparent)`,
                                 ...getStyles(i),
                             }}
                         />

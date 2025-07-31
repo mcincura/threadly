@@ -43,4 +43,5 @@
 
 .section3-carousel-desktop {
   width: 50%;
+  z-index: 0;
 }

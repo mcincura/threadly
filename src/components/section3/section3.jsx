@@ -16,12 +16,12 @@ const Section3 = ({ isMobile, isSection3 }) => {
     ];
 
     const screenshots = [
-        'https://placehold.co/200x400',
-        'https://placehold.co/200x400',
-        'https://placehold.co/200x400',
-        'https://placehold.co/200x400',
-        'https://placehold.co/200x400',
-        'https://placehold.co/200x400',
+        './assets/images/img1.png',
+        './assets/images/img2.png',
+        './assets/images/img3.png',
+        './assets/images/img4.png',
+        './assets/images/img5.png',
+        './assets/images/img6.png',
     ];
 
     if (!isSection3) {
@@ -88,7 +88,7 @@ const Section3 = ({ isMobile, isSection3 }) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 1.2 }}
                             >
-                                <Slider images={screenshots} activeSlide={3} isMobile={isMobile} />
+                                <Slider images={screenshots} activeSlide={2} isMobile={isMobile} />
                             </motion.div>
                         </div>
                     </>
