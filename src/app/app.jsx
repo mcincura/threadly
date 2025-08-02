@@ -4,7 +4,7 @@ import {
     Routes
 } from 'react-router-dom';
 import Landing from '../pages/landing/landing';
-import { SidebarDemo } from '../pages/dashboard/dashboard';
+import Dashboard from '../pages/dashboard/dashboard';
 
 const App = () => {
     return (
@@ -12,7 +12,7 @@ const App = () => {
             <Router>
                 <Routes>
                     <Route path="/" element={<Landing />} />
-                    <Route path="/dashboard" element={<SidebarDemo />} />
+                    <Route path="/dash" element={<Dashboard />} />
                 </Routes>
             </Router>
         </div>
