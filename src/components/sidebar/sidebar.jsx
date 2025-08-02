@@ -73,3 +73,27 @@ export const DesktopSidebar = ({
         </>
     );
 };
+
+export const SidebarLink = ({
+    link,
+    className,
+    ...props
+}) => {
+    const { open, animate } = useSidebar();
+    return (
+        <a
+            href={link.href}
+            className='sidebar-link'
+            {...props}>
+            {link.icon}
+            <motion.span
+                animate={{
+                    display: animate ? (open ? "inline-block" : "none") : "inline-block",
+                    opacity: animate ? (open ? 1 : 0) : 1,
+                }}
+                className="sidebar-link-content">
+                {link.label}
+            </motion.span>
+        </a>
+    );
+};
