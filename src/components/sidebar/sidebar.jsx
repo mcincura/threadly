@@ -63,7 +63,7 @@ export const DesktopSidebar = ({
             <motion.div
                 className="sidebar-desktop"
                 animate={{
-                    width: animate ? (open ? "300px" : "60px") : "300px",
+                    width: animate ? (open ? "fit-content" : "60px") : "fit-content",
                 }}
                 onMouseEnter={() => setOpen(true)}
                 onMouseLeave={() => setOpen(false)}

@@ -1,43 +1,137 @@
-.dashboard-main{
-    background-color: cadetblue;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
+.dashboard-main {
+  background-color: cadetblue;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
-.dashboard-content-wrapper{
-    background-color: #883cf3;
-    flex-grow: 1;
-    height: 100vh;
+.dashboard-content-wrapper {
+  background-color: #883cf3;
+  flex-grow: 1;
+  height: 100vh;
 }
 
-.dashboard-content{
-background-color: #f5f5f5;
-height: 100%;
-border-radius: 10px 0 0 0;
+.dashboard-content {
+  background-color: #f5f5f5;
+  height: 100%;
+  border-radius: 10px 0 0 0;
 }
 
 /* Base styles */
 .sidebar-link-icon {
-  height: 2vw;         /* h-5 (5 × 0.25rem = 1.25rem) */
-  width: 2vw;          /* w-5 */
-  flex-shrink: 0;          /* shrink-0 */
-  color: #fff;          /* text-neutral-700 */
+  height: 1.25rem; /* h-5 (5 × 0.25rem = 1.25rem) */
+  width: 1.25rem;
+  flex-shrink: 0; /* shrink-0 */
+  color: #fff; /* text-neutral-700 */
+}
+
+.sidebar-logo {
+  margin-bottom: 20px;
 }
 
 @media (prefers-color-scheme: dark) {
-    .dashboard-content-wrapper {
-        background-color: #121212; /* dark:bg-neutral-800 */
-    }
+  .dashboard-content-wrapper {
+    background-color: #121212; /* dark:bg-neutral-800 */
+  }
 
-    .dashboard-content{
-        background-color: #fff;
-    }
+  .dashboard-content {
+    background-color: #fff;
+  }
 
-    .sidebar-link-icon {
-        color: #e5e5e5;        /* dark:text-neutral-200 */
-    }
+  .sidebar-link-icon {
+    color: #e5e5e5; /* dark:text-neutral-200 */
+  }
+}
+
+/* BIG LOGO STYLES */
+/* Anchor element styles */
+.custom-link-big {
+  position: relative; /* .relative */
+  z-index: 20; /* .z-20 */
+  display: flex; /* .flex */
+  align-items: center; /* .items-center */
+  padding-top: 0.25rem; /* .py-1 */
+  padding-bottom: 0.25rem; /* .py-1 */
+  font-size: 0.875rem; /* .text-sm (14px) */
+  line-height: 1.25rem; /* .text-sm (line-height) */
+  font-weight: 400; /* .font-normal */
+  color: #000; /* .text-black */
+}
+
+/* Space between children */
+.custom-link-big > * + * {
+  margin-left: 0.5rem; /* .space-x-2 */
+}
+
+/* Icon container */
+.custom-link-big-icon {
+  height: 1.25rem; /* .h-5 */
+  width: 1.5rem; /* .w-6 */
+  flex-shrink: 0; /* .shrink-0 */
+  background-color: #000; /* .bg-black */
+
+  /* Complex border radius */
+  border-top-left-radius: 0.5rem; /* .rounded-tl-lg */
+  border-top-right-radius: 0.125rem; /* .rounded-tr-sm */
+  border-bottom-right-radius: 0.5rem; /* .rounded-br-lg */
+  border-bottom-left-radius: 0.125rem; /* .rounded-bl-sm */
+}
+
+/* Text element */
+.custom-link-big-text {
+  font-weight: 500; /* .font-medium */
+  white-space: pre; /* .whitespace-pre */
+  color: #000; /* .text-black */
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .custom-link-big-icon {
+    background-color: #fff; /* .dark:bg-white */
+  }
+  .custom-link-big-text {
+    color: #fff; /* .dark:text-white */
+  }
+}
+
+/* SMALL LOGO STYLES */
+.custom-link {
+  position: relative; /* .relative */
+  z-index: 20; /* .z-20 */
+  display: flex; /* .flex */
+  align-items: center; /* .items-center */
+  padding-top: 0.25rem; /* .py-1 */
+  padding-bottom: 0.25rem; /* .py-1 */
+  font-size: 0.875rem; /* .text-sm (14px) */
+  line-height: 1.25rem; /* .text-sm (20px) */
+  font-weight: 400; /* .font-normal */
+  color: #000; /* .text-black */
+}
+
+/* Space between child elements */
+.custom-link > * + * {
+  margin-left: 0.5rem; /* .space-x-2 */
+}
+
+/* Div element styles */
+.custom-link > div {
+  height: 1.25rem; /* .h-5 (5 * 0.25rem = 1.25rem) */
+  width: 1.5rem; /* .w-6 (6 * 0.25rem = 1.5rem) */
+  flex-shrink: 0; /* .shrink-0 */
+  background-color: #000; /* .bg-black */
+
+  border-top-left-radius: 0.5rem; /* .rounded-tl-lg */
+  border-top-right-radius: 0.125rem; /* .rounded-tr-sm */
+  border-bottom-right-radius: 0.5rem; /* .rounded-br-lg */
+  border-bottom-left-radius: 0.125rem; /* .rounded-bl-sm */
+}
+
+/* Dark mode adaptation */
+@media (prefers-color-scheme: dark) {
+  .custom-link > div {
+    background-color: #fff; /* .dark:bg-white */
+  }
 }

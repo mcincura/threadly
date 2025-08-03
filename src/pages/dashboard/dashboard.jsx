@@ -65,28 +65,26 @@ const Dashboard = () => {
 
 export const Logo = () => {
   return (
-    <a
-      href="#"
-      className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black"
-    >
-      <div className="h-5 w-6 shrink-0 rounded-tl-lg rounded-tr-sm rounded-br-lg rounded-bl-sm bg-black dark:bg-white" />
+    <a href="#" class="custom-link-big">
+      <div class="custom-link-big-icon"></div>
       <motion.span
+        class="custom-link-big-text"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="font-medium whitespace-pre text-black dark:text-white"
       >
-        Acet Labs
+        Threadly
       </motion.span>
     </a>
   );
 };
+
 export const LogoIcon = () => {
   return (
     <a
       href="#"
-      className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black"
+      className="custom-link"
     >
-      <div className="h-5 w-6 shrink-0 rounded-tl-lg rounded-tr-sm rounded-br-lg rounded-bl-sm bg-black dark:bg-white" />
+      <div />
     </a>
   );
 };
