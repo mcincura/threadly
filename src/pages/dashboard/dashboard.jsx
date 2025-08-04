@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "../../components/sidebar/sidebar";
 import { motion } from "framer-motion";
 import './dashboard.css'
@@ -8,7 +8,7 @@ import { SiTaketwointeractivesoftware } from "react-icons/si";
 const Dashboard = () => {
 
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState('dash')
+  const [active, setActive] = useState('dash');
 
   const links = [
     {
@@ -82,6 +82,9 @@ const Dashboard = () => {
                 onClick={() => setActive(link.view)}
               />
             ))}
+          </div>
+          <div className="sidebar-links-divider-wrapper">
+            <div className="sidebar-links-divider"></div>
           </div>
           <div className="sidebar-links-wrapper-bottom">
             {linksBottom.map((link, idx) => (

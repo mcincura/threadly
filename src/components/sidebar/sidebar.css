@@ -19,6 +19,10 @@
     align-items: center;
     align-items: flex-start;
   }
+
+  .sidebar-mobile-trigger {
+    display: none;
+  }
 }
 
 .sidebar-link {
@@ -52,69 +56,92 @@
   margin-right: 10px;
 }
 
-/* Base mobile bar */
 .sidebar-mobile-trigger {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  height: 40px;
-  padding: 16px;
-  width: 100%;
-  background-color: #883cf3; /* neutral-100 */
-  position: relative;
-  z-index: 10;
+  justify-content: flex-end;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  border-radius: 10px;
+  width: auto;
+  background-color: #883cf3;
+  padding: 4px;
 }
 
 .sidebar-mobile-menu-icon {
   display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  z-index: 20;
+  align-items: center;
+  justify-content: center;
 }
 
 .icon-toggle {
-  color: #1f1f1f; /* neutral-800 */
+  color: #fff;
+  height: 35px;
+  width: 35px;
 }
 
-.dark .icon-toggle {
-  color: #e5e5e5; /* neutral-200 */
-}
-
-/* Sidebar overlay */
 .sidebar-mobile-overlay {
   position: fixed;
-  inset: 0;
   height: 100%;
-  width: 100%;
+  width: 50%;
   background-color: #883cf3;
-  padding: 40px;
-  z-index: 100;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-}
-
-.dark .sidebar-mobile-overlay {
-  background-color: #121212; /* dark:bg-neutral-900 */
+  z-index: 100;
 }
 
 .sidebar-mobile-close {
   position: absolute;
-  top: 7%;
-  left: 93%;
-  z-index: 101;
-  color: #1f1f1f;
-  cursor: pointer;
+  padding: 4px;
+  right: 10px;
+  top: 10px;
 }
 
-.dark .sidebar-mobile-close {
-  color: #e5e5e5;
+.sidebar-mobile-close-icon {
+  height: 35px;
+  width: 35px;
+  color: #fff;
 }
 
-/* Hide on desktop */
 @media (min-width: 768px) {
   .sidebar-mobile-trigger {
     display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: #fff;
+    gap: 15px;
+    transition: 0.2s ease-out;
+    width: 90%;
+  }
+
+  .sidebar-link.active {
+    color: #883cf3;
+    background-color: #fff;
+    border-radius: 5px;
+  }
+
+  .sidebar-link:hover {
+    cursor: pointer;
+    gap: 20px;
+  }
+
+  .sidebar-link-icon {
+    height: 40px;
+    width: 40px;
+  }
+
+  .sidebar-link-text {
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    margin-right: 10px;
+    font-size: 20px;
   }
 }

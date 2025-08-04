@@ -1,4 +1,4 @@
-import { useState, useContext, createContext } from "react";
+import { useState, useContext, createContext, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import './sidebar.css'
@@ -46,10 +46,25 @@ export const Sidebar = ({
 };
 
 export const SidebarBody = (props) => {
+
+    const [isMobile, setIsMobile] = useState(false);
+
+    //_______HELPER: MOBILE DEVICE DETECTION
+    useEffect(() => {
+        const checkIsMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        checkIsMobile();
+        window.addEventListener('resize', checkIsMobile);
+        return () => window.removeEventListener('resize', checkIsMobile);
+    }, [])
+
     return (
         <>
-            <DesktopSidebar {...props} />
-            <MobileSidebar {...props} />
+            {isMobile ? (<MobileSidebar {...props} />) : (<DesktopSidebar {...props} />)}
+
+
         </>
     )
 }
@@ -83,7 +98,7 @@ export const MobileSidebar = ({
     children,
     ...props
 }) => {
-    const { open, setOpen } = useSidebar();
+    const { open, setOpen, animate } = useSidebar();
 
     return (
         <>
@@ -94,34 +109,31 @@ export const MobileSidebar = ({
                         onClick={() => setOpen(!open)}
                     />
                 </div>
-
-                <AnimatePresence>
-                    {open && (
-                        <motion.div
-                            initial={{ x: "-100%", opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            exit={{ x: "-100%", opacity: 0 }}
-                            transition={{
-                                duration: 0.3,
-                                ease: "easeInOut",
-                            }}
-                            className={`sidebar-mobile-overlay ${className || ""}`}
-                        >
-                            <div
-                                className="sidebar-mobile-close"
-                                onClick={() => setOpen(!open)}
-                            >
-                                <IconX />
-                            </div>
-                            {children}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
             </div>
+            <AnimatePresence>
+                {open && (
+                    <motion.div
+                        initial={{ x: "120%", opacity: 0 }}
+                        animate={{ x: "100%", opacity: 1 }}
+                        exit={{ x: "120%", opacity: 0 }}
+                        transition={{
+                            duration: 0.1,
+                            ease: "easeOut"
+                        }}
+                        className="sidebar-mobile-overlay"
+                    >
+                        <div className="sidebar-mobile-close"
+                            onClick={() => setOpen(!open)}
+                        >
+                            <IconX className="sidebar-mobile-close-icon" />
+                        </div>
+                        {children}
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     );
 };
-
 
 export const SidebarLink = ({
     link,
@@ -129,22 +141,57 @@ export const SidebarLink = ({
     onClick,
     ...props
 }) => {
+
+    const [isMobile, setIsMobile] = useState(false);
+
+    //_______HELPER: MOBILE DEVICE DETECTION
+    useEffect(() => {
+        const checkIsMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        checkIsMobile();
+        window.addEventListener('resize', checkIsMobile);
+        return () => window.removeEventListener('resize', checkIsMobile);
+    }, [])
+
     const { open, animate } = useSidebar();
     return (
-        <div className={`sidebar-link ${active ? 'active' : ''}`}
-            onClick={onClick}
-            {...props}
-        >
-            {link.icon}
-            <motion.span
-                animate={{
-                    display: animate ? (open ? "inline-block" : "none") : "inline-block",
-                    opacity: animate ? (open ? 1 : 0) : 1
-                }}
-                className="sidebar-link-text"
+        isMobile ? (<>
+            <div className={`sidebar-link ${active ? 'active' : ''}`}
+                onClick={onClick}
+                {...props}
             >
-                {link.label}
-            </motion.span>
-        </div>
+                <motion.span
+                    animate={{
+                        display: animate ? (open ? "inline-block" : "none") : "inline-block",
+                        opacity: animate ? (open ? 1 : 0) : 1
+                    }}
+                    className="sidebar-link-text"
+                >
+                    {link.label}
+                </motion.span>
+                {link.icon}
+
+            </div>
+        </>
+        ) : (
+            <>
+                <div className={`sidebar-link ${active ? 'active' : ''}`}
+                    onClick={onClick}
+                    {...props}
+                >
+                    {link.icon}
+                    <motion.span
+                        animate={{
+                            display: animate ? (open ? "inline-block" : "none") : "inline-block",
+                            opacity: animate ? (open ? 1 : 0) : 1
+                        }}
+                        className="sidebar-link-text"
+                    >
+                        {link.label}
+                    </motion.span>
+                </div>
+            </>)
     )
 }
