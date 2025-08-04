@@ -76,14 +76,16 @@ export const DesktopSidebar = ({
 
 export const SidebarLink = ({
     link,
+    active,      // New active prop
+    onClick,     // New onClick handler
     className,
     ...props
 }) => {
     const { open, animate } = useSidebar();
     return (
-        <a
-            href={link.href}
-            className='sidebar-link'
+        <button
+            className={`sidebar-link ${active ? 'active' : ''}`}
+            onClick={onClick}
             {...props}>
             {link.icon}
             <motion.span
@@ -94,6 +96,6 @@ export const SidebarLink = ({
                 className="sidebar-link-content">
                 {link.label}
             </motion.span>
-        </a>
+        </button>
     );
 };

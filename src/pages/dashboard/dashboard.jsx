@@ -7,32 +7,33 @@ import { motion } from 'framer-motion';
 const Dashboard = () => {
 
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState('dash')
 
   const links = [
     {
       label: "Dashboard",
-      href: "#",
+      view: "dash",  // Changed from href to view
       icon: (
         <IconBrandTabler className="sidebar-link-icon" />
       ),
     },
     {
       label: "Profile",
-      href: "#",
+      view: "profile",
       icon: (
         <IconUserBolt className="sidebar-link-icon" />
       ),
     },
     {
       label: "Settings",
-      href: "#",
+      view: "settings",
       icon: (
         <IconSettings className="sidebar-link-icon" />
       ),
     },
     {
       label: "Logout",
-      href: "#",
+      view: "logout",
       icon: (
         <IconArrowLeft className="sidebar-link-icon" />
       ),
@@ -48,7 +49,12 @@ const Dashboard = () => {
           </div>
           <div className="sidebar-links">
             {links.map((link, idx) => (
-              <SidebarLink key={idx} link={link} />
+              <SidebarLink
+                key={idx}
+                link={link}
+                active={active === link.view}
+                onClick={() => setActive(link.view)}
+              />
             ))}
           </div>
         </SidebarBody>
@@ -57,6 +63,9 @@ const Dashboard = () => {
         <div className="dashboard-content">
           <h1>kokocina</h1>
           <h2>kokocina 2</h2>
+          <div className="div">
+
+          </div>
         </div>
       </div>
     </div>
