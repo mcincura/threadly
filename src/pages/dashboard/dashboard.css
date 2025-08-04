@@ -1,7 +1,7 @@
 .dashboard-main {
-  background-color: cadetblue;
-  width: 100vw;
+  background-color: aqua;
   height: 100vh;
+  width: 100vw;
   overflow: hidden;
   display: flex;
   align-items: flex-start;
@@ -10,130 +10,77 @@
 
 .dashboard-content-wrapper {
   background-color: #883cf3;
-  flex-grow: 1;
   height: 100vh;
+  flex-grow: 1;
 }
 
 .dashboard-content {
-  background-color: #f5f5f5;
+  background-color: #121212;
   height: 100%;
   border-radius: 0.875rem 0 0 0;
 }
 
-
-
-/* Base styles */
-.sidebar-link-icon {
-  height: 20px; /* h-5 (5 × 0.25rem = 1.25rem) */
-  width: 20px;
-  flex-shrink: 0; /* shrink-0 */
-  color: #fff; /* text-neutral-700 */
-}
-
-.sidebar-logo {
-  margin-bottom: 20px;
-}
-
-@media (prefers-color-scheme: dark) {
-  .dashboard-content-wrapper {
-    background-color: #121212; /* dark:bg-neutral-800 */
-  }
-
+@media (prefers-color-scheme: light) {
   .dashboard-content {
-    background-color: #fff;
-  }
-
-  .sidebar-link-icon {
-    color: #e5e5e5; /* dark:text-neutral-200 */
+    background-color: #f5f5f5;
   }
 }
 
-/* BIG LOGO STYLES */
-/* Anchor element styles */
-.custom-link-big {
-  position: relative; /* .relative */
-  z-index: 20; /* .z-20 */
-  display: flex; /* .flex */
-  align-items: center; /* .items-center */
-  padding-top: 0.25rem; /* .py-1 */
-  padding-bottom: 0.25rem; /* .py-1 */
-  font-size: 0.875rem; /* .text-sm (14px) */
-  line-height: 1.25rem; /* .text-sm (line-height) */
-  font-weight: 400; /* .font-normal */
-  color: #000; /* .text-black */
+/* SIDEBAR LOGO STYLES */
+
+.sidebar-logo-wrapper {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 30px;
 }
 
-/* Space between children */
-.custom-link-big > * + * {
-  margin-left: 0.5rem; /* .space-x-2 */
+.sidebar-logo-wrapper img {
+  width: 30px;
+  height: auto;
 }
 
-/* Icon container */
-.custom-link-big-icon {
-  height: 1.25rem; /* .h-5 */
-  width: 1.5rem; /* .w-6 */
-  flex-shrink: 0; /* .shrink-0 */
-  background-color: #fff; /* .bg-black */
-
-  /* Complex border radius */
-  border-top-left-radius: 0.5rem; /* .rounded-tl-lg */
-  border-top-right-radius: 0.125rem; /* .rounded-tr-sm */
-  border-bottom-right-radius: 0.5rem; /* .rounded-br-lg */
-  border-bottom-left-radius: 0.125rem; /* .rounded-bl-sm */
+.sidebar-logo-big {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: #fff;
+  gap: 10px;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 20px;
 }
 
-/* Text element */
-.custom-link-big-text {
-  font-weight: 500; /* .font-medium */
-  white-space: pre; /* .whitespace-pre */
-  color: #000; /* .text-black */
+.sidebar-logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: #fff;
+  gap: 10px;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 20px;
 }
 
-/* Dark mode styles */
-@media (prefers-color-scheme: dark) {
-  .custom-link-big-icon {
-    background-color: #fff; /* .dark:bg-white */
-  }
-  .custom-link-big-text {
-    color: #fff; /* .dark:text-white */
-  }
+/* SIDEBAR LINKS STYLES */
+
+.sidebar-links-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 15px;
+  height: 100%;
+  width: 100%;
 }
 
-/* SMALL LOGO STYLES */
-.custom-link {
-  position: relative; /* .relative */
-  z-index: 20; /* .z-20 */
-  display: flex; /* .flex */
-  align-items: center; /* .items-center */
-  padding-top: 0.25rem; /* .py-1 */
-  padding-bottom: 0.25rem; /* .py-1 */
-  font-size: 0.875rem; /* .text-sm (14px) */
-  line-height: 1.25rem; /* .text-sm (20px) */
-  font-weight: 400; /* .font-normal */
-  color: #000; /* .text-black */
-}
-
-/* Space between child elements */
-.custom-link > * + * {
-  margin-left: 0.5rem; /* .space-x-2 */
-}
-
-/* Div element styles */
-.custom-link > div {
-  height: 1.25rem; /* .h-5 (5 * 0.25rem = 1.25rem) */
-  width: 1.5rem; /* .w-6 (6 * 0.25rem = 1.5rem) */
-  flex-shrink: 0; /* .shrink-0 */
-  background-color: #fff; /* .bg-black */
-
-  border-top-left-radius: 0.5rem; /* .rounded-tl-lg */
-  border-top-right-radius: 0.125rem; /* .rounded-tr-sm */
-  border-bottom-right-radius: 0.5rem; /* .rounded-br-lg */
-  border-bottom-left-radius: 0.125rem; /* .rounded-bl-sm */
-}
-
-/* Dark mode adaptation */
-@media (prefers-color-scheme: dark) {
-  .custom-link > div {
-    background-color: #fff; /* .dark:bg-white */
-  }
+.sidebar-links-wrapper-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  margin-bottom: 10px;
 }
