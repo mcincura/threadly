@@ -2,9 +2,9 @@ import './section3mobile.css'
 import './section3.css'
 import { motion } from 'framer-motion';
 import CountUp from 'react-countup';
-import Slider from '../slider/slider';
+import Slider from '../../ui/slider/slider';
 import { CardSpotlightDemo } from './cardSpotlight/cardSpotlightDemo';
-import { Spotlight } from '../ui/spotlight';
+import { Spotlight } from '../../ui/spotlight';
 
 const Section3 = ({ isMobile, isSection3 }) => {
 

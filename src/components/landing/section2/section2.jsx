@@ -4,7 +4,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Environment, useGLTF } from '@react-three/drei';
 import { ContactShadows } from '@react-three/drei';
 import './section2.css';
-import TracingBeam from '../tracingScroll/tracingBeam';
+import TracingBeam from '../../ui/tracingScroll/tracingBeam';
 
 const PhoneModel = ({ isSection2, scrollProgress }) => {
     const { scene } = useGLTF('./model/iphone2.glb');

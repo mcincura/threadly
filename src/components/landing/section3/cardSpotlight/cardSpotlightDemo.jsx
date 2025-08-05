@@ -1,7 +1,7 @@
 import React from "react";
 import CountUp from "react-countup";
 import "./cardSpotlightDemo.css"; // Optional: for custom styles
-import { CardSpotlight } from "../../ui/card-spotlight";
+import { CardSpotlight } from "../../../ui/card-spotlight";
 
 export function CardSpotlightDemo() {
 

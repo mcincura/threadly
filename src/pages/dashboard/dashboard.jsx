@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { Sidebar, SidebarBody, SidebarLink } from "../../components/sidebar/sidebar";
+import { Sidebar, SidebarBody, SidebarLink } from "../../components/ui/sidebar/sidebar";
 import { motion } from "framer-motion";
 import './dashboard.css'
 import { IconBrandTabler, IconAffiliate, IconSettings, IconCreditCardPay, IconUserCircle } from "@tabler/icons-react";
 import { SiTaketwointeractivesoftware } from "react-icons/si";
+
+import Dash from "../../components/dashboard/dash/dash";
 
 const Dashboard = () => {
 
@@ -53,7 +55,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-main">
-      <Sidebar open={open} setOpen={setOpen} animate={true}>
+      <Sidebar open={open} setOpen={setOpen} animate={true} className="dashboard-sidebar">
         <SidebarBody>
           <div className="sidebar-logo-wrapper">
             {open ? (
@@ -100,7 +102,9 @@ const Dashboard = () => {
       </Sidebar>
       <div className="dashboard-content-wrapper">
         <div className="dashboard-content">
-
+          <div className="dashboard-content-dash">
+            <Dash />
+          </div>
         </div>
       </div>
     </div>
