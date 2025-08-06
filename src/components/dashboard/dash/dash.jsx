@@ -3,7 +3,7 @@ import './dash.css'
 const Dash = () => {
     return (
         <div className="dash-main">
-            <div className="dash-content"></div>
+            <h1>ABY SI ZDECHEL DASH</h1>
         </div>
     )
 }

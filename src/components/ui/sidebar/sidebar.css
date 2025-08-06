@@ -84,11 +84,12 @@
 .sidebar-mobile-overlay {
   position: fixed;
   height: 100%;
-  width: 50%;
+  width: 60%;
   background-color: #883cf3;
   display: flex;
   flex-direction: column;
   z-index: 100;
+  border-radius: 15px 0px 0px 15px;
 }
 
 .sidebar-mobile-close {

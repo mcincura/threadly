@@ -63,8 +63,6 @@ export const SidebarBody = (props) => {
     return (
         <>
             {isMobile ? (<MobileSidebar {...props} />) : (<DesktopSidebar {...props} />)}
-
-
         </>
     )
 }
@@ -114,7 +112,7 @@ export const MobileSidebar = ({
                 {open && (
                     <motion.div
                         initial={{ x: "120%", opacity: 0 }}
-                        animate={{ x: "100%", opacity: 1 }}
+                        animate={{ x: "67%", opacity: 1 }}
                         exit={{ x: "120%", opacity: 0 }}
                         transition={{
                             duration: 0.1,
@@ -165,7 +163,7 @@ export const SidebarLink = ({
                 <motion.span
                     animate={{
                         display: animate ? (open ? "inline-block" : "none") : "inline-block",
-                        opacity: animate ? (open ? 1 : 0) : 1
+                        opacity: animate ? (open ? 1 : 0) : 1,
                     }}
                     className="sidebar-link-text"
                 >
