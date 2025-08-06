@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import Landing from '../pages/landing/landing';
 import Dashboard from '../pages/dashboard/dashboard';
+import Login from '../pages/login/login';
 
 const App = () => {
     return (
@@ -13,6 +14,7 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Landing />} />
                     <Route path="/dash" element={<Dashboard />} />
+                    <Route path="/login" element={<Login />} />
                 </Routes>
             </Router>
         </div>
