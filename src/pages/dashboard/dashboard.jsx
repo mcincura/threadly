@@ -6,6 +6,9 @@ import Dash from "../../components/dashboard/dash/dash";
 import Affiliate from "../../components/dashboard/affiliate/affiliate";
 import Payment from "../../components/dashboard/payment/payment";
 import Profile from "../../components/dashboard/profile/profile";
+
+import Login from "../../components/login/login";
+
 import './dashboard.css'
 import './sidebarDashboard.css'
 
@@ -73,6 +76,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-main">
+      <Login />
       {/* DASHBOARD SIDEBAR */}
       <div className="dashboard-sidebar-wrapper">
         <Sidebar open={open} setOpen={setOpen} animate={true}>

@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 import Landing from '../pages/landing/landing';
 import Dashboard from '../pages/dashboard/dashboard';
-import Login from '../pages/login/login';
+import Login from '../components/login/login';
 
 const App = () => {
     return (
