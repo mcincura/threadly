@@ -1,51 +1,75 @@
 import './dash.css';
+import './cards.css'
+import { IconUserCircle } from '@tabler/icons-react';
 
 const Dash = () => {
-    // Placeholder data - will be replaced with real data later
-    const metrics = [
-        { title: 'Affiliate Earnings', value: '$2,840', change: '+12%', description: 'From last month' },
-        { title: 'Subscriptions', value: '1,258', change: '+24%', description: 'Active members' },
-        { title: 'Registered Devices', value: '4,732', change: '-3%', description: 'Company-wide' },
-        { title: 'Active Users', value: '3,912', change: '+18%', description: 'Currently online' },
-        { title: 'Pending Requests', value: '142', change: '+6%', description: 'Awaiting approval' },
-        { title: 'API Calls', value: '28.1k', change: '+32%', description: 'This month' },
-    ];
+
+
 
     return (
         <div className="dash-main">
-            {/* Header Section */}
-            <header className="dashboard-header">
-                <div className="header-content">
-                    <h1>Dashboard Overview</h1>
-                    <p>Welcome back! Here's what's happening with your platform today.</p>
-                </div>
-                <div className="header-actions">
-                    <button className="notif-btn">🔔</button>
-                    <div className="user-avatar">JD</div>
-                </div>
-            </header>
-
-            {/* Bento Grid Section */}
-            <div className="bento-grid">
-                {metrics.map((metric, index) => (
-                    <div
-                        className={`card card-${index + 1}`}
-                        key={index}
-                        style={{ '--rotation': index % 2 === 0 ? '-1.5deg' : '1.5deg' }}
-                    >
-                        <div className="card-content">
-                            <h3>{metric.title}</h3>
-                            <div className="metric-value">{metric.value}</div>
-                            <div className="metric-footer">
-                                <span className={`change-indicator ${metric.change.startsWith('+') ? 'positive' : 'negative'}`}>
-                                    {metric.change}
-                                </span>
-                                <span className="metric-desc">{metric.description}</span>
+            <div className="dash-content-wrapper">
+                <div className="dash-content">
+                    <div className="dash-header">
+                        <h1>DASHBOARD</h1>
+                        <div className="dash-profile">
+                            <div className="dash-profile-circle">
+                                <IconUserCircle className='dash-profile-icon' />
                             </div>
                         </div>
                     </div>
-                ))}
+                    <div className="dash-bento-grid">
+                        <div className="bento-card wide device-usage-card">
+                            <div className="device-usage-content">
+                                <div className="device-progress">
+                                    <svg viewBox="0 0 36 36" className="progress-ring">
+                                        <path
+                                            className="progress-ring-bg"
+                                            d="M18 2.0845
+                       a 15.9155 15.9155 0 0 1 0 31.831
+                       a 15.9155 15.9155 0 0 1 0 -31.831"
+                                        />
+                                        <path
+                                            className="progress-ring-fill"
+                                            strokeDasharray="70, 100" /* example: 70% usage */
+                                            d="M18 2.0845
+                       a 15.9155 15.9155 0 0 1 0 31.831
+                       a 15.9155 15.9155 0 0 1 0 -31.831"
+                                        />
+                                    </svg>
+                                    <div className="progress-text">
+                                        <span className="used-devices">7</span>
+                                        <span className="total-devices">/ 10</span>
+                                    </div>
+                                </div>
+                                <div className="device-info">
+                                    <h2>Devices in Use</h2>
+                                    <p>7 of 10 licensed devices are active</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bento-card tall">
+                            <h1>tall bento grid</h1>
+                        </div>
+                        <div className="bento-card">
+                            <h1>normal bento grid</h1>
+                        </div>
+                        <div className="bento-card large">
+                            <h1>large bento grid</h1>
+                        </div>
+                        <div className="bento-card tall">
+                            <h1>tall bento grid</h1>
+                        </div>
+                        <div className="bento-card wide">
+                            <h1>wide bento grid</h1>
+                        </div>
+                        <div className="bento-card">
+                            <h1>normal bento grid</h1>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
     );
 }
