@@ -39,12 +39,35 @@ const Dash = () => {
                             </div>
                         </div>
 
-                        <div className="bento-card">
-                            <h1>normal bento grid</h1>
+                        <div className="bento-card device-allocation-card">
+                            <h2 className="allocation-title">Change Device Allocation</h2>
+                            <div className="allocation-controls">
+                                <button className="allocation-btn" onClick={() => console.log('Remove device')}>
+                                    –
+                                </button>
+                                <span className="device-count">3</span>
+                                <button className="allocation-btn" onClick={() => console.log('Add device')}>
+                                    +
+                                </button>
+                            </div>
+                            <p className="allocation-note">Upgrade for more devices</p>
                         </div>
-                        <div className="bento-card">
-                            <h1>normal bento grid</h1>
+
+                        <div className="bento-card invoice-card">
+                            <h2 className="invoice-title">Next Invoice</h2>
+                            <div className="invoice-amount">$149.99</div>
+                            <div className="invoice-due-date">Due: Aug 28, 2025</div>
+
+                            <button className="invoice-pay-btn" onClick={() => console.log('Pay now')}>
+                                Pay Now
+                            </button>
+
+                            {/*<div className="invoice-breakdown">
+                                <p>Base License: $99.99</p>
+                                <p>Extra Devices: $50.00</p>
+                            </div>*/}
                         </div>
+
                         <div className="bento-card tall">
                             <h1>tall bento grid</h1>
                         </div>
