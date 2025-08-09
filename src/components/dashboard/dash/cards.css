@@ -2,22 +2,22 @@
   display: flex;
   flex-direction: column;
   padding: 1rem;
+  font-family: "Inter", sans-serif;
 }
 
 .device-usage-content {
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  flex: 1;
-  gap: 1rem;
+  justify-content: space-evenly;
 }
 
 /* Progress ring container */
 .device-progress {
   position: relative;
   flex: 0 0 auto;
-  width: 40%; /* relative to card size */
+  width: 70%; /* relative to card size */
   max-width: 200px;
   aspect-ratio: 1 / 1;
 }
@@ -63,8 +63,7 @@
   color: #aaa;
 }
 
-/* Device info text */
-.device-info {
+* Device info text */ .device-info {
   flex: 1;
 }
 
