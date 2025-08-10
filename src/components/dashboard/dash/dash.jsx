@@ -1,8 +1,12 @@
 import './dash.css';
 import './cards.css'
 import { IconUserCircle } from '@tabler/icons-react';
+import { useState } from 'react';
 
 const Dash = () => {
+
+    const [isAff, setIsAff] = useState(false);
+    const [hasPfp, setHasPfp] = useState(false)
 
     return (
         <div className="dash-main">
@@ -68,23 +72,71 @@ const Dash = () => {
                             </div>*/}
                         </div>
 
-                        <div className="bento-card tall">
-                            <h1>tall bento grid</h1>
+                        <div className="bento-card tall announcements-card">
+                            <h2 className="announcements-title">📢 Announcements</h2>
+
+                            {/* New Feature Hero */}
+                            <div className="announcement-hero">
+                                <h3>🚀 New Feature!</h3>
+                                <p>Introducing smart device allocation for your team.</p>
+                                <button className="announcement-btn">Learn More</button>
+                            </div>
+
+                            {/* Updates List */}
+                            <div className="announcement-list">
+                                <div className="announcement-item">
+                                    <span className="announcement-date">Aug 8</span>
+                                    <p>🔧 Scheduled maintenance on Aug 12, 2 AM - 4 AM UTC.</p>
+                                </div>
+                                <div className="announcement-item">
+                                    <span className="announcement-date">Aug 6</span>
+                                    <p>📊 New analytics dashboard released.</p>
+                                </div>
+                            </div>
                         </div>
+
                         <div className="bento-card large">
                             <h1>large bento grid</h1>
                         </div>
                         <div className="bento-card tall">
-                            <h1>tall bento grid</h1>
+
                         </div>
+
                         <div className="bento-card">
                             <h1>normal bento grid</h1>
                         </div>
-                        <div className="bento-card">
-                            <h1>normal bento grid</h1>
+                        <div className="bento-card account-card">
+                            <h2 className="account-title">Account Management</h2>
+                            <div className="account-content">
+                                {hasPfp ? (
+                                    <img
+                                        src="https://via.placeholder.com/80"
+                                        alt="Profile"
+                                        className="account-avatar"
+                                    />
+                                ) : (
+                                    <IconUserCircle className='account-avatar' />
+                                )}
+                                <div className="account-info">
+                                    <p className="account-email">user@example.com</p>
+                                    <button className="account-edit-btn" onClick={() => console.log('Edit account')}>
+                                        Edit Profile
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div className="bento-card wide">
-                            <h1>wide bento grid</h1>
+                        <div className="bento-card wide affiliate-card">
+                            <div className="affiliate-text">
+                                <h2 className="affiliate-title">Affiliate Marketing</h2>
+                                <p className="affiliate-subtitle">
+                                    {isAff ? "You are making it rain. Check out your statistics!" : "Earn 50% from referrals. Join now and start earning today!"}
+                                </p>
+                            </div>
+
+                            <button className="affiliate-cta" onClick={() => console.log('Go to affiliate page')}>
+                                {isAff ? "Check Statistics" : "Get Started"}
+                                <span className="affiliate-arrow">→</span>
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -220,3 +220,265 @@
 .invoice-breakdown p {
   margin: 0;
 }
+
+.affiliate-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+}
+
+.affiliate-text {
+  flex: 1;
+}
+
+.affiliate-title {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-weight: bold;
+  color: #fff;
+  margin: 0;
+}
+
+@media (prefers-color-scheme: light) {
+  .affiliate-title {
+    color: #121212;
+  }
+}
+
+.affiliate-subtitle {
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  color: #ccc;
+  margin: 0.3rem 0 0;
+}
+
+.affiliate-cta {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background-color: #883cf3;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: clamp(0.5rem, 1vw, 0.6rem) clamp(0.9rem, 1.5vw, 1.2rem);
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.affiliate-cta:hover {
+  background-color: #6f2bd0;
+}
+
+.affiliate-arrow {
+  font-size: 1.2em;
+  transition: transform 0.2s ease;
+}
+
+.affiliate-cta:hover .affiliate-arrow {
+  transform: translateX(3px);
+}
+
+.account-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.account-title {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.account-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 1rem;
+}
+
+.account-avatar {
+  width: clamp(50px, 15%, 80px);
+  height: clamp(50px, 15%, 80px);
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #883cf3;
+}
+
+.account-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.account-email {
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  color: #ccc;
+  margin: 0;
+}
+
+.account-edit-btn {
+  background-color: transparent;
+  border: 1px solid #883cf3;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+  color: #883cf3;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.account-edit-btn:hover {
+  background-color: #883cf3;
+  color: #fff;
+}
+
+/* UPDATES CARD */
+
+.announcements-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.announcements-title {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-weight: bold;
+  color: #fff;
+}
+
+.announcement-hero {
+  background: linear-gradient(135deg, #883cf3, #5c27a6);
+  border-radius: 8px;
+  padding: 1rem;
+  color: #fff;
+  text-align: left;
+}
+
+.announcement-hero h3 {
+  margin: 0 0 0.3rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+}
+
+.announcement-hero p {
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  margin: 0 0 0.8rem;
+}
+
+.announcement-btn {
+  background-color: #fff;
+  color: #883cf3;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.announcement-btn:hover {
+  background-color: #e6d8f9;
+}
+
+/* Updates List */
+.announcement-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 0.3rem; /* space for scrollbar */
+}
+
+.announcement-item {
+  background-color: #1e1e1e;
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+}
+
+.announcement-date {
+  font-size: 0.75rem;
+  color: #aaa;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.announcement-item p {
+  margin: 0;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  color: #ddd;
+}
+
+/* SUPPORT CARD */
+
+.support-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.2rem;
+  border-radius: 12px;
+}
+
+.support-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.support-status {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0.6rem;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.support-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.support-btn {
+  padding: 0.6rem;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 8px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.support-btn:hover {
+  background: #e8e8e8;
+}
+
+.feedback-section {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.feedback-btn {
+  padding: 0.6rem 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+}
+
+.feedback-btn:hover {
+  background: #0062cc;
+}
