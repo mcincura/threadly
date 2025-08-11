@@ -2,11 +2,12 @@
   font-family: "Inter", sans-serif;
 }
 
+/* DEVICE USAGE CARD */
+
 .device-usage-card {
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  font-family: "Inter", sans-serif;
 }
 
 .device-usage-content {
@@ -14,19 +15,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 
-/* Progress ring container */
-.device-progress {
+.device-progress-ring {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   position: relative;
-  flex: 0 0 auto;
-  width: 70%; /* relative to card size */
-  max-width: 200px;
-  aspect-ratio: 1 / 1;
 }
 
 .progress-ring {
+  position: relative;
+  width: 75%;
+  aspect-ratio: 1/1;
+}
+
+.progress-ring-svg {
   width: 100%;
   height: 100%;
   transform: rotate(-90deg);
@@ -38,12 +44,6 @@
   stroke-width: 3;
 }
 
-@media (prefers-color-scheme: light) {
-  .progress-ring-bg {
-    stroke: #e9e9e9;
-  }
-}
-
 .progress-ring-fill {
   fill: none;
   stroke: #883cf3;
@@ -52,13 +52,11 @@
   transition: stroke-dasharray 0.3s ease;
 }
 
-/* Text inside the ring */
 .progress-text {
+  transform: translate(-50%, -50%);
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
 }
 
 .used-devices {
@@ -73,55 +71,62 @@
   color: #aaa;
 }
 
-@media (prefers-color-scheme: light) {
-  .used-devices {
-    color: #121212;
-  }
-}
-
-* Device info text */ .device-info {
+.device-info {
+  width: 100%;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .device-info h2 {
   font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: bold;
   margin: 0 0 0.5rem;
 }
 
 .device-info p {
   margin: 0;
-  color: #bbb;
+  color: #888;
   font-size: clamp(0.8rem, 1.5vw, 1rem);
 }
+
+@media (prefers-color-scheme: light) {
+  .progress-ring-bg {
+    stroke: #e9e9e9;
+  }
+
+  .used-devices {
+    color: #121212;
+  }
+}
+
+/* DEVICE ALLOCATION CARD */
 
 .device-allocation-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 1rem;
-  gap: 1rem;
-  text-align: center;
 }
 
 .allocation-title {
-  font-size: clamp(1rem, 2vw, 1.4rem);
+  text-align: center;
+  font-size: clamp(1rem, 2vw, 1.5rem);
   font-weight: bold;
   margin: 0;
   color: #fff;
 }
 
-@media (prefers-color-scheme: light) {
-  .allocation-title {
-    color: #121212;
-  }
-}
-
 .allocation-controls {
+  width: 100%;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.8rem;
+  gap: 1rem;
 }
 
 .allocation-btn {
@@ -129,11 +134,12 @@
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: clamp(0.4rem, 1vw, 0.6rem) clamp(0.6rem, 1.5vw, 1rem);
-  font-size: clamp(1.2rem, 3vw, 1.6rem);
-  font-weight: bold;
+  padding: 8px;
   cursor: pointer;
   transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .allocation-btn:hover {
@@ -148,60 +154,66 @@
   text-align: center;
 }
 
+.allocation-note {
+  color: #888;
+}
+
 @media (prefers-color-scheme: light) {
+  .allocation-title {
+    color: #121212;
+  }
+
   .device-count {
     color: #121212;
   }
 }
 
-.allocation-note {
-  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
-  color: #aaa;
-  margin: 0;
-}
+/* INVOICE CARD */
 
 .invoice-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
+  justify-content: flex-start;
   padding: 1rem;
-  text-align: center;
 }
 
 .invoice-title {
-  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-size: clamp(1rem, 2vw, 1.5rem);
   font-weight: bold;
-  color: #fff;
   margin: 0;
+  color: #fff;
 }
 
-@media (prefers-color-scheme: light) {
-  .invoice-title {
-    color: #121212;
-  }
+.invoice-amount-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin-bottom: 4px;
 }
 
 .invoice-amount {
-  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
   font-weight: bold;
   color: #883cf3;
 }
 
 .invoice-due-date {
   font-size: clamp(0.85rem, 1.5vw, 1rem);
-  color: #ccc;
+  color: #888;
 }
 
 .invoice-pay-btn {
-  margin-top: 0.4rem;
   background-color: #883cf3;
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: clamp(0.4rem, 1vw, 0.6rem) clamp(0.8rem, 1.5vw, 1.2rem);
-  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  padding: 8px;
+  padding-inline: 20px;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
   cursor: pointer;
   transition: background 0.2s ease;
 }
@@ -210,23 +222,20 @@
   background-color: #6f2bd0;
 }
 
-.invoice-breakdown {
-  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
-  color: #aaa;
-  margin-top: 0.5rem;
-  line-height: 1.3;
+@media (prefers-color-scheme: light) {
+  .invoice-title {
+    color: #121212;
+  }
 }
 
-.invoice-breakdown p {
-  margin: 0;
-}
+/*  AFFILIATE CARD */
 
 .affiliate-card {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
+  justify-content: flex-start;
+  padding: 1rem;
 }
 
 .affiliate-text {
@@ -234,36 +243,30 @@
 }
 
 .affiliate-title {
-  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-size: clamp(1rem, 2vw, 1.5rem);
   font-weight: bold;
-  color: #fff;
   margin: 0;
-}
-
-@media (prefers-color-scheme: light) {
-  .affiliate-title {
-    color: #121212;
-  }
+  color: #fff;
 }
 
 .affiliate-subtitle {
   font-size: clamp(0.85rem, 1.5vw, 1rem);
-  color: #ccc;
-  margin: 0.3rem 0 0;
+  color: #888;
+  margin-top: 6px;
 }
 
 .affiliate-cta {
-  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  gap: 8px;
   background-color: #883cf3;
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: clamp(0.5rem, 1vw, 0.6rem) clamp(0.9rem, 1.5vw, 1.2rem);
-  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  padding: 8px;
+  padding-inline: 20px;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
   cursor: pointer;
   transition: background 0.2s ease;
 }
@@ -273,6 +276,9 @@
 }
 
 .affiliate-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.2em;
   transition: transform 0.2s ease;
 }
@@ -281,98 +287,136 @@
   transform: translateX(3px);
 }
 
+@media (prefers-color-scheme: light) {
+  .affiliate-title {
+    color: #121212;
+  }
+}
+
+/* ACCOUNT CARD */
+
 .account-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 2rem;
+  justify-content: flex-start;
+  padding: 1rem;
 }
 
 .account-title {
-  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-size: clamp(1rem, 2vw, 1.5rem);
   font-weight: bold;
+  margin: 0;
   color: #fff;
-  margin-bottom: 1rem;
 }
 
 .account-content {
-  display: flex;
-  align-items: center;
   flex: 1;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .account-avatar {
-  width: clamp(50px, 15%, 80px);
-  height: clamp(50px, 15%, 80px);
-  border-radius: 50%;
-  object-fit: cover;
+  background-color: #fff;
+  border-radius: 500px;
+  height: 30px;
+  width: 30px;
+  color: #883cf3;
   border: 2px solid #883cf3;
 }
 
 .account-info {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex: 1;
 }
 
-.account-email {
-  font-size: clamp(0.85rem, 1.5vw, 1rem);
-  color: #ccc;
-  margin: 0;
+.account-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
 }
 
-.account-edit-btn {
-  background-color: transparent;
-  border: 1px solid #883cf3;
-  border-radius: 6px;
-  padding: 0.4rem 0.8rem;
-  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
-  color: #883cf3;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.account-edit-btn:hover {
+.account-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   background-color: #883cf3;
   color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  padding-inline: 20px;
+  min-width: 40%;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.account-btn:hover {
+  background-color: #6f2bd0;
+}
+
+@media (prefers-color-scheme: light) {
+  .account-title {
+    color: #121212;
+  }
 }
 
 /* UPDATES CARD */
 
-.announcements-card {
+.update-card{
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   padding: 1rem;
   gap: 1rem;
 }
 
-.announcements-title {
-  font-size: clamp(1rem, 2vw, 1.4rem);
+.update-title{
+  font-size: clamp(1rem, 2vw, 1.5rem);
   font-weight: bold;
+  margin: 0;
   color: #fff;
 }
 
-.announcement-hero {
+.update-hero {
   background: linear-gradient(135deg, #883cf3, #5c27a6);
   border-radius: 8px;
-  padding: 1rem;
   color: #fff;
   text-align: left;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 0.5rem;
+  width: 100%;
 }
 
-.announcement-hero h3 {
+.update-hero h3 {
   margin: 0 0 0.3rem;
   font-size: clamp(1rem, 2vw, 1.2rem);
+  text-align: center;
 }
 
-.announcement-hero p {
+.update-hero p {
   font-size: clamp(0.85rem, 1.5vw, 1rem);
   margin: 0 0 0.8rem;
 }
 
-.announcement-btn {
+.update-btn {
   background-color: #fff;
   color: #883cf3;
   border: none;
@@ -383,102 +427,406 @@
   transition: background-color 0.2s ease;
 }
 
-.announcement-btn:hover {
+.update-btn:hover {
   background-color: #e6d8f9;
 }
 
-/* Updates List */
-.announcement-list {
+.update-list{
+  width: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
-  overflow-y: auto;
+  gap: 8px;
+}
+
+.update-list-title{
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: bold;
+  margin: 0;
+  color: #fff;
+  text-align: center;
+}
+
+.update-items-wrapper{
   flex: 1;
-  padding-right: 0.3rem; /* space for scrollbar */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
-.announcement-item {
-  background-color: #1e1e1e;
+.update-item {
+  background-color: #181818;
   border-radius: 6px;
-  padding: 0.6rem 0.8rem;
+  width: 100%;
+  margin-top: 8px;
 }
 
-.announcement-date {
+.update-date {
   font-size: 0.75rem;
-  color: #aaa;
+  color: #888;
   display: block;
   margin-bottom: 0.3rem;
 }
 
-.announcement-item p {
+.update-item p {
   margin: 0;
   font-size: clamp(0.85rem, 1.5vw, 1rem);
   color: #ddd;
 }
 
-/* SUPPORT CARD */
+@media (prefers-color-scheme: light) {
+  .update-title {
+    color: #121212;
+  }
 
-.support-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 1.2rem;
-  border-radius: 12px;
+  .update-list-title{
+    color: #121212;
+  }
+
+  .update-item{
+    background-color: #fff;
+  }
+
+  .update-item p{
+    color: #121212;
+  }
 }
 
-.support-title {
-  font-size: 1.4rem;
+/* MAINTENANCE CARD */
+
+.maintenance-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.maintenance-title {
+  font-size: clamp(1rem, 2vw, 1.5rem);
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin: 0;
+  color: #fff;
 }
 
-.support-status {
+.maintenance-info-wrapper{
+  flex: 1;
+  width: 100%;
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  padding: 0.6rem;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-  font-size: 0.9rem;
+  align-items: center;
+  justify-content: center;
 }
 
-.support-links {
+.maintenance-info {
+  background: linear-gradient(135deg, #f39c12, #883cf3);
+  border-radius: 8px;
+  color: #fff;
+  text-align: center;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-block: 1rem;
+  gap: 0.5rem;
+}
+
+.maintenance-date {
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  font-weight: 500;
+  color: #fff;
+}
+
+.maintenance-duration {
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
+  color: #eee;
+}
+
+.maintenance-none {
+  width: 100%;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  color: #888;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+}
+
+@media (prefers-color-scheme: light) {
+  .maintenance-title {
+    color: #121212;
+  }
+  .maintenance-info {
+    background: linear-gradient(135deg, #fd9f09, #883cf3);
+    color: #121212;
+  }
+  .maintenance-none {
+    background-color: #fff;
+    color: #888;
+  }
+  .maintenance-date,
+  .maintenance-duration {
+    color: #fff;
+  }
+}
+
+/* RESOURCE LINKS CARD */
+
+.resource-links-card {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1rem;
+  gap: 1rem;
 }
 
-.support-btn {
-  padding: 0.6rem;
-  background: #f5f5f5;
-  border: none;
+.resource-title {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: bold;
+  margin: 0;
+  color: #fff;
+}
+
+.resource-links {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.resource-link{
+  background-color: #883cf3;
+  color: #fff;
+  text-decoration: none;
   border-radius: 8px;
-  text-align: left;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  font-size: 0.9rem;
+  padding: 8px;
+  padding-inline: 20px;
+  min-width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease-out;
 }
 
-.support-btn:hover {
-  background: #e8e8e8;
+.resource-link:hover {
+  background-color: #6f2bd0;
+  color: #fff;
 }
 
-.feedback-section {
-  margin-top: 1rem;
+.resource-socials{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  height: 12%;
+}
+
+.resource-social{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+    border-radius: 8px;
+  transition: 0.3s ease-out;
+  color: #fff;
+}
+
+.resource-social:hover{
+  scale: 1.1;
+  background-color: #fff;
+  color: #883cf3;
+}
+
+.resource-icon{
+  height: 100%;
+  aspect-ratio: 1/1;
+}
+
+@media (prefers-color-scheme: light) {
+  .resource-title {
+    color: #121212;
+  }
+
+.resource-social{
+  color: #121212;
+}
+
+.resource-social:hover{
+  scale: 1.1;
+  background-color: #883cf3;
+  color: #fff;
+}
+}
+
+/* DEVICE NETWORK CARD */
+
+.device-map-card{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+}
+
+.rays-wrapper{
+  background-color: #000000;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.custom-rays{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #000000;
+}
+
+.hero-content-wrapper{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  color: #fff;
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-title{
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: bold;
+  margin: 0;
+  color: #fff;
   text-align: center;
 }
 
-.feedback-btn {
-  padding: 0.6rem 1rem;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background 0.2s ease;
+/*4K DISPLAYS STYLING*/
+@media (min-width: 2000px) {
+  .device-allocation-card {
+    padding: 2rem;
+  }
+
+  /* 
+AFFILIATE CARD 
+*/
+
+  .affiliate-card {
+    padding: 2rem;
+  }
+
+  .affiliate-cta {
+    padding-block: 12px;
+  }
+
+  /* 
+INVOICE CARD 
+*/
+
+  .invoice-card {
+    padding: 2rem;
+  }
+
+  .invoice-pay-btn {
+    padding-block: 12px;
+  }
+
+  /* 
+ACCOUNT CARD 
+*/
+
+  .account-card {
+    padding: 2rem;
+  }
+
+  .account-btn {
+    padding-block: 12px;
+  }
+
+  .account-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0px;
+    flex: 1;
+    margin-bottom: 2px;
+  }
+
+  .account-avatar {
+    height: 50px;
+    width: 50px;
+    color: #883cf3;
+    border: 4px solid #883cf3;
+    margin-block: 8px;
+  }
+
+/* 
+UPDATE CARD 
+*/
+
+.update-card{
+  padding: 2rem;
 }
 
-.feedback-btn:hover {
-  background: #0062cc;
+/* 
+MAINTENANCE CARD 
+*/
+
+  .maintenance-card {
+    padding: 2rem;
+  }
+  .maintenance-info,
+  .maintenance-none {
+    padding-block: 2rem;
+  }
+
+/* 
+RESOURCES CARD 
+*/
+
+  .resource-links-card{
+  padding: 2rem;
+  gap: 2rem;
+}
+
+  .resource-links{
+    gap: 2rem;
+  }
+
+.resource-link{
+  background-color: #883cf3;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 8px;
+  padding-inline: 20px;
+  min-width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 12px;
+}
+
+  .resource-socials{
+    height: 10%;
+  }
 }

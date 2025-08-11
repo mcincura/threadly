@@ -76,7 +76,6 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-main">
-      <Login />
       {/* DASHBOARD SIDEBAR */}
       <div className="dashboard-sidebar-wrapper">
         <Sidebar open={open} setOpen={setOpen} animate={true}>
@@ -136,7 +135,7 @@ const Dashboard = () => {
         >
           {active === 'dash' && (
             <div className={`dashboard-content-dash-wrapper ${open && isMobile ? 'blur' : ''}`}>
-              <Dash />
+              <Dash setActive={setActive} open={open} />
             </div>
           )}
           {active === 'aff' && (
@@ -150,7 +149,7 @@ const Dashboard = () => {
             </div>
           )}
           {active === 'prof' && (
-            <div className={`dashboard-content-payment-wrapper ${open && isMobile ? 'blur' : ''} `}>
+            <div className={`dashboard-content-profile-wrapper ${open && isMobile ? 'blur' : ''} `}>
               <Profile />
             </div>
           )}
