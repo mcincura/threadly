@@ -1,10 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
 import { IconEye, IconEyeOff, IconSquareX } from "@tabler/icons-react";
+// ...existing imports...
+import { useContext } from "react";
+import { UserContext } from "../../app/context/userContext";
 import "./login.css";
 
-const Login = () => {
+const API_URL = "http://localhost:3001/auth";
 
+const Login = () => {
     const [isSignup, setIsSignup] = useState(false);
     const [closed, setClosed] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -13,30 +17,38 @@ const Login = () => {
     const [formData, setFormData] = useState({
         email: "",
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
+        remember: false,
+        verification_code: ""
     });
+    const [awaitingVerification, setAwaitingVerification] = useState(false);
+    const { setLoggedIn, setUser } = useContext(UserContext);
 
-    //handle form inpurts
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value, type, checked } = e.target;
+        setFormData({
+            ...formData,
+            [name]: type === "checkbox" ? checked : value
+        });
 
-        if (e.target.name === "password" && isSignup) {
-            validatePasswordStrength(e.target.value);
+        if (name === "password" && isSignup) {
+            validatePasswordStrength(value);
         }
     };
 
-    //handle changing from login to signup
     const toggleMode = () => {
         setIsSignup(!isSignup);
         setFormData({
             email: "",
             password: "",
-            confirmPassword: ""
+            confirmPassword: "",
+            remember: false,
+            verification_code: ""
         });
         setPasswordError("");
+        setAwaitingVerification(false);
     };
 
-    //handle weak passwords
     const validatePasswordStrength = (password) => {
         const strongPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
         if (!strongPattern.test(password)) {
@@ -46,12 +58,9 @@ const Login = () => {
         }
     };
 
-    //TO DO: FINISH API CALLS 
-    //PLACEHOLDERS FOR NOW
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const { email, password, confirmPassword } = formData;
+        const { email, password, confirmPassword, remember } = formData;
 
         try {
             if (isSignup) {
@@ -63,38 +72,43 @@ const Login = () => {
                     alert("Please choose a stronger password.");
                     return;
                 }
-                const response = await axios.post("threadly/api/auth/signup", {
-                    email,
-                    password
-                });
-                alert("Signup successful");
-                console.log(response.data);
+                const response = await axios.post(`${API_URL}/signup`, { email, password });
+                alert(response.data.message || "Signup successful. Verification pending.");
+                setAwaitingVerification(true);
             } else {
-                const response = await axios.post("threadly/api/auth/login", {
-                    email,
-                    password
-                });
-                alert("Login successful");
-                console.log(response.data);
+                const response = await axios.post(`${API_URL}/login`, { email, password, remember }, { withCredentials: true });
+                alert(response.data.message || "Login successful");
+                setLoggedIn(true);
+                setUser(response.data.user);
             }
         } catch (err) {
-            console.error(err);
-            alert(err.response?.data?.message || "An error occurred");
+            alert(err.response?.data?.error || "An error occurred");
         }
     };
 
-    if (closed) {
-        return;
-    } else {
-        return (
-            <div className="modal-backdrop">
-                <div className="modal">
-                    <div className="modal-close-icon"
-                        onClick={() => setClosed(!closed)}
-                    >
-                        <IconSquareX />
-                    </div>
-                    <h2>{isSignup ? "Sign Up" : "Log In"}</h2>
+    const handleVerify = async (e) => {
+        e.preventDefault();
+        const { email, verification_code } = formData;
+        try {
+            const response = await axios.post(`${API_URL}/verify`, { email, verification_code });
+            alert(response.data.message || "Email verified successfully.");
+            setAwaitingVerification(false);
+            setIsSignup(false);
+        } catch (err) {
+            alert(err.response?.data?.error || "Verification failed.");
+        }
+    };
+
+    if (closed) return null;
+
+    return (
+        <div className="modal-backdrop">
+            <div className="modal">
+                <div className="modal-close-icon" onClick={() => setClosed(true)}>
+                    <IconSquareX />
+                </div>
+                <h2>{isSignup ? "Sign Up" : "Log In"}</h2>
+                {!awaitingVerification ? (
                     <form onSubmit={handleSubmit}>
                         <input
                             type="email"
@@ -103,8 +117,8 @@ const Login = () => {
                             value={formData.email}
                             onChange={handleChange}
                             required
+                            className="input-field"
                         />
-
                         <div className="password-input">
                             <input
                                 type={showPassword ? "text" : "password"}
@@ -113,15 +127,12 @@ const Login = () => {
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
+                                className="input-field"
                             />
-                            <span
-                                className="eye-icon"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? < IconEye /> : < IconEyeOff />}
+                            <span className="eye-icon" onClick={() => setShowPassword(!showPassword)}>
+                                {showPassword ? <IconEye /> : <IconEyeOff />}
                             </span>
                         </div>
-
                         {isSignup && (
                             <>
                                 <div className="password-input">
@@ -132,12 +143,10 @@ const Login = () => {
                                         value={formData.confirmPassword}
                                         onChange={handleChange}
                                         required
+                                        className="input-field"
                                     />
-                                    <span
-                                        className="eye-icon"
-                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                    >
-                                        {showConfirmPassword ? < IconEye /> : < IconEyeOff />}
+                                    <span className="eye-icon" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                                        {showConfirmPassword ? <IconEye /> : <IconEyeOff />}
                                     </span>
                                 </div>
                                 {passwordError && (
@@ -145,19 +154,45 @@ const Login = () => {
                                 )}
                             </>
                         )}
+                        {!isSignup && (
+                            <div className="remember-me-wrapper">
+                                <input
+                                    type="checkbox"
+                                    name="remember"
+                                    checked={formData.remember}
+                                    onChange={handleChange}
+                                    className="remember-me-checkbox"
+                                />
+                                <p className="remember-me-text">Remember Me</p>
+                            </div>
+                        )}
                         <button type="submit">{isSignup ? "Create Account" : "Log In"}</button>
                     </form>
-                    <p onClick={toggleMode} className="toggle-link">
-                        {isSignup
-                            ? "Already have an account? Log in"
-                            : "Don't have an account? Sign up"}
-                    </p>
-                </div>
+                ) : (
+                    <form onSubmit={handleVerify}>
+                        <p>
+                            Enter the verification code sent to your email:
+                        </p>
+                        <input
+                            type="text"
+                            name="verification_code"
+                            placeholder="Verification Code"
+                            value={formData.verification_code}
+                            onChange={handleChange}
+                            required
+                            className="input-field"
+                        />
+                        <button type="submit">Verify Email</button>
+                    </form>
+                )}
+                <p onClick={toggleMode} className="toggle-link">
+                    {isSignup
+                        ? "Already have an account? Log in"
+                        : "Don't have an account? Sign up"}
+                </p>
             </div>
-        )
-    }
-
-
-}
+        </div>
+    );
+};
 
 export default Login;

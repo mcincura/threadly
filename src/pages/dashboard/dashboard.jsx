@@ -2,12 +2,16 @@ import { useEffect, useState, useRef } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "../../components/ui/sidebar/sidebar";
 import { motion } from "framer-motion";
 import { IconAffiliate, IconBrandTabler, IconCreditCardPay, IconArrowLeftToArc, IconUserCircle } from "@tabler/icons-react";
+import axios from "axios";
+
 import Dash from "../../components/dashboard/dash/dash";
 import Affiliate from "../../components/dashboard/affiliate/affiliate";
 import Payment from "../../components/dashboard/payment/payment";
 import Profile from "../../components/dashboard/profile/profile";
 
 import Login from "../../components/login/login";
+import { useContext } from "react";
+import { UserContext } from "../../app/context/userContext";
 
 import './dashboard.css'
 import './sidebarDashboard.css'
@@ -18,12 +22,13 @@ const Dashboard = () => {
   const [active, setActive] = useState('dash');
   const [isMobile, setIsMobile] = useState(false);
   const prevActiveRef = useRef(active);
+  const { loggedIn } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     if (prevActiveRef.current !== active && isMobile) {
       setOpen(false);
     }
-    // Update ref with current active value
     prevActiveRef.current = active;
   }, [active, isMobile]);
 
@@ -37,6 +42,15 @@ const Dashboard = () => {
     window.addEventListener('resize', checkIsMobile);
     return () => window.removeEventListener('resize', checkIsMobile);
   }, [])
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:3001/auth/logout", {}, { withCredentials: true });
+      window.location.href = "/";
+    } catch (error) {
+      window.location.href = "/";
+    }
+  };
 
   const links = [
     {
@@ -76,6 +90,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-main">
+      {!loggedIn && <Login />}
       {/* DASHBOARD SIDEBAR */}
       <div className="dashboard-sidebar-wrapper">
         <Sidebar open={open} setOpen={setOpen} animate={true}>
@@ -118,7 +133,11 @@ const Dashboard = () => {
                   key={idx}
                   link={link}
                   active={active === link.view}
-                  onClick={() => setActive(link.view)}
+                  onClick={
+                    link.view === "logout"
+                      ? handleLogout
+                      : () => setActive(link.view)
+                  }
                 />
               ))}
             </div>
@@ -135,12 +154,12 @@ const Dashboard = () => {
         >
           {active === 'dash' && (
             <div className={`dashboard-content-dash-wrapper ${open && isMobile ? 'blur' : ''}`}>
-              <Dash setActive={setActive} open={open} />
+              <Dash setActive={setActive} open={open} user={user} loggedIn={loggedIn} />
             </div>
           )}
           {active === 'aff' && (
             <div className={`dashboard-content-affiliate-wrapper ${open && isMobile ? 'blur' : ''} `}>
-              <Affiliate />
+              <Affiliate user={user} loggedIn={loggedIn} />
             </div>
           )}
           {active === 'pay' && (

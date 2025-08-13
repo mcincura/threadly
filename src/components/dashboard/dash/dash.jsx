@@ -16,14 +16,14 @@ const updates = [
     // Add more updates as needed
 ];
 
-const Dash = ({ setActive, open }) => {
+const Dash = ({ setActive, open, user, loggedIn }) => {
 
     const [usedDevices, setUsedDevices] = useState(9);
     const [allDevices, setAllDevices] = useState(10);
     const progress = (usedDevices / allDevices) * 100;
     const [newDevices, setnewDevices] = useState(0);
     const [invoiceAmount, setInvoiceAmount] = useState(149.99);
-    const [isAff, setIsAff] = useState(true);
+    const [isAff, setIsAff] = useState(false);
     const [hasPfp, sethasPfp] = useState(false);
     const [newFeature, setNewFeature] = useState(false);
     const [visibleUpdates, setVisibleUpdates] = useState(2);
@@ -35,6 +35,16 @@ const Dash = ({ setActive, open }) => {
         time: "02:00 AM UTC",
         duration: "2 hours"
     });
+
+    useEffect(() => {
+        if (loggedIn) {
+            if (user.isAff === 0) {
+                setIsAff(false);
+            } else {
+                setIsAff(true);
+            }
+        }
+    }, [user, loggedIn])
 
     useEffect(() => {
         const updateVisibleItems = () => {
@@ -274,7 +284,7 @@ const Dash = ({ setActive, open }) => {
                                     ) : (
                                         <IconUser className='account-avatar' />
                                     )}
-                                    <p className="account-email">user@example.com</p>
+                                    <p className="account-email">{loggedIn ? user.email : 'user@example.com'}</p>
                                 </div>
                                 <div className="account-buttons">
                                     <button className="account-btn" onClick={() => setActive('prof')}>

@@ -67,7 +67,7 @@
   gap: 1rem;
 }
 
-.modal input {
+.input-field {
   font-size: 1rem;
   border-radius: 7px;
   outline: none;
@@ -79,11 +79,11 @@
   font-family: "Inter", sans-serif;
 }
 
-.modal input:focus {
+.input-field:focus {
   border: solid 2px #883cf3;
 }
 
-.modal input::placeholder {
+.input-field::placeholder {
   font-family: "Inter", sans-serif;
   font-weight: 500;
   color: #8d8d8d;
@@ -144,17 +144,37 @@
   margin-bottom: 0.5rem;
 }
 
+.remember-me-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.remember-me-text {
+  flex: 1;
+}
+
+.remember-me-checkbox {
+  display: flex;
+  width: 10%;
+}
+
+.remember-me-checkbox:checked {
+  accent-color: #883cf3;
+}
+
 @media (prefers-color-scheme: light) {
   .modal {
     background-color: #fff;
     color: #121212;
   }
 
-  .modal input {
+  .input-field {
     border: 2px solid #883cf3;
   }
 
-  .modal input:focus {
+  .input-field:focus {
     background-color: #ededed;
   }
 
