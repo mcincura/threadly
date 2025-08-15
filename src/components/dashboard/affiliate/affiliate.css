@@ -48,8 +48,9 @@
 }
 
 .affiliate-section2 {
+  display: flex;
   width: 90%;
-  height: 100vh;
+  min-height: 50vh;
   z-index: 2;
   background: rgba(0, 0, 0, 0.25);
   border-radius: 16px;
@@ -127,7 +128,7 @@
 
   .affiliate-section2 {
     width: 90%;
-    height: 100vh;
+    min-height: 50vh;
     z-index: 2;
     background: rgba(255, 255, 255, 0.25);
     border-radius: 16px;

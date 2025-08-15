@@ -11,12 +11,9 @@ import Stepper, { Step } from '../../ui/stepper/stepper';
 const Affiliate = ({ user, loggedIn }) => {
 
     const [isAff, setIsAff] = useState(null);
-    const [hasAnimated, setHasAnimated] = useState(false);
-    const [hasAnimated2, setHasAnimated2] = useState(false);
     const [isLight, setIsLight] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
-    // ...existing code...
     useEffect(() => {
         if (loggedIn && user && typeof user.isAff !== "undefined") {
             if (user.isAff === 0) {
@@ -85,19 +82,21 @@ const Affiliate = ({ user, loggedIn }) => {
                     >
                         {!isAff ? (
                             <div className="NO-affiliate-section2-content">
-                                <div className='NO-affiliate-section2-content1-left'>
-                                    <h1>Turn Conversations into Conversions</h1>
-                                    <h3>Become an Affiliate Today</h3>
-                                    <button
-                                        onClick={() => setShowModal(true)}
-                                    >JOIN NOW</button>
-                                </div>
-                                <div className='NO-affiliate-section2-content1-right'>
-                                    <h1>Turn Conversations into Conversions</h1>
-                                    <h3>Become an Affiliate Today</h3>
-                                    <button
-                                        onClick={() => setShowModal(true)}
-                                    >JOIN NOW</button>
+                                <div className='NO-affiliate-section2-content1'>
+                                    <div className='NO-affiliate-section2-content1-left'>
+                                        <h1>Turn Conversations into Conversions</h1>
+                                        <h3>Become an Affiliate Today</h3>
+                                        <button
+                                            onClick={() => setShowModal(true)}
+                                        >JOIN NOW</button>
+                                    </div>
+                                    <div className='NO-affiliate-section2-content1-right'>
+                                        <h1>Turn Conversations into Conversions</h1>
+                                        <h3>Become an Affiliate Today</h3>
+                                        <button
+                                            onClick={() => setShowModal(true)}
+                                        >JOIN NOW</button>
+                                    </div>
                                 </div>
                             </div>
                         ) : (
