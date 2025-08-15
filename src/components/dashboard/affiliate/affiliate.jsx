@@ -1,29 +1,12 @@
-import './affiliate.css'
+import './affiliate.css';
+import './noAff.css';
+import './aff.css';
 import DotGrid from '../../ui/dotGrid/dotgrid';
 import AffiliateTitle from './affTitle';
 import AffiliateSubtitle from './affSub';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Bar } from 'react-chartjs-2';
 import Stepper, { Step } from '../../ui/stepper/stepper';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend,
-} from 'chart.js';
-
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend
-);
 
 const Affiliate = ({ user, loggedIn }) => {
 
@@ -33,19 +16,22 @@ const Affiliate = ({ user, loggedIn }) => {
     const [isLight, setIsLight] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
+    // ...existing code...
     useEffect(() => {
-        if (loggedIn) {
+        if (loggedIn && user && typeof user.isAff !== "undefined") {
             if (user.isAff === 0) {
                 setIsAff(false);
             } else {
                 setIsAff(true);
             }
+        } else {
+            setIsAff(false);
         }
     }, [user, loggedIn])
 
     const title = !isAff
         ? "Become an Affiliate"
-        : `Welcome Back, ${user.username}!`;
+        : `Welcome Back, ${user && user.username ? user.username : "Affiliate"}!`;
 
     const subtitle = !isAff
         ? "Earn up to 50% commission from each sale and recurring sales!"
@@ -82,6 +68,12 @@ const Affiliate = ({ user, loggedIn }) => {
                     <div className="affiliate-section1">
                         <AffiliateTitle isAff={isAff} text={title} />
                         <AffiliateSubtitle isAff={isAff} text={subtitle} />
+                        {!isAff && (
+                            <button
+                                onClick={() => setShowModal(true)}
+                                className='affiliate-hero-cta-button'
+                            >JOIN NOW</button>
+                        )}
                     </div>
                 )}
                 {isAff !== null && (
@@ -93,9 +85,20 @@ const Affiliate = ({ user, loggedIn }) => {
                     >
                         {!isAff ? (
                             <div className="NO-affiliate-section2-content">
-                                <button
-                                    onClick={() => setShowModal(true)}
-                                >JOIN NOW</button>
+                                <div className='NO-affiliate-section2-content1-left'>
+                                    <h1>Turn Conversations into Conversions</h1>
+                                    <h3>Become an Affiliate Today</h3>
+                                    <button
+                                        onClick={() => setShowModal(true)}
+                                    >JOIN NOW</button>
+                                </div>
+                                <div className='NO-affiliate-section2-content1-right'>
+                                    <h1>Turn Conversations into Conversions</h1>
+                                    <h3>Become an Affiliate Today</h3>
+                                    <button
+                                        onClick={() => setShowModal(true)}
+                                    >JOIN NOW</button>
+                                </div>
                             </div>
                         ) : (
                             <div className="affiliate-section2-content">
@@ -103,8 +106,7 @@ const Affiliate = ({ user, loggedIn }) => {
                             </div>
                         )}
                     </motion.div>
-                )}
-                {showModal && (
+                )}                {showModal && (
                     <div className="stepper-wrapper">
                         <Stepper
                             initialStep={1}
