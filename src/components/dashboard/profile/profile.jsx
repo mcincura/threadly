@@ -1,14 +1,17 @@
 import './profile.css'
-import Balatro from '../../ui/balatro/balatro';
+import Balatro from '../../ui/balatro/balatro.js';
 
 const Profile = () => {
     return (
         <div className="profile-main">
-            <Balatro
-                isRotate={false}
-                mouseInteraction={false}
-                pixelFilter={2000}
-            />
+            <div className="profile-content-wrapper">
+                <Balatro
+                    className={"balatro-bg"}
+                    isRotate={false}
+                    mouseInteraction={false}
+                    pixelFilter={20000}
+                />
+            </div>
         </div>
     )
 }
