@@ -4,36 +4,60 @@ import {
     Routes,
     useLocation
 } from 'react-router-dom';
-import { useEffect } from 'react';
-import { UserProvider } from './context/userContext';
+import { useEffect, useContext } from 'react';
+import { UserProvider, UserContext } from './context/userContext';
 import Landing from '../pages/landing/landing';
 import Dashboard from '../pages/dashboard/dashboard';
 import Login from '../components/login/login';
 
-const App = () => {
+const AppContent = () => {
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
+        // Helper to get cookie by name
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
         const params = new URLSearchParams(window.location.search);
         const ref = params.get('ref');
-        if (ref) {
-            console.log('Affiliate ref:', ref);
-            // Optionally store in localStorage or context here
+        //log the ref from the link in the console
+        console.log('Affiliate ref from URL:', ref);
+        const refCookie = getCookie('ref');
+        const tokenCookie = getCookie('token');
+
+        // Only set ref cookie if:
+        // - ref param exists
+        // - user is not logged in (no user)
+        // - no ref cookie exists
+        // - no token cookie exists
+        if (ref && !user && !refCookie && !tokenCookie) {
+            // Set cookie for 7 days
+            const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
+            document.cookie = `ref=${ref}; expires=${expires}; path=/`;
+            console.log('Affiliate ref cookie set:', ref);
         }
-    }, []); // Empty dependency array: runs only once on mount
+    }, [user]); // Re-run if user changes
 
     return (
-        <div className="App">
-            <UserProvider>
-                <Router>
-                    <Routes>
-                        <Route path="/" element={<Landing />} />
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/login" element={<Login />} />
-                    </Routes>
-                </Router>
-            </UserProvider>
-        </div>
+        <Router>
+            <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/login" element={<Login />} />
+            </Routes>
+        </Router>
     );
 };
+
+const App = () => (
+    <div className="App">
+        <UserProvider>
+            <AppContent />
+        </UserProvider>
+    </div>
+);
 
 export default App;

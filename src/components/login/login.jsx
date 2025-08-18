@@ -8,6 +8,12 @@ import "./login.css";
 
 const API_URL = "http://localhost:3001/auth";
 
+const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+};
+
 const Login = () => {
     const [isSignup, setIsSignup] = useState(false);
     const [closed, setClosed] = useState(false);
@@ -72,7 +78,8 @@ const Login = () => {
                     alert("Please choose a stronger password.");
                     return;
                 }
-                const response = await axios.post(`${API_URL}/signup`, { email, password });
+                const signupData = { email, password };
+                const response = await axios.post(`${API_URL}/signup`, signupData);
                 alert(response.data.message || "Signup successful. Verification pending.");
                 setAwaitingVerification(true);
             } else {
@@ -89,8 +96,10 @@ const Login = () => {
     const handleVerify = async (e) => {
         e.preventDefault();
         const { email, verification_code } = formData;
+        // Get ref from cookie if present
+        const ref_link = getCookie('ref');
         try {
-            const response = await axios.post(`${API_URL}/verify`, { email, verification_code });
+            const response = await axios.post(`${API_URL}/verify`, { email, verification_code, ref_link });
             alert(response.data.message || "Email verified successfully.");
             setAwaitingVerification(false);
             setIsSignup(false);
