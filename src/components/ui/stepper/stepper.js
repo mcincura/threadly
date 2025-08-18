@@ -1,5 +1,6 @@
-import React, { useState, Children, useRef, useLayoutEffect } from "react";
+import React, { useState, Children, useRef, useLayoutEffect, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { IconCheck } from "@tabler/icons-react";
 
 import "./stepper.css";
 
@@ -193,6 +194,17 @@ export function Step({ children }) {
 
 function StepIndicator({ step, currentStep, onClickStep, disableStepIndicators }) {
     const status = currentStep === step ? "active" : currentStep < step ? "inactive" : "complete";
+    const [isLight, setIsLight] = useState(false);
+
+    useEffect(() => {
+        const mq = window.matchMedia('(prefers-color-scheme: light)');
+        setIsLight(mq.matches);
+
+        const handler = (e) => setIsLight(e.matches);
+        mq.addEventListener('change', handler);
+
+        return () => mq.removeEventListener('change', handler);
+    }, []);
 
     const handleClick = () => {
         if (step !== currentStep && !disableStepIndicators) onClickStep(step);
@@ -202,15 +214,15 @@ function StepIndicator({ step, currentStep, onClickStep, disableStepIndicators }
         <motion.div onClick={handleClick} className="step-indicator" animate={status} initial={false}>
             <motion.div
                 variants={{
-                    inactive: { scale: 1, backgroundColor: "#222", color: "#a3a3a3" },
-                    active: { scale: 1, backgroundColor: "#5227FF", color: "#5227FF" },
-                    complete: { scale: 1, backgroundColor: "#5227FF", color: "#3b82f6" },
+                    inactive: { scale: 1, backgroundColor: isLight ? "#dadada" : "#212121", color: "#a0a0a0" },
+                    active: { scale: 1, backgroundColor: "#883cf3", color: "#883cf3" },
+                    complete: { scale: 1, backgroundColor: "#883cf3", color: "#883cf3" },
                 }}
                 transition={{ duration: 0.3 }}
                 className="step-indicator-inner"
             >
                 {status === "complete" ? (
-                    <CheckIcon className="check-icon" />
+                    <IconCheck className="check-icon" />
                 ) : status === "active" ? (
                     <div className="active-dot" />
                 ) : (
@@ -222,9 +234,10 @@ function StepIndicator({ step, currentStep, onClickStep, disableStepIndicators }
 }
 
 function StepConnector({ isComplete }) {
+
     const lineVariants = {
         incomplete: { width: 0, backgroundColor: "transparent" },
-        complete: { width: "100%", backgroundColor: "#5227FF" },
+        complete: { width: "100%", backgroundColor: "#883cf3" },
     };
 
     return (

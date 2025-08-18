@@ -29,13 +29,15 @@
   box-shadow:
     0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  padding-inline: 2rem;
+  padding-block: 2rem;
 }
 
 .step-indicator-row {
   display: flex;
   width: 100%;
   align-items: center;
-  padding: 2rem;
+  margin-bottom: 2rem;
 }
 
 .step-content-default {
@@ -51,11 +53,10 @@
 .footer-container {
   padding-left: 2rem;
   padding-right: 2rem;
-  padding-bottom: 2rem;
 }
 
 .footer-nav {
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   display: flex;
 }
 
@@ -71,18 +72,15 @@
   transition: all 350ms;
   border-radius: 0.25rem;
   padding: 0.25rem 0.5rem;
-  color: #a3a3a3;
+  border: none;
+  background-color: #fff;
+  color: #883cf3;
+  font-weight: 500;
   cursor: pointer;
 }
 
 .back-button:hover {
-  color: #52525b;
-}
-
-.back-button.inactive {
-  pointer-events: none;
-  opacity: 0.5;
-  color: #a3a3a3;
+  color: #121212;
 }
 
 .next-button {
@@ -90,8 +88,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9999px;
-  background-color: #5227ff;
+  border-radius: 0.3rem;
+  border: none;
+  background-color: #883cf3;
   color: #fff;
   font-weight: 500;
   letter-spacing: -0.025em;
@@ -100,11 +99,12 @@
 }
 
 .next-button:hover {
-  background-color: #5227ff;
+  background-color: #883cf3;
 }
 
 .next-button:active {
-  background-color: #5227ff;
+  background-color: #883cf3;
+  scale: 0.98;
 }
 
 .step-indicator {
@@ -156,4 +156,33 @@
   height: 1rem;
   width: 1rem;
   color: #fff;
+  font-weight: bold;
+}
+
+@media (prefers-color-scheme: light) {
+  .back-button {
+    transition: all 350ms;
+    border-radius: 0.3rem;
+    padding: 0.25rem 0.5rem;
+    border: none;
+    background-color: #121212;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .back-button:hover {
+    color: #883cf3;
+  }
+
+  .step-connector {
+    position: relative;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    height: 0.125rem;
+    flex: 1;
+    overflow: hidden;
+    border-radius: 0.25rem;
+    background-color: #a0a0a0;
+  }
 }

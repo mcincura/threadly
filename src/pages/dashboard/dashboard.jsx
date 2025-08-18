@@ -81,7 +81,7 @@ const Dashboard = () => {
         <IconUserCircle className="sidebar-link-icon" />
     },
     {
-      label: 'Log Out',
+      label: 'Sign Out',
       view: 'logout',
       icon:
         <IconArrowLeftToArc className="sidebar-link-icon" />

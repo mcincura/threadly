@@ -31,6 +31,7 @@
   color: #fff;
   gap: 15px;
   transition: 0.2s ease-out;
+  white-space: nowrap;
 }
 
 .sidebar-link.active {

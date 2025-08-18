@@ -4,15 +4,96 @@ import './aff.css';
 import DotGrid from '../../ui/dotGrid/dotgrid';
 import AffiliateTitle from './affTitle';
 import AffiliateSubtitle from './affSub';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Stepper, { Step } from '../../ui/stepper/stepper';
+import axios from 'axios';
 
 const Affiliate = ({ user, loggedIn }) => {
 
     const [isAff, setIsAff] = useState(null);
     const [isLight, setIsLight] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [scrollY, setScrollY] = useState(0);
+    const [name, setName] = useState('');
+    const [linkAvailable, setLinkAvailable] = useState(true);
+    const [linkError, setLinkError] = useState('');
+    const debounceRef = useRef();
+    const [agreeEmail, setAgreeEmail] = useState(false);
+    const [agreeTos, setAgreeTos] = useState(false);
+    const [currentStep, setCurrentStep] = useState(1);
+
+    // Handler for final step submit
+    const handleAffiliateSignup = async () => {
+        if (!user || !user.id) {
+            alert("User not found. Please log in.");
+            return;
+        }
+        try {
+            const res = await axios.post('http://localhost:3001/affiliate/signup', {
+                id: user.id,
+                link: name,
+                email_report: agreeEmail
+            });
+            alert(res.data.message || "Successfully joined the affiliate program!");
+            setShowModal(false);
+            setTimeout(() => {
+                window.location.reload();
+            }, 300); // Give the modal time to hide before reload
+        } catch (err) {
+            alert(
+                err.response?.data?.error ||
+                "Signup to become affiliate failed."
+            );
+            setShowModal(false);
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        }
+    };
+
+    // Check link availability
+    const checkLink = async (link) => {
+        if (!link) {
+            setLinkAvailable(true);
+            setLinkError('');
+            return;
+        }
+        try {
+            const res = await axios.post('http://localhost:3001/affiliate/check-link', { link });
+            if (res.data.available) {
+                setLinkAvailable(true);
+                setLinkError('');
+            } else {
+                setLinkAvailable(false);
+                setLinkError('This link is already taken.');
+            }
+        } catch (err) {
+            setLinkAvailable(false);
+            setLinkError('Error checking link.');
+        }
+    };
+
+    // Debounce link checking
+    useEffect(() => {
+        if (debounceRef.current) clearTimeout(debounceRef.current);
+        if (!name) {
+            setLinkAvailable(true);
+            setLinkError('');
+            return;
+        }
+        debounceRef.current = setTimeout(() => {
+            checkLink(name);
+        }, 500);
+        return () => clearTimeout(debounceRef.current);
+    }, [name]);
+
+    // Track scroll position for cube rotation
+    useEffect(() => {
+        const handleScroll = () => setScrollY(window.scrollY);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useEffect(() => {
         if (loggedIn && user && typeof user.isAff !== "undefined") {
@@ -65,38 +146,42 @@ const Affiliate = ({ user, loggedIn }) => {
                     <div className="affiliate-section1">
                         <AffiliateTitle isAff={isAff} text={title} />
                         <AffiliateSubtitle isAff={isAff} text={subtitle} />
-                        {!isAff && (
-                            <button
-                                onClick={() => setShowModal(true)}
-                                className='affiliate-hero-cta-button'
-                            >JOIN NOW</button>
-                        )}
                     </div>
                 )}
                 {isAff !== null && (
                     <motion.div className="affiliate-section2"
-                        initial={{ opacity: 0, y: 400 }}
+                        initial={{ opacity: 0, y: 200 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 400 }}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
+                        exit={{ opacity: 0, y: 200 }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
                     >
+                        <div className="affiliate-section2-decoration">
+                            <div className="deco-dot first" />
+                            <div className="deco-dot second" />
+                            <div className="deco-dot third" />
+                        </div>
                         {!isAff ? (
                             <div className="NO-affiliate-section2-content">
                                 <div className='NO-affiliate-section2-content1'>
-                                    <div className='NO-affiliate-section2-content1-left'>
+                                    <motion.div className='NO-affiliate-section2-content1-left'
+                                        initial={{ opacity: 0, y: 300 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.7, ease: "easeOut" }}
+                                    >
                                         <h1>Turn Conversations into Conversions</h1>
                                         <h3>Become an Affiliate Today</h3>
                                         <button
                                             onClick={() => setShowModal(true)}
+                                            className='affiliate-hero-cta-button'
                                         >JOIN NOW</button>
-                                    </div>
-                                    <div className='NO-affiliate-section2-content1-right'>
-                                        <h1>Turn Conversations into Conversions</h1>
-                                        <h3>Become an Affiliate Today</h3>
-                                        <button
-                                            onClick={() => setShowModal(true)}
-                                        >JOIN NOW</button>
-                                    </div>
+                                    </motion.div>
+                                    <motion.div className='NO-affiliate-section2-content1-right'
+                                        initial={{ opacity: 0, y: 300 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.7, ease: "easeOut" }}
+                                    >
+                                        <img src='./assets/images/cone.png' />
+                                    </motion.div>
                                 </div>
                             </div>
                         ) : (
@@ -109,25 +194,60 @@ const Affiliate = ({ user, loggedIn }) => {
                     <div className="stepper-wrapper">
                         <Stepper
                             initialStep={1}
-                            onStepChange={(step) => {
-                                console.log(step);
-                            }}
-                            onFinalStepCompleted={() => setShowModal(false)}
+                            onStepChange={setCurrentStep}
+                            onFinalStepCompleted={handleAffiliateSignup}
                             backButtonText="Previous"
                             nextButtonText="Next"
+                            nextButtonProps={{
+                                disabled:
+                                    (currentStep === 2 && name && !linkAvailable) ||
+                                    (currentStep === 4 && !agreeTos)
+                            }}
                         >
                             <Step>
-                                <h2>Welcome to the Threadly Affiliate program!</h2>
-                                <p>Follow these steps to join.</p>
+                                <h2 className="step-title">Welcome to the Threadly Affiliate program!</h2>
+                                <p className="step-desc">Follow these steps to join.</p>
                             </Step>
                             <Step>
-                                <h2>Create a custom link</h2>
-                                <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your custom link" />
-                                <p>or leave empty to get a random one</p>
+                                <h2 className="step-title">Create a custom link</h2>
+                                <input
+                                    className="step-input"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    placeholder="Your custom link"
+                                />
+                                <p className="step-desc">or leave empty to get a random one</p>
+                                {!linkAvailable && (
+                                    <div className="step-error">{linkError}</div>
+                                )}
                             </Step>
                             <Step>
-                                <h2>Final Step</h2>
-                                <p>You made it!</p>
+                                <h2 className="step-title">Email Reports</h2>
+                                <label className="step-checkbox-label">
+                                    <input
+                                        type="checkbox"
+                                        className="step-checkbox"
+                                        checked={agreeEmail}
+                                        onChange={e => setAgreeEmail(e.target.checked)}
+                                    />
+                                    I agree to receive reports via email.
+                                </label>
+                            </Step>
+                            <Step>
+                                <h2 className="step-title">Affiliate Terms of Service</h2>
+                                <label className="step-checkbox-label">
+                                    <input
+                                        type="checkbox"
+                                        className="step-checkbox"
+                                        checked={agreeTos}
+                                        onChange={e => setAgreeTos(e.target.checked)}
+                                    />
+                                    I agree to the <a className='affiliate-tos-link' href="/affiliate-terms" target="_blank" rel="noopener noreferrer">Affiliate Terms of Service</a>
+                                </label>
+                            </Step>
+                            <Step>
+                                <h2 className="step-title">Final Step</h2>
+                                <p className="step-desc">You're all set! Click "Complete" to finish your application.</p>
                             </Step>
                         </Stepper>
                     </div>

@@ -103,6 +103,12 @@ const Login = () => {
             alert(response.data.message || "Email verified successfully.");
             setAwaitingVerification(false);
             setIsSignup(false);
+
+            // Only send event if verification was successful (status 200)
+            if (response.status === 200 && ref_link) {
+                await axios.post('http://localhost:3001/event/register', { ref_link, user_email: email });
+                // Optionally, you can log or handle the response here
+            }
         } catch (err) {
             alert(err.response?.data?.error || "Verification failed.");
         }

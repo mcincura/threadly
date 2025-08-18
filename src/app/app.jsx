@@ -5,6 +5,7 @@ import {
     useLocation
 } from 'react-router-dom';
 import { useEffect, useContext } from 'react';
+import axios from 'axios';
 import { UserProvider, UserContext } from './context/userContext';
 import Landing from '../pages/landing/landing';
 import Dashboard from '../pages/dashboard/dashboard';
@@ -14,7 +15,6 @@ const AppContent = () => {
     const { user } = useContext(UserContext);
 
     useEffect(() => {
-        // Helper to get cookie by name
         function getCookie(name) {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
@@ -23,12 +23,10 @@ const AppContent = () => {
 
         const params = new URLSearchParams(window.location.search);
         const ref = params.get('ref');
-        //log the ref from the link in the console
-        console.log('Affiliate ref from URL:', ref);
         const refCookie = getCookie('ref');
         const tokenCookie = getCookie('token');
 
-        // Only set ref cookie if:
+        // Only set ref cookie and send event if:
         // - ref param exists
         // - user is not logged in (no user)
         // - no ref cookie exists
@@ -38,8 +36,17 @@ const AppContent = () => {
             const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
             document.cookie = `ref=${ref}; expires=${expires}; path=/`;
             console.log('Affiliate ref cookie set:', ref);
+
+            // After cookie is set, send event to backend using axios
+            axios.post('http://localhost:3001/event/click', { ref_link: ref })
+                .then(res => {
+                    console.log('Affiliate click event sent:', res.data);
+                })
+                .catch(err => {
+                    console.error('Failed to send affiliate click event:', err);
+                });
         }
-    }, [user]); // Re-run if user changes
+    }, [user]);
 
     return (
         <Router>
