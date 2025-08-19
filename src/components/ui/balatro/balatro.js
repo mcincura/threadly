@@ -1,6 +1,5 @@
 import { Renderer, Program, Mesh, Triangle } from "ogl";
 import { useEffect, useRef } from "react";
-
 import "./balatro.css";
 
 function hexToVec4(hex) {
@@ -120,31 +119,34 @@ export default function Balatro({
   mouseInteraction = true,
 }) {
   const containerRef = useRef(null);
+  const rendererRef = useRef(null);
+  const glRef = useRef(null);
+  const programRef = useRef(null);
+  const meshRef = useRef(null);
+  const animationFrameIdRef = useRef(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
-    const renderer = new Renderer();
-    const gl = renderer.gl;
-    gl.clearColor(0, 0, 0, 1);
 
-    let program;
-
-    function resize() {
-      renderer.setSize(container.offsetWidth, container.offsetHeight);
-      if (program) {
-        program.uniforms.iResolution.value = [
-          gl.canvas.width,
-          gl.canvas.height,
-          gl.canvas.width / gl.canvas.height,
-        ];
+    // Only create renderer once
+    if (!rendererRef.current) {
+      rendererRef.current = new Renderer();
+      glRef.current = rendererRef.current.gl;
+      // Set canvas background in JS
+      glRef.current.canvas.style.background = "#121212";
+      glRef.current.clearColor(18 / 255, 18 / 255, 18 / 255, 1); // #121212
+      // Only append if not already present
+      if (!container.contains(glRef.current.canvas)) {
+        container.appendChild(glRef.current.canvas);
       }
     }
-    window.addEventListener("resize", resize);
-    resize();
+    const renderer = rendererRef.current;
+    const gl = glRef.current;
 
+    // Geometry, program, mesh
     const geometry = new Triangle(gl);
-    program = new Program(gl, {
+    const program = new Program(gl, {
       vertex: vertexShader,
       fragment: fragmentShader,
       uniforms: {
@@ -171,17 +173,37 @@ export default function Balatro({
         uMouse: { value: [0.5, 0.5] },
       },
     });
-
+    programRef.current = program;
     const mesh = new Mesh(gl, { geometry, program });
-    let animationFrameId;
+    meshRef.current = mesh;
+
+    function resize() {
+      renderer.setSize(container.offsetWidth, container.offsetHeight);
+      if (program) {
+        program.uniforms.iResolution.value = [
+          gl.canvas.width,
+          gl.canvas.height,
+          gl.canvas.width / gl.canvas.height,
+        ];
+        // Force render after resize
+        renderer.render({ scene: mesh });
+      }
+    }
+
+    // Use ResizeObserver for container size changes
+    const resizeObserver = new window.ResizeObserver(() => {
+      window.requestAnimationFrame(resize);
+    });
+    resizeObserver.observe(container);
+
+    resize();
 
     function update(time) {
-      animationFrameId = requestAnimationFrame(update);
+      animationFrameIdRef.current = requestAnimationFrame(update);
       program.uniforms.iTime.value = time * 0.001;
       renderer.render({ scene: mesh });
     }
-    animationFrameId = requestAnimationFrame(update);
-    container.appendChild(gl.canvas);
+    animationFrameIdRef.current = requestAnimationFrame(update);
 
     function handleMouseMove(e) {
       if (!mouseInteraction) return;
@@ -193,12 +215,13 @@ export default function Balatro({
     container.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", resize);
+      cancelAnimationFrame(animationFrameIdRef.current);
+      resizeObserver.disconnect();
       container.removeEventListener("mousemove", handleMouseMove);
-      container.removeChild(gl.canvas);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      // Do NOT remove the canvas or lose context, just leave it in place
     };
+    // Only rerun effect if these change
+    // eslint-disable-next-line
   }, [
     spinRotation,
     spinSpeed,
@@ -213,7 +236,6 @@ export default function Balatro({
     spinEase,
     isRotate,
     mouseInteraction,
-    containerRef,
   ]);
 
   return <div ref={containerRef} className="balatro-container" />;

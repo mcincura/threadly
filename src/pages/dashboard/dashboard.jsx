@@ -169,7 +169,7 @@ const Dashboard = () => {
           )}
           {active === 'prof' && (
             <div className={`dashboard-content-profile-wrapper ${open && isMobile ? 'blur' : ''} `}>
-              <Profile />
+              <Profile user={user} />
             </div>
           )}
         </motion.div>

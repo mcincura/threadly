@@ -1,15 +1,104 @@
 .profile-main {
-  min-height: 100vh;
+  height: 100vh;
   border-radius: 10px 0 0 0;
   display: flex;
-  background-color: azure;
+  background-color: #121212;
+  overflow: hidden;
+}
+
+.profile-bg {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  z-index: 0;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  border-radius: 10px 0 0 0;
+  background-color: aqua;
 }
 
 .profile-content-wrapper {
   flex: 1;
+  margin: 1.5vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.profile-content-container {
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.profile-content {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-content-left,
+.profile-content-right {
+  width: 50%;
+  height: 100%;
+}
+
+.profile-content-left {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   position: relative;
+}
+
+.profile-content-left-container {
+  position: absolute;
+  inset: 3rem;
+  flex: 1;
+}
+
+.profile-content-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-content-right-image {
+  width: 40vw;
+  transform: rotate(-50deg);
+}
+
+.profile-content-image-floating.first {
+  width: 13vw;
+  position: absolute;
+  bottom: -10%;
+  left: 0%;
+  transform: rotate(-120deg);
+}
+
+.profile-content-image-floating.second {
+  width: 13vw;
+  position: absolute;
+  top: -10%;
+  right: 0%;
+  transform: rotate(120deg);
+}
+
+@media (prefers-color-scheme: light) {
+  .profile-content-container {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
 }

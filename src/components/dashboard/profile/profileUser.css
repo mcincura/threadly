@@ -1,0 +1,62 @@
+.profile-setting-main {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    90% 60% at 50% -10.6%,
+    var(--token-254ceba7-924e-427d-af54-f74df92930d0, #4a208a)
+      /* {"name":"Purple Dark 1"} */ 0%,
+    rgb(0, 0, 0) 100%
+  );
+  box-shadow: 15px 15px 20px rgba(0, 0, 0, 0.8);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.profile-setting-main-bg {
+  position: absolute;
+  inset: 0px;
+  background-image: url(https://framerusercontent.com/images/J9PD0z8SzMHT2KxXQClbD5Q7PU.png);
+  background-repeat: repeat;
+  background-position: left top;
+  background-size: 600px;
+  border: 0px;
+}
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  margin-block: 2rem;
+}
+
+.user-pfp {
+  display: flex;
+  align-items: center;
+  width: 4rem;
+  height: 4rem;
+  color: #fff;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+@media (prefers-color-scheme: light) {
+  .profile-setting-main {
+    background-color: #fff;
+    box-shadow: 15px 15px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .user-profile-header h1,
+  .user-profile-header h3 {
+    color: #fff;
+  }
+}

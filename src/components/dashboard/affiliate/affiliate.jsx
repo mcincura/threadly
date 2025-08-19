@@ -14,7 +14,6 @@ const Affiliate = ({ user, loggedIn }) => {
     const [isAff, setIsAff] = useState(null);
     const [isLight, setIsLight] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [scrollY, setScrollY] = useState(0);
     const [name, setName] = useState('');
     const [linkAvailable, setLinkAvailable] = useState(true);
     const [linkError, setLinkError] = useState('');
@@ -87,13 +86,6 @@ const Affiliate = ({ user, loggedIn }) => {
         }, 500);
         return () => clearTimeout(debounceRef.current);
     }, [name]);
-
-    // Track scroll position for cube rotation
-    useEffect(() => {
-        const handleScroll = () => setScrollY(window.scrollY);
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     useEffect(() => {
         if (loggedIn && user && typeof user.isAff !== "undefined") {
