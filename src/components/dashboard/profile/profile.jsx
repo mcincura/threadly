@@ -10,6 +10,7 @@ const Profile = ({ user }) => {
     const [isLight, setIsLight] = useState(false);
     const controls = useAnimation();
 
+    //animations for cubes
     useEffect(() => {
         async function sequence() {
             // Fly-in animation
@@ -34,6 +35,7 @@ const Profile = ({ user }) => {
         sequence();
     }, [controls]);
 
+    //get light/dark mode
     useEffect(() => {
         const mq = window.matchMedia('(prefers-color-scheme: light)');
         setIsLight(mq.matches);
@@ -76,8 +78,22 @@ const Profile = ({ user }) => {
                                     <div className="user-profile-header">
                                         <IconUserSquareRounded className='user-pfp' />
                                         <div className="user-details">
-                                            <h1>{user ? user.username : "kokot"}</h1>
-                                            <h3>{user ? user.email : "example@kokot.com"}</h3>
+                                            <h1>{user ? user.username : "Example"}</h1>
+                                            <h3>{user ? user.email : "example@example.com"}</h3>
+                                        </div>
+                                    </div>
+                                    <div className="user-profile-form">
+                                        <div className="user-profile-form-group">
+                                            <label htmlFor="username">Username</label>
+                                            <div className="user-input-button">
+                                                <input
+                                                    type="text"
+                                                    id="username"
+                                                    name="username"
+                                                    defaultValue={user ? user.username : "Example"}
+                                                />
+                                                <button className="profile-btn accent">Change</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </motion.div>
