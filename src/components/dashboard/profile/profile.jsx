@@ -8,7 +8,25 @@ import './profileUser.css';
 const Profile = ({ user }) => {
 
     const [isLight, setIsLight] = useState(false);
+    const [isEditingUsername, setIsEditingUsername] = useState(false);
+    const [isEditingEmail, setIsEditingEmail] = useState(false);
     const controls = useAnimation();
+
+    const handleUsernameEdit = () => {
+        if (isEditingUsername) {
+            // Call your save username endpoint here
+            // e.g., saveUsername();
+        }
+        setIsEditingUsername(!isEditingUsername);
+    };
+
+    const handleEmailEdit = () => {
+        if (isEditingEmail) {
+            // Call your save email endpoint here
+            // e.g., saveEmail();
+        }
+        setIsEditingEmail(!isEditingEmail);
+    };
 
     //animations for cubes
     useEffect(() => {
@@ -91,8 +109,32 @@ const Profile = ({ user }) => {
                                                     id="username"
                                                     name="username"
                                                     defaultValue={user ? user.username : "Example"}
+                                                    disabled={!isEditingUsername}
                                                 />
-                                                <button className="profile-btn accent">Change</button>
+                                                <button
+                                                    className="profile-btn accent"
+                                                    onClick={handleUsernameEdit}
+                                                >
+                                                    {isEditingUsername ? "Save" : "Change"}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="user-profile-form-group">
+                                            <label htmlFor="email">Email</label>
+                                            <div className="user-input-button">
+                                                <input
+                                                    type="email"
+                                                    id="email"
+                                                    name="email"
+                                                    defaultValue={user ? user.email : "example@example.com"}
+                                                    disabled={!isEditingEmail}
+                                                />
+                                                <button
+                                                    className="profile-btn accent"
+                                                    onClick={handleEmailEdit}
+                                                >
+                                                    {isEditingEmail ? "Save" : "Change"}
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
