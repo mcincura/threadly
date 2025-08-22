@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
+import axios from 'axios';
 import Balatro from '../../ui/balatro/balatro.js';
 import { IconUserSquareRounded } from '@tabler/icons-react';
 import './profile.css'
@@ -9,13 +10,22 @@ const Profile = ({ user }) => {
 
     const [isLight, setIsLight] = useState(false);
     const [isEditingUsername, setIsEditingUsername] = useState(false);
+    const [username, setUsername] = useState(user ? user.username : "Example");
     const [isEditingEmail, setIsEditingEmail] = useState(false);
     const controls = useAnimation();
 
-    const handleUsernameEdit = () => {
+    const handleUsernameEdit = async () => {
         if (isEditingUsername) {
-            // Call your save username endpoint here
-            // e.g., saveUsername();
+            try {
+                await axios.put('http://localhost:3001/profile/edit-username', {
+                    id: user.id,
+                    newUsername: username
+                });
+                // Optionally show a success message or update parent state
+            } catch (error) {
+                // Optionally show an error message
+                console.error(error);
+            }
         }
         setIsEditingUsername(!isEditingUsername);
     };
@@ -108,11 +118,12 @@ const Profile = ({ user }) => {
                                                     type="text"
                                                     id="username"
                                                     name="username"
-                                                    defaultValue={user ? user.username : "Example"}
+                                                    value={username}
+                                                    onChange={e => setUsername(e.target.value)}
                                                     disabled={!isEditingUsername}
                                                 />
                                                 <button
-                                                    className="profile-btn accent"
+                                                    className="profile-btn"
                                                     onClick={handleUsernameEdit}
                                                 >
                                                     {isEditingUsername ? "Save" : "Change"}
@@ -130,7 +141,7 @@ const Profile = ({ user }) => {
                                                     disabled={!isEditingEmail}
                                                 />
                                                 <button
-                                                    className="profile-btn accent"
+                                                    className="profile-btn"
                                                     onClick={handleEmailEdit}
                                                 >
                                                     {isEditingEmail ? "Save" : "Change"}
