@@ -108,9 +108,8 @@
 }
 
 .profile-btn {
-  min-width: 90px; /* Ensures button doesn't resize */
-  max-width: 120px;
-  width: 100px;
+  min-width: 120px; /* Ensures button doesn't resize */
+  max-width: 180px;
   background-color: #883cf3;
   color: #fff;
   border: none;
@@ -132,6 +131,44 @@
   background-color: #a97cff;
   color: #121212;
   box-shadow: 0 4px 16px rgba(136, 60, 243, 0.18);
+}
+
+.user-profile-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 2rem;
+}
+
+.profile-btn-big {
+  min-width: 120px; /* Ensures button doesn't resize */
+  background-color: #883cf3;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(136, 60, 243, 0.08);
+  text-align: center;
+}
+
+.user-profile-star {
+  width: 100%;
+  flex: 1;
+  display: flex;
+}
+
+.user-profile-star img {
+  width: auto;
+  height: 10rem;
 }
 
 @media (prefers-color-scheme: light) {

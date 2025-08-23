@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import axios from 'axios';
 import Balatro from '../../ui/balatro/balatro.js';
@@ -13,6 +13,9 @@ const Profile = ({ user }) => {
     const [username, setUsername] = useState(user ? user.username : "Example");
     const [isEditingEmail, setIsEditingEmail] = useState(false);
     const controls = useAnimation();
+
+    const [buttonWidth, setButtonWidth] = useState(150);
+    const divRef = useRef(null);
 
     const handleUsernameEdit = async () => {
         if (isEditingUsername) {
@@ -37,6 +40,13 @@ const Profile = ({ user }) => {
         }
         setIsEditingEmail(!isEditingEmail);
     };
+
+    //dynamic button width
+    useEffect(() => {
+        if (divRef.current) {
+            setButtonWidth(divRef.current.offsetWidth);
+        }
+    }, [divRef]);
 
     //animations for cubes
     useEffect(() => {
@@ -132,7 +142,7 @@ const Profile = ({ user }) => {
                                         </div>
                                         <div className="user-profile-form-group">
                                             <label htmlFor="email">Email</label>
-                                            <div className="user-input-button">
+                                            <div className="user-input-button" ref={divRef}>
                                                 <input
                                                     type="email"
                                                     id="email"
@@ -147,6 +157,13 @@ const Profile = ({ user }) => {
                                                     {isEditingEmail ? "Save" : "Change"}
                                                 </button>
                                             </div>
+                                        </div>
+                                        <div className="user-profile-buttons">
+                                            <button className='profile-btn-big' style={{ width: `${buttonWidth}px` }}>Change Password</button>
+                                            <button className='profile-btn-big accent' style={{ width: `${buttonWidth}px` }}>Disable Account</button>
+                                        </div>
+                                        <div className="user-profile-star">
+                                            <img src="./assets/images/star.avif" alt="star" />
                                         </div>
                                     </div>
                                 </motion.div>
