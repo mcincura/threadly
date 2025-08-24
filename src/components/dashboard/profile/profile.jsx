@@ -17,6 +17,26 @@ const Profile = ({ user }) => {
     const [buttonWidth, setButtonWidth] = useState(150);
     const divRef = useRef(null);
 
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteInput, setDeleteInput] = useState('');
+    const [deleteError, setDeleteError] = useState('');
+
+    const handleDeleteAccount = () => {
+        setShowDeleteModal(true);
+        setDeleteInput('');
+        setDeleteError('');
+    };
+
+    const handleConfirmDelete = () => {
+        if (deleteInput === (user?.email || '')) {
+            // Here you would send a request to the backend
+            console.log('Account deletion request sent for:', user.email);
+            setShowDeleteModal(false);
+        } else {
+            setDeleteError('Email does not match. Please try again.');
+        }
+    };
+
     const handleUsernameEdit = async () => {
         if (isEditingUsername) {
             try {
@@ -160,10 +180,24 @@ const Profile = ({ user }) => {
                                         </div>
                                         <div className="user-profile-buttons">
                                             <button className='profile-btn-big' style={{ width: `${buttonWidth}px` }}>Change Password</button>
-                                            <button className='profile-btn-big accent' style={{ width: `${buttonWidth}px` }}>Disable Account</button>
+                                            <button
+                                                className='profile-btn-big accent'
+                                                style={{ width: `${buttonWidth}px` }}
+                                                onClick={handleDeleteAccount}
+                                            >Delete Account</button>
                                         </div>
                                         <div className="user-profile-star">
-                                            <img src="./assets/images/star.avif" alt="star" />
+                                            <motion.img src="./assets/images/star.avif" alt="star"
+                                                animate={{
+                                                    y: [0, -5, 0],
+                                                }}
+                                                transition={{
+                                                    duration: 3,
+                                                    repeat: Infinity,
+                                                    repeatType: "loop",
+                                                    ease: "easeInOut"
+                                                }}
+                                            />
                                         </div>
                                     </div>
                                 </motion.div>
@@ -179,6 +213,67 @@ const Profile = ({ user }) => {
                         </motion.div>
                     </div>
                 </div>
+
+                {/* Delete Account Modal */}
+                {showDeleteModal && (
+                    <div className="modal-overlay" style={{
+                        position: 'fixed',
+                        top: 0, left: 0, right: 0, bottom: 0,
+                        background: 'rgba(0,0,0,0.6)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 1000
+                    }}>
+                        <div className="modal-content" style={{
+                            background: '#232323',
+                            padding: '2rem',
+                            borderRadius: '10px',
+                            minWidth: '320px',
+                            boxShadow: '0 4px 32px rgba(0,0,0,0.4)',
+                            color: '#fff',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center'
+                        }}>
+                            <h2>Delete Account</h2>
+                            <p>
+                                To confirm deletion, type your email address:<br />
+                                <b>{user?.email}</b>
+                            </p>
+                            <input
+                                type="email"
+                                value={deleteInput}
+                                onChange={e => setDeleteInput(e.target.value)}
+                                placeholder="Enter your email"
+                                style={{
+                                    margin: '1rem 0',
+                                    padding: '0.5rem',
+                                    borderRadius: '5px',
+                                    border: '1px solid #883cf3',
+                                    width: '100%'
+                                }}
+                            />
+                            {deleteError && (
+                                <div style={{ color: '#ff4d4f', marginBottom: '1rem' }}>{deleteError}</div>
+                            )}
+                            <div style={{ display: 'flex', gap: '1rem' }}>
+                                <button
+                                    className="profile-btn accent"
+                                    onClick={handleConfirmDelete}
+                                >
+                                    Confirm
+                                </button>
+                                <button
+                                    className="profile-btn"
+                                    onClick={() => setShowDeleteModal(false)}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )

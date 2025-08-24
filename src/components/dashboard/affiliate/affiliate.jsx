@@ -1,6 +1,7 @@
 import './affiliate.css';
 import './noAff.css';
 import './aff.css';
+import AffRewardsGraph from '../../ui/affGraph/affGraph';
 import DotGrid from '../../ui/dotGrid/dotgrid';
 import AffiliateTitle from './affTitle';
 import AffiliateSubtitle from './affSub';
@@ -172,8 +173,22 @@ const Affiliate = ({ user, loggedIn }) => {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.7, ease: "easeOut" }}
                                     >
-                                        <img src='./assets/images/cone.png' />
+                                        <img
+                                            src={isLight ? './assets/images/cone.png' : './assets/images/cone.avif'}
+                                            className={isLight ? 'NO-affiliate-cone-light' : 'NO-affiliate-cone-dark'}
+                                        />
                                     </motion.div>
+                                </div>
+                                <div className="NO-affiliate-section2-content2">
+                                    <div className="NO-affiliate-section2-content2-left">
+                                        <AffRewardsGraph />
+                                    </div>
+                                    <div className="NO-affiliate-section2-content2-right">
+                                        <h1>
+                                            Earn more than just money.
+                                        </h1>
+                                        <h3>Top performing affiliates earn exclusive rewards. Each month.</h3>
+                                    </div>
                                 </div>
                             </div>
                         ) : (

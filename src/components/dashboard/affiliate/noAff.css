@@ -8,6 +8,20 @@
   padding-inline: 2rem;
 }
 
+.NO-affiliate-section2-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.875rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.NO-affiliate-section2-content h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  color: #fff;
+}
+
 .NO-affiliate-section2-content1 {
   width: 100%;
   display: flex;
@@ -39,16 +53,43 @@
   height: 40vh;
 }
 
-.NO-affiliate-section2-content1-left h1 {
-  font-size: 2.5rem;
-  margin-bottom: 0.875rem;
-  font-weight: 700;
-  color: #fff;
+.NO-affiliate-cone-light {
+  transform: rotate(0deg);
 }
 
-.NO-affiliate-section2-content1-left h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-  font-weight: 500;
-  color: #fff;
+.NO-affiliate-cone-dark {
+  transform: rotate(-66deg);
+}
+
+.NO-affiliate-section2-content2 {
+  height: 50vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.NO-affiliate-section2-content2-left {
+  height: 100%;
+  width: 50%;
+}
+
+.NO-affiliate-section2-content2-right {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (prefers-color-scheme: light) {
+  .NO-affiliate-section2-content1-left h1 {
+    color: #121212;
+  }
+
+  .NO-affiliate-section2-content1-left h3 {
+    color: #121212;
+  }
 }
