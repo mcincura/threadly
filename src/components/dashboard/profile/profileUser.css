@@ -172,11 +172,21 @@
   width: 100%;
   flex: 1;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-.user-profile-star img {
-  width: 20%;
-  height: auto;
+.user-profile-star-image {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-profile-star-image img {
+  height: 100%;
+  aspect-ratio: 1/1;
 }
 
 @media (prefers-color-scheme: light) {

@@ -16,6 +16,8 @@ const Profile = ({ user }) => {
 
     const [buttonWidth, setButtonWidth] = useState(150);
     const divRef = useRef(null);
+    const imgDivRef = useRef(null);
+    const imgWidth = imgDivRef.current ? imgDivRef.current.offsetHeight : 50;
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteInput, setDeleteInput] = useState('');
@@ -186,8 +188,8 @@ const Profile = ({ user }) => {
                                                 onClick={handleDeleteAccount}
                                             >Delete Account</button>
                                         </div>
-                                        <div className="user-profile-star">
-                                            <motion.img src="./assets/images/star.avif" alt="star"
+                                        <div className="user-profile-star" ref={imgDivRef}>
+                                            <motion.div className="user-profile-star-image"
                                                 animate={{
                                                     y: [0, -5, 0],
                                                 }}
@@ -197,7 +199,9 @@ const Profile = ({ user }) => {
                                                     repeatType: "loop",
                                                     ease: "easeInOut"
                                                 }}
-                                            />
+                                            >
+                                                <img src="./assets/images/star.avif" alt="star" style={{ width: `${imgWidth}px` }} />
+                                            </motion.div>
                                         </div>
                                     </div>
                                 </motion.div>
