@@ -29,11 +29,19 @@ const Profile = ({ user }) => {
         setDeleteError('');
     };
 
-    const handleConfirmDelete = () => {
+    const handleConfirmDelete = async () => {
         if (deleteInput === (user?.email || '')) {
-            // Here you would send a request to the backend
-            console.log('Account deletion request sent for:', user.email);
-            setShowDeleteModal(false);
+            try {
+                // send DELETE with body using axios (axios.delete accepts `data` in config)
+                await axios.delete('http://localhost:3001/profile/delete-account', {
+                    data: { id: user.id }
+                });
+                // close modal on success (optionally show a toast or redirect)
+                setShowDeleteModal(false);
+            } catch (error) {
+                console.error(error);
+                setDeleteError('Failed to delete account. Please try again.');
+            }
         } else {
             setDeleteError('Email does not match. Please try again.');
         }
