@@ -1,7 +1,8 @@
 import './dash.css'
 import './cards.css'
 import { useState, useEffect, useRef } from 'react'
-import { IconPlus, IconMinus, IconArrowRight, IconUser, IconBrandX, IconBrandInstagram } from '@tabler/icons-react'
+import axios from 'axios'
+import { IconPlus, IconMinus, IconArrowRight, IconUserSquareRounded, IconBrandX, IconBrandInstagram } from '@tabler/icons-react'
 import LightRays from '../../ui/lightRays/LightRays'
 
 const updates = [
@@ -51,26 +52,15 @@ const Dash = ({ setActive, open, user, loggedIn }) => {
             if (wrapperRef.current && itemRef.current) {
                 const wrapperHeight = wrapperRef.current.offsetHeight;
                 const itemHeight = itemRef.current.offsetHeight + 8;
-                console.log('wrapperHeight:', wrapperHeight);
-                console.log('itemHeight:', itemHeight);
-                if (wrapperHeight === 0) {
-                    console.log('wrapperHeight is 0 (possibly not visible)');
-                }
-                if (itemHeight === 0) {
-                    console.log('itemHeight is 0 (possibly not visible)');
-                }
                 const count = Math.max(1, Math.floor(wrapperHeight / itemHeight));
-                console.log('Calculated visibleUpdates count:', count);
                 setVisibleUpdates(count);
             }
-            console.log('Current visibleUpdates:', visibleUpdates);
         };
         updateVisibleItems();
         window.addEventListener('resize', updateVisibleItems);
 
         // Delayed recalculation after 50ms
         const timeout = setTimeout(() => {
-            console.log('--- Delayed updateVisibleItems called ---');
             updateVisibleItems();
         }, 50);
 
@@ -79,6 +69,15 @@ const Dash = ({ setActive, open, user, loggedIn }) => {
             clearTimeout(timeout);
         };
     }, [isOpen]);
+
+    const handleLogout = async () => {
+        try {
+            await axios.post("http://localhost:3001/auth/logout", {}, { withCredentials: true });
+            window.location.href = "/";
+        } catch (error) {
+            window.location.href = "/";
+        }
+    };
 
     return (
         <div className="dash-main">
@@ -245,7 +244,6 @@ const Dash = ({ setActive, open, user, loggedIn }) => {
                                 >
                                     <IconBrandInstagram className="resource-icon" style={{ height: '100%', width: '100%' }} />
                                 </a>
-                                {/* Add more social icons as needed */}
                             </div>
                         </div>
 
@@ -275,22 +273,14 @@ const Dash = ({ setActive, open, user, loggedIn }) => {
                             <h2 className="account-title">Account Management</h2>
                             <div className="account-content">
                                 <div className="account-info">
-                                    {hasPfp ? (
-                                        <img
-                                            src="https://via.placeholder.com/80"
-                                            alt="Profile"
-                                            className="account-avatar"
-                                        />
-                                    ) : (
-                                        <IconUser className='account-avatar' />
-                                    )}
+                                    <IconUserSquareRounded className='account-avatar' />
                                     <p className="account-email">{loggedIn ? user.email : 'user@example.com'}</p>
                                 </div>
                                 <div className="account-buttons">
                                     <button className="account-btn" onClick={() => setActive('prof')}>
                                         Edit Profile
                                     </button>
-                                    <button className="account-btn" onClick={() => console.log('Edit account')}>
+                                    <button className="account-btn" onClick={handleLogout}>
                                         Log Out
                                     </button>
                                 </div>

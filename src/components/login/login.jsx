@@ -40,6 +40,8 @@ const Login = () => {
         if (name === "password" && isSignup) {
             validatePasswordStrength(value);
         }
+
+        if (passwordError) setPasswordError("");
     };
 
     const toggleMode = () => {
@@ -71,43 +73,33 @@ const Login = () => {
         try {
             if (isSignup) {
                 if (password !== confirmPassword) {
-                    alert("Passwords do not match");
-                    return;
-                }
-                if (passwordError) {
-                    alert("Please choose a stronger password.");
+                    setPasswordError("Passwords do not match");
                     return;
                 }
                 const signupData = { email, password };
                 const response = await axios.post(`${API_URL}/signup`, signupData);
-                alert(response.data.message || "Signup successful. Verification pending.");
                 setAwaitingVerification(true);
             } else {
                 const response = await axios.post(`${API_URL}/login`, { email, password, remember }, { withCredentials: true });
-                alert(response.data.message || "Login successful");
                 setLoggedIn(true);
                 setUser(response.data.user);
             }
         } catch (err) {
-            alert(err.response?.data?.error || "An error occurred");
+            setPasswordError(err.response?.data?.error || "An error occurred");
         }
     };
 
     const handleVerify = async (e) => {
         e.preventDefault();
         const { email, verification_code } = formData;
-        // Get ref from cookie if present
         const ref_link = getCookie('ref');
         try {
             const response = await axios.post(`${API_URL}/verify`, { email, verification_code, ref_link });
-            alert(response.data.message || "Email verified successfully.");
             setAwaitingVerification(false);
             setIsSignup(false);
 
-            // Only send event if verification was successful (status 200)
             if (response.status === 200 && ref_link) {
                 await axios.post('http://localhost:3001/event/register', { ref_link, user_email: email });
-                // Optionally, you can log or handle the response here
             }
         } catch (err) {
             alert(err.response?.data?.error || "Verification failed.");
@@ -148,6 +140,10 @@ const Login = () => {
                                 {showPassword ? <IconEye /> : <IconEyeOff />}
                             </span>
                         </div>
+                        {/* Always show passwordError (backend or validation) below the password field */}
+                        {passwordError && (
+                            <p className="password-error">{passwordError}</p>
+                        )}
                         {isSignup && (
                             <>
                                 <div className="password-input">

@@ -320,12 +320,9 @@
 }
 
 .account-avatar {
-  background-color: #fff;
-  border-radius: 500px;
-  height: 30px;
-  width: 30px;
-  color: #883cf3;
-  border: 2px solid #883cf3;
+  height: 40px;
+  width: 40px;
+  color: #fff;
 }
 
 .account-info {
@@ -371,6 +368,10 @@
 @media (prefers-color-scheme: light) {
   .account-title {
     color: #121212;
+  }
+
+  .account-avatar {
+    color: #883cf3;
   }
 }
 
