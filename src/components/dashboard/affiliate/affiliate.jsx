@@ -190,7 +190,31 @@ const Affiliate = ({ user, loggedIn }) => {
                                         <h3>Top performing affiliates earn exclusive rewards. Each month.</h3>
                                     </div>
                                 </div>
+                                <div className="NO-affiliate-section2-content3">
+                                    <div className="affiliate-cta-card">
+                                        <h2>Ready to Start Earning?</h2>
+                                        <p className="affiliate-cta-desc">
+                                            Don’t miss your chance to be part of our growing affiliate community. Whether you’re a creator, influencer, or just passionate about sharing great products, Threadly’s affiliate program is your gateway to recurring income and exclusive rewards.
+                                        </p>
+                                        <ul className="affiliate-cta-list">
+                                            <li>Earn up to <strong>50% commission</strong> on every sale</li>
+                                            <li>Monthly bonuses for top affiliates</li>
+                                            <li>Real-time tracking and easy payouts</li>
+                                            <li>Free to join — no hidden fees</li>
+                                        </ul>
+                                        <button
+                                            className="affiliate-hero-cta-button"
+                                            onClick={() => setShowModal(true)}
+                                        >
+                                            JOIN NOW
+                                        </button>
+                                        <p className="affiliate-cta-note">
+                                            Take the first step today. Early members get access to special launch rewards!
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
+
                         ) : (
                             <div className="affiliate-section2-content">
                                 AFFILIATE
@@ -260,7 +284,7 @@ const Affiliate = ({ user, loggedIn }) => {
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     )
 }
 

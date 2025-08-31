@@ -82,6 +82,36 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+}
+
+.NO-affiliate-section2-content3 {
+  background-color: brown;
+  height: 50vh;
+  width: 100%;
+  display: flex;
+}
+
+.affiliate-cta-short {
+  background: linear-gradient(90deg, #883cf3 0%, #5f2eea 100%);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 0.3em 1.2em;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(136, 60, 243, 0.08);
+  transition:
+    background 0.2s,
+    transform 0.1s;
+  white-space: nowrap;
+}
+
+.affiliate-cta-short:hover,
+.affiliate-cta-short:focus {
+  background: linear-gradient(90deg, #a96bfa 0%, #7d4ffb 100%);
+  transform: translateY(-2px) scale(1.03);
 }
 
 @media (prefers-color-scheme: light) {
