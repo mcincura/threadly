@@ -32,6 +32,11 @@ body {
   --scrollbar-track-color: #121212; /* Dark by default */
 }
 
+@media (prefers-color-scheme: light) {
+  body {
+    --scrollbar-track-color: #fff; /* Dark by default */
+  }
+}
 /* Scrollbar Base Style */
 ::-webkit-scrollbar {
   width: 0.4vw;

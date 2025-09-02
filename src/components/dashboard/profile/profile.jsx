@@ -10,7 +10,7 @@ const Profile = ({ user }) => {
 
     //VAR - username editing
     const [isEditingUsername, setIsEditingUsername] = useState(false);
-    const [username, setUsername] = useState(user ? user.username : "Example");
+    const [username, setUsername] = useState(user ? user.user.username : "Example");
 
     //VAR - button width
     const [buttonWidth, setButtonWidth] = useState(150);
@@ -22,7 +22,7 @@ const Profile = ({ user }) => {
 
     //VAR - email editing
     const [isEditingEmail, setIsEditingEmail] = useState(false);
-    const [email, setEmail] = useState(user ? user.email : "example@example.com");
+    const [email, setEmail] = useState(user ? user.user.email : "example@example.com");
     const [showEmailChangeModal, setShowEmailChangeModal] = useState(false);
     const [verificationCode, setVerificationCode] = useState('');
     const [emailChangeError, setEmailChangeError] = useState('');
@@ -59,7 +59,7 @@ const Profile = ({ user }) => {
             try {
                 // send DELETE with body using axios (axios.delete accepts `data` in config)
                 await axios.delete('http://localhost:3001/profile/delete-account', {
-                    data: { id: user.id }
+                    data: { id: user.user.id }
                 });
                 // close modal on success (optionally show a toast or redirect)
                 setShowDeleteModal(false);
@@ -77,7 +77,7 @@ const Profile = ({ user }) => {
         if (isEditingUsername) {
             try {
                 await axios.put('http://localhost:3001/profile/edit-username', {
-                    id: user.id,
+                    id: user.user.id,
                     newUsername: username
                 });
                 // Optionally show a success message or update parent state
@@ -99,7 +99,7 @@ const Profile = ({ user }) => {
             try {
                 // Request verification to new email (server will send the verification code)
                 const response = await axios.put('http://localhost:3001/profile/edit-email', {
-                    id: user.id,
+                    id: user.user.id,
                     newEmail: email
                 });
                 // log response in console
@@ -117,7 +117,7 @@ const Profile = ({ user }) => {
     const handleEmailVerification = async () => {
         try {
             const response = await axios.post('http://localhost:3001/profile/confirm-email-change', {
-                id: user.id,
+                id: user.user.id,
                 newEmail: email,
                 verification_code: verificationCode
             });

@@ -9,6 +9,16 @@
   user-select: none;
 }
 
+.aff-graph {
+  --aff-glow-color: #ffffff;
+}
+
+@media (prefers-color-scheme: light) {
+  .aff-graph {
+    --aff-glow-color: #883cf3;
+  }
+}
+
 .aff-graph-svg {
   width: 100%;
   height: 100%;

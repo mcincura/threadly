@@ -15,8 +15,9 @@ export const UserProvider = ({ children }) => {
           withCredentials: true,
         });
         if (res.status === 200 && res.data.user) {
-          setUser(res.data.user);
+          setUser(res.data);
           setLoggedIn(true);
+          console.log("User authenticated:", res.data);
         } else {
           setUser(null);
           setLoggedIn(false);
@@ -28,8 +29,6 @@ export const UserProvider = ({ children }) => {
     };
     checkAuth();
   }, []);
-
-  //use effect to retrieve all affiliate details and set them into the userContext
 
   return (
     <UserContext.Provider value={{ user, setUser, loggedIn, setLoggedIn }}>

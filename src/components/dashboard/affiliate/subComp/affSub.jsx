@@ -1,4 +1,4 @@
-import SplitTextSub from '../../ui/SplitTextSub';
+import SplitTextSub from '../../../ui/SplitTextSub';
 import { useState } from 'react';
 
 const AffiliateSubtitle = ({ isAff, text }) => {

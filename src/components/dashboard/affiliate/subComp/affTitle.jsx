@@ -1,4 +1,4 @@
-import SplitTextTitle from '../../ui/SplitText';
+import SplitTextTitle from '../../../ui/SplitText';
 import { useState } from 'react';
 
 const AffiliateTitle = ({ isAff, text }) => {

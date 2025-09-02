@@ -1,12 +1,13 @@
 import './affGraph.css';
+import { motion } from 'framer-motion';
 
-const data = [40, 70, 55, 100, 90]; // purely decorative values
+const data = [40, 70, 55, 90, 80]; // purely decorative values
 
 export default function AffRewardsGraph() {
 
     const rewardMap = {
-        100: './assets/images/rolex.png',
-        90: './assets/images/macbook.png',
+        90: './assets/images/rolex.png',
+        80: './assets/images/macbook.png',
         70: './assets/images/apple_watch.png',
         55: './assets/images/airpods.png',
         40: './assets/images/gift_card.png',
@@ -17,8 +18,8 @@ export default function AffRewardsGraph() {
             <svg className="aff-graph-svg" viewBox="0 0 320 140" preserveAspectRatio="xMidYMid meet">
                 <defs>
                     <linearGradient id="barGrad" x1="0" x2="0" y1="0" y2="1">
-                        <stop offset="0%" stopColor="#a260fe" />
-                        <stop offset="100%" stopColor="#883cf3" />
+                        <stop offset="0%" stopColor="#883cf3" />
+                        <stop offset="100%" stopColor="#5f2eea" />
                     </linearGradient>
 
                     {/* smaller, white glow for images */}
@@ -26,7 +27,7 @@ export default function AffRewardsGraph() {
                         {/* blur the alpha so the glow is uniformly white (not colored by the image) */}
                         <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
                         {/* paint a white color */}
-                        <feFlood floodColor="#ffffff" floodOpacity="0.9" result="flood" />
+                        <feFlood floodColor="#ffffff" floodOpacity="0.9" result="flood" style={{ floodColor: "var(--aff-glow-color)" }} />
                         {/* keep the white only where the blur exists */}
                         <feComposite in="flood" in2="blur" operator="in" result="glow" />
                         {/* merge the white glow behind the original graphic */}
@@ -36,11 +37,6 @@ export default function AffRewardsGraph() {
                         </feMerge>
                     </filter>
                 </defs>
-
-                {/* grid lines 
-                {[0, 25, 50, 75, 100].map((v, i) => (
-                    <line key={i} x1="20" x2="300" y1={10 + (100 - v) * 0.9} y2={10 + (100 - v) * 0.9} stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
-                ))}*/}
 
                 {/* bars */}
                 {data.map((val, i) => {
@@ -62,22 +58,33 @@ export default function AffRewardsGraph() {
                                 fill="url(#barGrad)"
                                 style={{ animationDelay: `${i * 140}ms` }}
                             />
-                            {/* soft top highlight 
-                            <rect x={x} y={y} width="26" height={Math.max(6, h * 0.12)} fill="rgba(255,255,255,0.12)" rx="6" ry="6" />
-                            */}
 
                             {/* reward images for specific values */}
                             {rewardSrc && (
                                 <g className="reward" transform={`translate(${x + 13}, ${y - 18})`} aria-hidden="true">
                                     {/* center the image on the transform origin */}
-                                    <image
+                                    <motion.image
                                         href={rewardSrc}
-                                        x="-12"
-                                        y="-12"
-                                        width="24"
-                                        height="24"
+                                        x="-14"
+                                        y="-14"
+                                        width="28"
+                                        height="28"
                                         preserveAspectRatio="xMidYMid meet"
                                         filter="url(#glow)"
+                                        initial={{ y: 0, opacity: 0 }}
+                                        animate={{
+                                            y: [0, -2, 0],
+                                            opacity: 1,
+                                            transition: {
+                                                y: {
+                                                    duration: 4,
+                                                    repeat: Infinity,
+                                                    repeatType: "loop",
+                                                    ease: "easeInOut"
+                                                },
+                                                opacity: { duration: 0.7, ease: "easeOut" }
+                                            }
+                                        }}
                                     />
                                 </g>
                             )}
@@ -92,7 +99,6 @@ export default function AffRewardsGraph() {
             {/* decorative floating sparkles */}
             <div className="aff-sparkles">
                 <div className="sparkle s1" />
-                <div className="sparkle s2" />
                 <div className="sparkle s3" />
             </div>
         </div>

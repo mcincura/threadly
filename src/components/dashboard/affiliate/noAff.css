@@ -86,40 +86,53 @@
 }
 
 .NO-affiliate-section2-content3 {
-  background-color: brown;
   height: 50vh;
   width: 100%;
+  position: relative;
   display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
-.affiliate-cta-short {
-  background: linear-gradient(90deg, #883cf3 0%, #5f2eea 100%);
-  color: #fff;
-  border: none;
-  border-radius: 20px;
-  padding: 0.3em 1.2em;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(136, 60, 243, 0.08);
-  transition:
-    background 0.2s,
-    transform 0.1s;
-  white-space: nowrap;
+.NO-affiliate-cta-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.affiliate-cta-short:hover,
-.affiliate-cta-short:focus {
-  background: linear-gradient(90deg, #a96bfa 0%, #7d4ffb 100%);
-  transform: translateY(-2px) scale(1.03);
+.NO-affiliate-section2-content3-decoration-right {
+  position: absolute;
+  top: 5%;
+  right: 10%;
+}
+
+.NO-affiliate-section2-content3-decoration-left {
+  position: absolute;
+  bottom: 0%;
+  left: 10%;
+}
+
+.NO-affiliate-section2-content3-decoration-right img {
+  width: 10vw;
+  height: auto;
+  transform: rotate(62deg);
+}
+
+.NO-affiliate-section2-content3-decoration-left img {
+  width: 10vw;
+  height: auto;
+  transform: rotate(28deg);
 }
 
 @media (prefers-color-scheme: light) {
-  .NO-affiliate-section2-content1-left h1 {
+  .NO-affiliate-section2-content h1 {
     color: #121212;
   }
 
-  .NO-affiliate-section2-content1-left h3 {
+  .NO-affiliate-section2-content h3 {
     color: #121212;
   }
 }

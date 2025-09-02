@@ -39,7 +39,7 @@ const Dash = ({ setActive, open, user, loggedIn }) => {
 
     useEffect(() => {
         if (loggedIn) {
-            if (user.isAff === 0) {
+            if (user.user.isAff === 0) {
                 setIsAff(false);
             } else {
                 setIsAff(true);
@@ -274,7 +274,7 @@ const Dash = ({ setActive, open, user, loggedIn }) => {
                             <div className="account-content">
                                 <div className="account-info">
                                     <IconUserSquareRounded className='account-avatar' />
-                                    <p className="account-email">{loggedIn ? user.email : 'user@example.com'}</p>
+                                    <p className="account-email">{loggedIn ? user.user.email : 'user@example.com'}</p>
                                 </div>
                                 <div className="account-buttons">
                                     <button className="account-btn" onClick={() => setActive('prof')}>
