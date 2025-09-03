@@ -18,8 +18,13 @@ import './sidebarDashboard.css'
 
 const Dashboard = () => {
 
+  function getViewFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("view") || "dash";
+  }
+
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState('dash');
+  const [active, setActive] = useState(getViewFromURL());
   const [isMobile, setIsMobile] = useState(false);
   const prevActiveRef = useRef(active);
   const { loggedIn } = useContext(UserContext);
@@ -31,6 +36,15 @@ const Dashboard = () => {
     }
     prevActiveRef.current = active;
   }, [active, isMobile]);
+
+  // Update URL when active changes
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (active !== (params.get("view") || "dash")) {
+      params.set("view", active);
+      window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
+    }
+  }, [active]);
 
   //_______HELPER: MOBILE DEVICE DETECTION
   useEffect(() => {
@@ -61,13 +75,13 @@ const Dashboard = () => {
     },
     {
       label: 'Payment',
-      view: 'pay',
+      view: 'payment',
       icon:
         <IconCreditCardPay className="sidebar-link-icon" />
     },
     {
       label: 'Affiliate',
-      view: 'aff',
+      view: 'affiliate',
       icon:
         <IconAffiliate className="sidebar-link-icon" />
     }
@@ -76,7 +90,7 @@ const Dashboard = () => {
   const linksBottom = [
     {
       label: 'Profile',
-      view: 'prof',
+      view: 'profile',
       icon:
         <IconUserCircle className="sidebar-link-icon" />
     },
@@ -157,17 +171,17 @@ const Dashboard = () => {
               <Dash setActive={setActive} open={open} user={user} loggedIn={loggedIn} />
             </div>
           )}
-          {active === 'aff' && (
+          {active === 'affiliate' && (
             <div className={`dashboard-content-affiliate-wrapper ${open && isMobile ? 'blur' : ''} `}>
               <Affiliate user={user} loggedIn={loggedIn} />
             </div>
           )}
-          {active === 'pay' && (
+          {active === 'payment' && (
             <div className={`dashboard-content-payment-wrapper ${open && isMobile ? 'blur' : ''} `}>
               <Payment />
             </div>
           )}
-          {active === 'prof' && (
+          {active === 'profile' && (
             <div className={`dashboard-content-profile-wrapper ${open && isMobile ? 'blur' : ''} `}>
               <Profile user={user} />
             </div>

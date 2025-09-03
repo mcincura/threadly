@@ -82,7 +82,7 @@ const Login = () => {
             } else {
                 const response = await axios.post(`${API_URL}/login`, { email, password, remember }, { withCredentials: true });
                 setLoggedIn(true);
-                setUser(response.data.user);
+                setUser(response.data);
             }
         } catch (err) {
             setPasswordError(err.response?.data?.error || "An error occurred");

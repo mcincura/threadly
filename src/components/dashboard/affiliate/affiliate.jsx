@@ -14,6 +14,15 @@ import axios from 'axios';
 const Affiliate = ({ user, loggedIn }) => {
 
   const [isAff, setIsAff] = useState(null);
+
+  const title = !isAff
+    ? "Become an Affiliate"
+    : `Welcome Back, ${user && user.user.username ? user.user.username : "Affiliate"}!`;
+
+  const subtitle = !isAff
+    ? "Earn 50% commission from each sale and recurring sales!"
+    : "Monitor your commissions and performance here.";
+
   const [isLight, setIsLight] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState('');
@@ -24,24 +33,36 @@ const Affiliate = ({ user, loggedIn }) => {
   const [agreeTos, setAgreeTos] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const divRef = useRef(null);
-  const bentoRef = useRef(null);
   const marginTop = divRef.current ? divRef.current.offsetWidth * 0.05 : 35;
-  const [bentoHeight, setBentoHeight] = useState(0);
   const [affiliateStatsBreakdown, setAffiliateStatsBreakdown] = useState(null);
   const [link, setLink] = useState(null);
+  const [topAffiliates, setTopAffiliates] = useState([]);
+  const [showPayoutModal, setShowPayoutModal] = useState(false);
+  const [copyStatus, setCopyStatus] = useState("COPY");
+  const [changeStatus, setChangeStatus] = useState("CHANGE");
 
+  const homepage = "http://localhost:3000";
+
+  // Fetch top 10 affiliates on mount
   useEffect(() => {
-    if (bentoRef.current) {
-      const handleResize = () => {
-        setBentoHeight(bentoRef.current.offsetHeight);
-      };
-      handleResize();
-      window.addEventListener('resize', handleResize);
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
+    async function fetchTopAffiliates() {
+      try {
+        const res = await axios.get('http://localhost:3001/affiliate/top');
+        if (res.data && Array.isArray(res.data.topAffiliates)) {
+          // Convert amount to number if needed
+          const affiliates = res.data.topAffiliates.map(a => ({
+            ...a,
+            amount: typeof a.amount === "string" ? parseFloat(a.amount) : a.amount
+          }));
+          setTopAffiliates(affiliates);
+        }
+      } catch (err) {
+        setTopAffiliates([]);
+        console.error("Failed to fetch top affiliates:", err);
+      }
     }
-  }, [])
+    fetchTopAffiliates();
+  }, []);
 
   // Fetch affiliate stats breakdown
   useEffect(() => {
@@ -53,6 +74,7 @@ const Affiliate = ({ user, loggedIn }) => {
     console.log("Fetched affiliate stats breakdown:", affiliateStatsBreakdown);
   }, [user]);
 
+  //FUN - get current affiliate link
   useEffect(() => {
     if (user && user.user && user.user.id) {
       fetchAffiliateLink(user.user.id).then(link => {
@@ -60,6 +82,34 @@ const Affiliate = ({ user, loggedIn }) => {
       });
     }
   }, [user]);
+
+  const handleChangeLink = async () => {
+    if (!user || !user.user || !user.user.id) {
+      setChangeStatus("FAILED");
+      setTimeout(() => setChangeStatus("CHANGE"), 2000);
+      return;
+    }
+    if (!linkAvailable || !name) {
+      setChangeStatus("FAILED");
+      setTimeout(() => setChangeStatus("CHANGE"), 2000);
+      return;
+    }
+    try {
+      const res = await axios.put('http://localhost:3001/affiliate/change-link', {
+        id: user.user.id,
+        newLink: name
+      });
+      setChangeStatus("UPDATED");
+      setTimeout(() => setChangeStatus("CHANGE"), 2000);
+      setLink(name); // update local state
+      setName('');   // clear input
+      setLinkError('');
+      setLinkAvailable(true);
+    } catch (err) {
+      setChangeStatus("FAILED");
+      setTimeout(() => setChangeStatus("CHANGE"), 2000);
+    }
+  };
 
   // Handler for final step submit
   const handleAffiliateSignup = async () => {
@@ -138,14 +188,6 @@ const Affiliate = ({ user, loggedIn }) => {
     }
   }, [user, loggedIn])
 
-  const title = !isAff
-    ? "Become an Affiliate"
-    : `Welcome Back, ${user && user.user.username ? user.user.username : "Affiliate"}!`;
-
-  const subtitle = !isAff
-    ? "Earn 50% commission from each sale and recurring sales!"
-    : "Monitor your commissions and performance here.";
-
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: light)');
     setIsLight(mq.matches);
@@ -170,6 +212,20 @@ const Affiliate = ({ user, loggedIn }) => {
       return null;
     }
   }
+
+  const copyAffiliateLink = () => {
+    if (!link) return;
+    const fullLink = `${homepage}?ref=${link}`;
+    navigator.clipboard.writeText(fullLink)
+      .then(() => {
+        setCopyStatus("COPIED");
+        setTimeout(() => setCopyStatus("COPY"), 2000);
+      })
+      .catch(() => {
+        setCopyStatus("FAILED");
+        setTimeout(() => setCopyStatus("COPY"), 2000);
+      });
+  };
 
   function formatMoney(amount) {
     if (Math.abs(amount) >= 1_000_000) {
@@ -404,7 +460,7 @@ const Affiliate = ({ user, loggedIn }) => {
                       <h1>
                         Commissions
                       </h1>
-                      <div className="aff-bento-grid" ref={bentoRef}>
+                      <div className="aff-bento-grid">
                         <div className="aff-bento-card pending">
                           <h3>Commission Pending</h3>
                           <p>${user.affiliateStats.commission_pending}</p>
@@ -428,18 +484,7 @@ const Affiliate = ({ user, loggedIn }) => {
                         Top Affiliates
                       </h1>
                       <div className="affiliate-content3-top-affiliates">
-                        <TopAffiliatesTable affiliates={[
-                          { username: "superlongusername123456789", amount: 201345 },
-                          { username: "alice", amount: 12900 },
-                          { username: "bob", amount: 9500 },
-                          { username: "charlie", amount: 8000 },
-                          { username: "david", amount: 7000 },
-                          { username: "eve", amount: 6000 },
-                          { username: "frank", amount: 5000 },
-                          { username: "grace", amount: 4000 },
-                          { username: "heidi", amount: 3000 },
-                          { username: "ivan", amount: 2000 },
-                        ]} />
+                        <TopAffiliatesTable affiliates={topAffiliates} />
                       </div>
                     </div>
                   </div>
@@ -450,8 +495,30 @@ const Affiliate = ({ user, loggedIn }) => {
                     <h1>Link Management</h1>
                     <div className="affiliate-section2-content4-wrapper">
                       <div className="current-link-container">
-                        <p>Your current affiliate link:</p>
-                        <p>{link}</p>
+                        <p className="change-link-header">Your current affiliate link:</p>
+                        <p>{link ? `${homepage}?ref=${link}` : ''}</p>
+                        <button onClick={copyAffiliateLink}>{copyStatus}</button>
+                      </div>
+                      <div className="change-link-container">
+                        <p className="change-link-header">Change your link</p>
+                        <input
+                          className="change-link-input"
+                          type="text"
+                          value={name}
+                          onChange={e => setName(e.target.value)}
+                          placeholder="Enter new affiliate link"
+                          autoComplete="off"
+                        />
+                        {linkError && (
+                          <div className="change-link-error">{linkError}</div>
+                        )}
+                        <button
+                          className="change-link-btn"
+                          onClick={handleChangeLink}
+                          disabled={!linkAvailable || !name}
+                        >
+                          {changeStatus}
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -522,6 +589,13 @@ const Affiliate = ({ user, loggedIn }) => {
                 <p className="step-desc">You're all set! Click "Complete" to finish your application.</p>
               </Step>
             </Stepper>
+          </div>
+        )}
+
+        {/* PAYOUT MODAL */}
+        {showPayoutModal && (
+          <div className="payout-modal-overlay">
+
           </div>
         )}
       </div>

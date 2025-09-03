@@ -38,7 +38,7 @@ const Dash = ({ setActive, open, user, loggedIn }) => {
     });
 
     useEffect(() => {
-        if (loggedIn) {
+        if (loggedIn && user && user.user) {
             if (user.user.isAff === 0) {
                 setIsAff(false);
             } else {
@@ -274,10 +274,14 @@ const Dash = ({ setActive, open, user, loggedIn }) => {
                             <div className="account-content">
                                 <div className="account-info">
                                     <IconUserSquareRounded className='account-avatar' />
-                                    <p className="account-email">{loggedIn ? user.user.email : 'user@example.com'}</p>
+                                    <p className="account-email">
+                                        {loggedIn && user && user.user && user.user.email
+                                            ? user.user.email
+                                            : 'user@example.com'}
+                                    </p>
                                 </div>
                                 <div className="account-buttons">
-                                    <button className="account-btn" onClick={() => setActive('prof')}>
+                                    <button className="account-btn" onClick={() => setActive('profile')}>
                                         Edit Profile
                                     </button>
                                     <button className="account-btn" onClick={handleLogout}>
@@ -295,7 +299,7 @@ const Dash = ({ setActive, open, user, loggedIn }) => {
                                     {isAff ? "You are making it rain. Check out your statistics!" : "Earn 50% from referrals. Join now and start earning today!"}
                                 </p>
                             </div>
-                            <button className="affiliate-cta" onClick={() => setActive('aff')}>
+                            <button className="affiliate-cta" onClick={() => setActive('affiliate')}>
                                 {isAff ? "Check Statistics" : "Get Started"}
                                 <div className="affiliate-arrow"><IconArrowRight /></div>
                             </button>
