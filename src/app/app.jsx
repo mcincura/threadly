@@ -10,6 +10,7 @@ import { UserProvider, UserContext } from './context/userContext';
 import Landing from '../pages/landing/landing';
 import Dashboard from '../pages/dashboard/dashboard';
 import Login from '../components/login/login';
+import Checkout from '../pages/checkout/checkout';
 
 const AppContent = () => {
     const { user } = useContext(UserContext);
@@ -54,6 +55,7 @@ const AppContent = () => {
                 <Route path="/" element={<Landing />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/login" element={<Login />} />
+                <Route path='/checkout' element={<Checkout />} />
             </Routes>
         </Router>
     );

@@ -245,6 +245,12 @@
   background-color: #e05549;
 }
 
+.landing-signup-modal h2 {
+  color: #fff;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
 @media (max-width: 600px) {
   .cards-container {
     padding: 1rem;

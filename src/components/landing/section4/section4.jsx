@@ -12,6 +12,7 @@ const Section4 = ({ isSection4, isMobile }) => {
     const additionalDevicePrice = 10;
     const totalPrice = basePrice + (devices - 1) * additionalDevicePrice;
     const [bundleOffsetX, setBundleOffsetX] = useState(0);
+    const [showSignupModal, setShowSignupModal] = useState(false);
 
     const handleIncrement = () => setDevices((prev) => prev + 1);
     const handleDecrement = () => setDevices((prev) => (prev > 1 ? prev - 1 : 1));
@@ -22,7 +23,6 @@ const Section4 = ({ isSection4, isMobile }) => {
     useEffect(() => {
         const calcOffset = () => {
             const screenWidth = window.innerWidth;
-            // Example: 15% of screen width for side bundles
             const offset = screenWidth * 0.12;
             setBundleOffsetX(offset);
         };
@@ -223,6 +223,10 @@ const Section4 = ({ isSection4, isMobile }) => {
         };
     }, [isMobile, isSection4]);
 
+    const handleBuyNowClick = () => {
+        location.href = '/checkout?devices=' + devices;
+    }
+
     return (
         <div className="payment-main">
             <div className="geometric-bg" ref={bgRef} />
@@ -334,7 +338,9 @@ const Section4 = ({ isSection4, isMobile }) => {
                         <p className="note">
                             <strong>+$10</strong> per extra device
                         </p>
-                        <button className="buy-now-btn">Buy Now</button>
+                        <button className="buy-now-btn"
+                            onClick={handleBuyNowClick}
+                        >Buy Now</button>
                     </motion.div>
 
                     <motion.div
@@ -357,8 +363,6 @@ const Section4 = ({ isSection4, isMobile }) => {
                     </motion.div>
                 </div>
             )}
-            <div className="cards-container">
-            </div>
         </div>
 
     );
