@@ -111,9 +111,9 @@ const Login = () => {
     return (
         <div className="modal-backdrop">
             <div className="modal">
-                <div className="modal-close-icon" onClick={() => setClosed(true)}>
+                {/*<div className="modal-close-icon" onClick={() => setClosed(true)}>
                     <IconSquareX />
-                </div>
+                </div>*/}
                 <h2>{isSignup ? "Sign Up" : "Log In"}</h2>
                 {!awaitingVerification ? (
                     <form onSubmit={handleSubmit}>
