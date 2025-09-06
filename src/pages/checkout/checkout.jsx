@@ -22,54 +22,52 @@ const CheckoutForm = ({ email, userId, deviceCount, onSuccess }) => {
 		e.preventDefault();
 		setLoading(true);
 		setError("");
-		console.log("CheckoutForm: handleSubmit called");
-		console.log("Props:", { email, userId, deviceCount });
-
 		try {
 			const cardElement = elements.getElement(CardElement);
-			console.log("CardElement:", cardElement);
 
+			// Step 1: Create PaymentMethod
 			const { error: pmError, paymentMethod } = await stripe.createPaymentMethod({
 				type: "card",
 				card: cardElement,
-				billing_details: { email }
+				billing_details: { email },
 			});
-			console.log("Stripe createPaymentMethod result:", { pmError, paymentMethod });
 
 			if (pmError) {
-				console.error("Payment method error:", pmError);
 				setError(pmError.message);
 				setLoading(false);
 				return;
 			}
 
-			console.log("Sending subscription request to backend:", {
+			// Step 2: Send to backend to create subscription
+			const { data } = await axios.post("http://localhost:3001/test/subscribe", {
 				paymentMethodId: paymentMethod.id,
 				email,
 				user_id: userId,
 				device_count: deviceCount,
 			});
 
-			const { data } = await axios.post(
-				"http://localhost:3001/payment/subscribe",
-				{
-					paymentMethodId: paymentMethod.id,
-					email,
-					user_id: userId,
-					device_count: deviceCount,
-				}
-			);
+			console.log("Backend response:", data);
 
-			console.log("Backend response data:", data);
-
-			const status = data.status;
-
-			if (status === 'active') {
-				console.log("Payment succeeded!");
+			// Step 3: Handle cases
+			if (data.subscriptionStatus === "active") {
 				onSuccess();
+			} else if (data.requiresAction && data.paymentIntentClientSecret) {
+				// Step 4: Handle 3DS authentication
+				const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(
+					data.paymentIntentClientSecret
+				);
+
+				if (confirmError) {
+					console.error("3DS confirmation failed:", confirmError);
+					setError(confirmError.message);
+				} else if (paymentIntent.status === "succeeded") {
+					console.log("3DS success, subscription active!");
+					onSuccess();
+				} else {
+					setError("Payment could not be completed.");
+				}
 			} else {
-				console.error("No clientSecret received from backend.");
-				setError("No client secret received from server.");
+				setError("Unexpected response from server.");
 			}
 		} catch (err) {
 			console.error("Subscription failed:", err);
@@ -81,17 +79,16 @@ const CheckoutForm = ({ email, userId, deviceCount, onSuccess }) => {
 	return (
 		<div className="stripe-form-wrapper">
 			<form onSubmit={handleSubmit}>
-				<CardElement options={{
-					hidePostalCode: true, style: {
-						base: {
-							color: "#fff",
-							'::placeholder': { color: "#ccc" },
+				<CardElement
+					options={{
+						hidePostalCode: true,
+						style: {
+							base: { color: "#fff", "::placeholder": { color: "#ccc" } },
+							invalid: { color: "#ff5252" },
 						},
-						invalid: {
-							color: "#ff5252",
-						},
-					},
-				}} className="stripe-checkout-card-input" />
+					}}
+					className="stripe-checkout-card-input"
+				/>
 				<button type="submit" disabled={!stripe || loading}>
 					{loading ? "Processing..." : "Subscribe"}
 				</button>
@@ -165,23 +162,24 @@ const Checkout = () => {
 	};
 
 	const handleVerify = async (e) => {
+		const getCookie = (name) => {
+			const value = `; ${document.cookie}`;
+			const parts = value.split(`; ${name}=`);
+			if (parts.length === 2) return parts.pop().split(';').shift();
+			return null;
+		};
+		const ref_link = getCookie("ref");
+
 		e.preventDefault();
 		const { email, verification_code } = formData;
 		setLoading(true);
 		try {
-			const response = await axios.post(`${API_URL}/verify`, { email, verification_code });
+			const response = await axios.post(`${API_URL}/verify`, { email, verification_code, ref_link });
 			const loginRes = await axios.post(`${API_URL}/login`, { email, password: formData.password }, { withCredentials: true });
 			setLoggedIn(true);
 			setUser(loginRes.data);
 
 			// Record affiliate register event
-			const getCookie = (name) => {
-				const value = `; ${document.cookie}`;
-				const parts = value.split(`; ${name}=`);
-				if (parts.length === 2) return parts.pop().split(';').shift();
-				return null;
-			};
-			const ref_link = getCookie("ref");
 			if (response.status === 200 && ref_link) {
 				await axios.post("http://localhost:3001/event/register", {
 					ref_link,

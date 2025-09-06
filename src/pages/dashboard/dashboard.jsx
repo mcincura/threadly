@@ -178,7 +178,7 @@ const Dashboard = () => {
           )}
           {active === 'payment' && (
             <div className={`dashboard-content-payment-wrapper ${open && isMobile ? 'blur' : ''} `}>
-              <Payment />
+              <Payment user={user} />
             </div>
           )}
           {active === 'profile' && (

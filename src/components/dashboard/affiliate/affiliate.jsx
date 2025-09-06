@@ -113,13 +113,13 @@ const Affiliate = ({ user, loggedIn }) => {
 
   // Handler for final step submit
   const handleAffiliateSignup = async () => {
-    if (!user || !user.id) {
+    if (!user.user || !user.user.id) {
       alert("User not found. Please log in.");
       return;
     }
     try {
       const res = await axios.post('http://localhost:3001/affiliate/signup', {
-        id: user.id,
+        id: user.user.id,
         link: name,
         email_report: agreeEmail
       });
