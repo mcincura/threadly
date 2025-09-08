@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
-import Iridescence from "../../ui/iridescence.js";
+import { useStripe, useElements, CardElement, Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { PaymentIcon } from "react-svg-credit-card-payment-icons";
+import { IconCreditCardPay, IconX } from "@tabler/icons-react";
 import './payment.css';
+
+const STRIPE_PUBLIC_KEY = "pk_test_51S3YAs7GapckM751dqbjBCkO0d6rPxbqmoI7MEJgSEUcoSQP4fRXDZ38LnTuUJmC5j77E9eCztLwIuHhSMQP9Ex000QCcDYywf";
+const stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
 
 const Payment = ({ user }) => {
 	const [loading, setLoading] = useState(true);
@@ -9,6 +15,7 @@ const Payment = ({ user }) => {
 	const [error, setError] = useState("");
 	const [cancelLoading, setCancelLoading] = useState(false);
 	const [showPaymentModal, setShowPaymentModal] = useState(false);
+	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 	const [paymentMethods, setPaymentMethods] = useState([]);
 	const [pmLoading, setPmLoading] = useState(false);
 	const [pmError, setPmError] = useState("");
@@ -53,7 +60,10 @@ const Payment = ({ user }) => {
 			});
 			const data = await res.json();
 			if (!res.ok) throw new Error(data.error || "Failed to fetch payment methods");
-			setPaymentMethods(data.paymentMethods || []);
+			let methods = data.paymentMethods || [];
+			// Sort: default payment method first
+			methods = methods.sort((a, b) => (b.is_default ? 1 : 0) - (a.is_default ? 1 : 0));
+			setPaymentMethods(methods);
 		} catch (err) {
 			setPmError(err.message);
 		}
@@ -81,6 +91,7 @@ const Payment = ({ user }) => {
 	};
 
 	// Payment method actions
+	//delete payment method
 	const handleDeletePaymentMethod = async (pmId) => {
 		if (!window.confirm("Delete this payment method?")) return;
 		setPmLoading(true);
@@ -102,6 +113,7 @@ const Payment = ({ user }) => {
 		setPmLoading(false);
 	};
 
+	//set default payment method
 	const handleSetDefaultPaymentMethod = async (pmId) => {
 		setPmLoading(true);
 		setPmError("");
@@ -122,34 +134,61 @@ const Payment = ({ user }) => {
 		setPmLoading(false);
 	};
 
-	const handleAddPaymentMethod = async (e) => {
-		e.preventDefault();
-		setPmLoading(true);
-		setPmError("");
-		setPmSuccess("");
-		const form = e.target;
-		const cardNumber = form.cardNumber.value;
-		const expMonth = form.expMonth.value;
-		const expYear = form.expYear.value;
-		const cvc = form.cvc.value;
-		try {
+	//add payment method
+	const AddPaymentMethod = ({ user }) => {
+		const stripe = useStripe();
+		const elements = useElements();
+		const [inputHeight, setInputHeight] = useState(40);
+
+		const handleAddPaymentMethod = async (e) => {
+			e.preventDefault();
+			if (!stripe || !elements) return;
+
+			const cardElement = elements.getElement(CardElement);
+
+			const { error, paymentMethod } = await stripe.createPaymentMethod({
+				type: "card",
+				card: cardElement,
+			});
+
+			if (error) {
+				console.error(error);
+				return;
+			}
+
 			const res = await fetch("http://localhost:3001/payment/methods/add", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
 					stripe_customer_id: user?.user?.stripe_customer_id,
-					card: { number: cardNumber, exp_month: expMonth, exp_year: expYear, cvc }
+					payment_method_id: paymentMethod.id,
 				}),
 			});
+
 			const data = await res.json();
-			if (!res.ok) throw new Error(data.error || "Failed to add payment method");
-			setPmSuccess("Payment method added.");
-			form.reset();
-			await fetchPaymentMethods();
-		} catch (err) {
-			setPmError(err.message);
-		}
-		setPmLoading(false);
+			if (!res.ok) {
+				console.error(data.error);
+			} else {
+				console.log("Payment method added:", paymentMethod.id);
+			}
+		};
+
+		return (
+			<div className="add-pm-form-wrapper">
+				<form onSubmit={handleAddPaymentMethod} >
+					<CardElement
+						options={{
+							hidePostalCode: true,
+							style: {
+								base: { color: "#fff", "::placeholder": { color: "#ccc" } },
+								invalid: { color: "#ff5252" },
+							}
+						}}
+					/>
+					<button type="add-pm-submit" style={{ height: `${inputHeight}px` }}><IconCreditCardPay stroke={2} /></button>
+				</form>
+			</div>
+		);
 	};
 
 	const openPaymentModal = () => {
@@ -163,6 +202,10 @@ const Payment = ({ user }) => {
 		setShowPaymentModal(false);
 		setPaymentMethods([]);
 	};
+
+	const openDeleteModal = () => {
+		setShowDeleteConfirm(true);
+	}
 
 	return (
 		<div className="payment-main">
@@ -225,7 +268,7 @@ const Payment = ({ user }) => {
 				)}
 			</div>
 
-			{/* Payment Methods Modal */}
+			{/* Payment methods modal */}
 			{showPaymentModal && (
 				<div className="modal-overlay" onClick={closePaymentModal}>
 					<div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -235,33 +278,60 @@ const Payment = ({ user }) => {
 						{pmSuccess && <p style={{ color: "green" }}>{pmSuccess}</p>}
 						<ul className="payment-method-list">
 							{paymentMethods.map(pm => (
-								<li key={pm.id} className="payment-method-item">
-									<span>
-										{pm.card?.brand?.toUpperCase()} **** {pm.card?.last4} (exp {pm.card?.exp_month}/{pm.card?.exp_year})
-										{pm.is_default && <span className="default-badge">Default</span>}
-									</span>
-									<div>
+								<li key={pm.id} className={`payment-method-item ${pm.is_default ? 'default' : ''}`}>
+									<div className="payment-method-info">
+										<PaymentIcon type={pm.card?.brand} format="flatRounded" style={{ width: '40px', height: '25px' }} />
+
+										<span style={{ marginLeft: "1rem", fontWeight: "bold" }}>
+											**** {pm.card?.last4}
+										</span>
+										<span style={{ color: "#828282ff", marginLeft: "1rem" }}>
+											({pm.card?.exp_month}/{pm.card?.exp_year})
+										</span>
+									</div>
+									<div className="default-pm">
+										{pm.is_default && <button className="default-badge">Default</button>}
+									</div>
+									<div className="normal-pm">
 										{!pm.is_default && (
-											<button onClick={() => handleSetDefaultPaymentMethod(pm.id)} disabled={pmLoading}>
+											<button onClick={() => handleSetDefaultPaymentMethod(pm.id)} disabled={pmLoading} className="set-default-btn">
 												Set Default
 											</button>
 										)}
-										<button onClick={() => handleDeletePaymentMethod(pm.id)} disabled={pmLoading}>
-											Delete
-										</button>
+										{!pm.is_default && (
+											<button onClick={() => handleDeletePaymentMethod(pm.id)} disabled={pmLoading} className="delete-btn">
+												Delete
+											</button>
+										)}
 									</div>
 								</li>
 							))}
 						</ul>
-						<form className="add-payment-method-form" onSubmit={handleAddPaymentMethod}>
-							<h3>Add Payment Method</h3>
-							<input name="cardNumber" type="text" placeholder="Card Number" required minLength={12} maxLength={19} />
-							<input name="expMonth" type="number" placeholder="Exp Month" required min={1} max={12} />
-							<input name="expYear" type="number" placeholder="Exp Year" required min={2024} max={2100} />
-							<input name="cvc" type="text" placeholder="CVC" required minLength={3} maxLength={4} />
-							<button type="submit" disabled={pmLoading}>Add</button>
-						</form>
-						<button className="close-modal-btn" onClick={closePaymentModal}>Close</button>
+						<div className="add-payment-method-form">
+							<h3>Add New Payment Method</h3>
+							<Elements stripe={stripePromise} style={{ height: "200px" }}>
+								<AddPaymentMethod user={user} style={{ height: "200px" }} />
+							</Elements>
+						</div>
+						<div className="modal-close-button" onClick={closePaymentModal}>
+							<IconX size={24} />
+						</div>
+					</div>
+				</div>
+			)}
+
+			{/* Delete confirmation modal */}
+			{showDeleteConfirm && (
+				<div className="modal-overlay" onClick={() => setShowDeleteConfirm(false)}>
+					<div className="modal-content" onClick={e => e.stopPropagation()}>
+						<h2>Confirm Deletion</h2>
+						<p>Are you sure you want to delete this payment method?</p>
+						<div className="confirm-buttons">
+							<button onClick={() => setShowDeleteConfirm(false)} className="cancel-btn">Cancel</button>
+							<button onClick={confirmDeletePaymentMethod} className="delete-btn" disabled={pmLoading}>
+								{pmLoading ? "Deleting..." : "Delete"}
+							</button>
+						</div>
 					</div>
 				</div>
 			)}

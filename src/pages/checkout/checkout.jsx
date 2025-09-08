@@ -8,8 +8,7 @@ import { Elements, CardElement, useStripe, useElements } from "@stripe/react-str
 import './checkout.css';
 
 const API_URL = "http://localhost:3001/auth";
-const STRIPE_PUBLIC_KEY = "pk_test_51S3YAs7GapckM751dqbjBCkO0d6rPxbqmoI7MEJgSEUcoSQP4fRXDZ38LnTuUJmC5j77E9eCztLwIuHhSMQP9Ex000QCcDYywf"; // <-- Replace with your key
-
+const STRIPE_PUBLIC_KEY = "pk_test_51S3YAs7GapckM751dqbjBCkO0d6rPxbqmoI7MEJgSEUcoSQP4fRXDZ38LnTuUJmC5j77E9eCztLwIuHhSMQP9Ex000QCcDYywf";
 const stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
 
 const CheckoutForm = ({ email, userId, deviceCount, onSuccess }) => {
@@ -89,7 +88,7 @@ const CheckoutForm = ({ email, userId, deviceCount, onSuccess }) => {
 					}}
 					className="stripe-checkout-card-input"
 				/>
-				<button type="submit" disabled={!stripe || loading}>
+				<button type="checkout-submit" disabled={!stripe || loading}>
 					{loading ? "Processing..." : "Subscribe"}
 				</button>
 				{error && <p style={{ color: "red" }}>{error}</p>}
@@ -269,7 +268,7 @@ const Checkout = () => {
 										{passwordError && (
 											<p style={{ color: "red", marginBottom: 12 }}>{passwordError}</p>
 										)}
-										<button type="submit" disabled={loading}>
+										<button type="checkout-submit" disabled={loading}>
 											{loading ? "Creating..." : "Create Account"}
 										</button>
 									</form>
@@ -287,7 +286,7 @@ const Checkout = () => {
 											required
 											style={{ display: "block", marginBottom: 12, width: "100%" }}
 										/>
-										<button type="submit" disabled={loading}>
+										<button type="checkout-submit" disabled={loading}>
 											{loading ? "Verifying..." : "Verify Email"}
 										</button>
 										{passwordError && (
@@ -319,21 +318,23 @@ const Checkout = () => {
 								<h2>${(amount / 100).toFixed(2)}/month</h2>
 							</div>
 						</div>
-						<Elements stripe={stripePromise}>
-							<CheckoutForm
-								email={formData.email}
-								userId={user.user.id}
-								deviceCount={deviceCount}
-								onSuccess={handlePaymentSuccess}
-							/>
-						</Elements>
+						<div className="checkout-card" style={{ width: "100%" }}>
+							<Elements stripe={stripePromise}>
+								<CheckoutForm
+									email={formData.email}
+									userId={user.user.id}
+									deviceCount={deviceCount}
+									onSuccess={handlePaymentSuccess}
+								/>
+							</Elements>
+						</div>
 					</div>
 				)}
 				{paymentSuccess && (
 					<div className="payment-success-container">
 						<h1 className="checkout-success-header">Payment Successful</h1>
 						<h3 className="checkout-signup-subheader">Thank you for your purchase.</h3>
-						<button onClick={handleRedirectToDashboard} className="checkout-success-button" type="submit">Dashboard</button>
+						<button onClick={handleRedirectToDashboard} className="checkout-success-button" type="checkout-submit">Dashboard</button>
 					</div>
 				)}
 			</div>

@@ -152,6 +152,16 @@
   margin-bottom: 0.3em;
 }
 
+/*
+
+
+
+Modal styles 
+
+
+
+*/
+
 .modal-overlay {
   position: fixed;
   z-index: 1000;
@@ -160,90 +170,207 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(5px);
 }
+
 .modal-content {
-  background: #181828;
-  color: #fff;
+  min-width: 40vw;
+  background-color: rgba(18, 18, 18, 0.7);
+  padding: 2rem;
+  box-sizing: border-box;
   border-radius: 12px;
-  padding: 2rem 2.5rem;
-  min-width: 340px;
-  max-width: 95vw;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   position: relative;
 }
-.close-modal-btn {
-  background: #444;
+
+.modal-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
   color: #fff;
-  border: none;
-  padding: 0.5em 1em;
-  border-radius: 6px;
-  margin-top: 1.5rem;
-  cursor: pointer;
+  z-index: 1;
 }
+
 .payment-method-list {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0 2rem 0;
-}
-.payment-method-item {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  background: rgba(60, 60, 60, 0.13);
-  padding: 0.6em 1em;
-  border-radius: 7px;
-  margin-bottom: 0.7em;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  list-style: none;
 }
-.payment-method-item button {
+
+.payment-method-item {
+  background-color: #222222;
+  border-radius: 8px;
+  width: 100%;
+  padding: 0.75rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.payment-method-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.normal-pm {
+  display: flex;
+  gap: 0.5em;
+}
+
+.normal-pm button {
   margin-left: 0.5em;
-  background: #7c4dff;
   color: #fff;
   border: none;
-  border-radius: 5px;
-  padding: 0.3em 0.8em;
+  border-radius: 8px;
+  padding: 0.5em 0.8em;
   cursor: pointer;
   font-size: 0.95em;
+  min-width: 80px;
+  font-weight: bold;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  transition: scale 0.2s ease-out;
 }
-.payment-method-item button:hover {
-  background: #512da8;
+
+.normal-pm button:hover {
+  scale: 1.02;
 }
+
+.set-default-btn {
+  background: #883cf3;
+}
+
+.delete-btn {
+  background-color: #cb3737;
+}
+
 .default-badge {
-  background: #388e3c;
-  color: #fff;
+  margin-left: 0.5em;
+  background: #5bb54d;
+  color: #dbdbdb;
+  border: none;
   border-radius: 8px;
-  padding: 0.2em 0.7em;
-  margin-left: 0.7em;
-  font-size: 0.85em;
-  font-weight: 600;
+  padding: 0.5em 0.8em;
+  font-size: 0.95em;
+  min-width: 80px;
+  font-weight: bold;
 }
+
 .add-payment-method-form {
   display: flex;
   flex-direction: column;
-  gap: 0.5em;
-  margin-top: 1.5em;
-}
-.add-payment-method-form input {
-  padding: 0.5em;
-  border-radius: 5px;
-  border: 1px solid #333;
-  background: #23233a;
-  color: #fff;
-}
-.add-payment-method-form button {
-  background: #388e3c;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 0.5em 1em;
-  font-weight: 600;
-  margin-top: 0.5em;
-  cursor: pointer;
-}
-.add-payment-method-form button:hover {
-  background: #256029;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+  background-color: #222;
+  padding: 0.75rem;
+  box-sizing: border-box;
+  border-radius: 8px;
 }
 
-/* Light mode overrides */
+.add-payment-method-form h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.add-pm-form-wrapper {
+  width: 100%;
+}
+
+.add-pm-form-wrapper form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.add-payment-method-form .StripeElement {
+  background: #181828; /* darker */
+  border-radius: 8px;
+  padding: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.stripe-form-card button,
+form button[type="add-pm-submit"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #883cf3;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 8px #883cf3;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
+}
+
+.stripe-form-card button:hover,
+form button[type="add-pm-submit"]:hover {
+  background: #fff;
+  color: #883cf3;
+  box-shadow: 0 0 12px #883cf3;
+}
+
+.modal-close-button {
+  height: 24px;
+  width: 24px;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: #fff;
+  transition:
+    scale 0.2s ease-out,
+    color 0.2s ease-out;
+}
+
+.modal-close-button:hover {
+  color: #883cf3;
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+/* 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Light mode overrides */
 @media (prefers-color-scheme: light) {
   .modal-content {
     background: #fff;

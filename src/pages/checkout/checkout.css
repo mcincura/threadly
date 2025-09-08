@@ -265,3 +265,35 @@
   color: #883cf3;
   box-shadow: 0 0 12px #883cf3;
 }
+
+.checkout-card .StripeElement {
+  background: #181828;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 16px #0004;
+  margin: 2rem auto;
+}
+
+.stripe-form-card button,
+form button[type="checkout-submit"] {
+  background: #883cf3;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 8px #883cf3;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
+}
+
+.stripe-form-card button:hover,
+form button[type="checkout-submit"]:hover {
+  background: #fff;
+  color: #883cf3;
+  box-shadow: 0 0 12px #883cf3;
+}

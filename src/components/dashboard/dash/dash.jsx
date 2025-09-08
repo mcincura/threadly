@@ -140,7 +140,7 @@ const Dash = ({ setActive, open, user, loggedIn }) => {
                                 <div className="invoice-amount">${invoiceAmount}</div>
                                 <div className="invoice-due-date">Due: Aug 28, 2025</div>
                             </div>
-                            <button className="invoice-pay-btn" onClick={() => setActive('pay')}>
+                            <button className="invoice-pay-btn" onClick={() => setActive('payment')}>
                                 Pay Now
                             </button>
                         </div>
