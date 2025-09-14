@@ -21,14 +21,18 @@ const Payment = ({ user }) => {
 	const [pmError, setPmError] = useState("");
 	const [pmSuccess, setPmSuccess] = useState("");
 
+	const [pmToDelete, setPmToDelete] = useState();
+	const [showAddPmSuccess, setShowAddPmSuccess] = useState(false);
+
 	// Fetch payment dashboard data
 	useEffect(() => {
 		if (user?.user?.stripe_customer_id) {
 			fetchSubscriptionData();
+			fetchPaymentMethods();
 		}
 	}, [user]);
 
-	//fetch subscription data:
+	//fetch subscription data
 	const fetchSubscriptionData = async () => {
 		setLoading(true);
 		setError("");
@@ -93,7 +97,7 @@ const Payment = ({ user }) => {
 	// Payment method actions
 	//delete payment method
 	const handleDeletePaymentMethod = async (pmId) => {
-		if (!window.confirm("Delete this payment method?")) return;
+		setShowDeleteConfirm(false);
 		setPmLoading(true);
 		setPmError("");
 		setPmSuccess("");
@@ -105,7 +109,7 @@ const Payment = ({ user }) => {
 			});
 			const data = await res.json();
 			if (!res.ok) throw new Error(data.error || "Failed to delete payment method");
-			setPmSuccess("Payment method deleted.");
+			//setPmSuccess("Payment method deleted.");
 			await fetchPaymentMethods();
 		} catch (err) {
 			setPmError(err.message);
@@ -139,10 +143,12 @@ const Payment = ({ user }) => {
 		const stripe = useStripe();
 		const elements = useElements();
 		const [inputHeight, setInputHeight] = useState(40);
+		const [adding, setAdding] = useState(false);
 
 		const handleAddPaymentMethod = async (e) => {
 			e.preventDefault();
 			if (!stripe || !elements) return;
+			setAdding(true);
 
 			const cardElement = elements.getElement(CardElement);
 
@@ -153,6 +159,7 @@ const Payment = ({ user }) => {
 
 			if (error) {
 				console.error(error);
+				setAdding(false);
 				return;
 			}
 
@@ -166,10 +173,15 @@ const Payment = ({ user }) => {
 			});
 
 			const data = await res.json();
+			setAdding(false);
 			if (!res.ok) {
 				console.error(data.error);
+
 			} else {
 				console.log("Payment method added:", paymentMethod.id);
+				fetchPaymentMethods();
+				setShowAddPmSuccess(true);
+				setTimeout(() => setShowAddPmSuccess(false), 3000);
 			}
 		};
 
@@ -195,15 +207,14 @@ const Payment = ({ user }) => {
 		setShowPaymentModal(true);
 		setPmSuccess("");
 		setPmError("");
-		fetchPaymentMethods();
 	};
 
 	const closePaymentModal = () => {
 		setShowPaymentModal(false);
-		setPaymentMethods([]);
 	};
 
-	const openDeleteModal = () => {
+	const openDeleteModal = (pmID) => {
+		setPmToDelete(pmID);
 		setShowDeleteConfirm(true);
 	}
 
@@ -273,7 +284,7 @@ const Payment = ({ user }) => {
 				<div className="modal-overlay" onClick={closePaymentModal}>
 					<div className="modal-content" onClick={e => e.stopPropagation()}>
 						<h2>Manage Payment Methods</h2>
-						{pmLoading && <p>Loading...</p>}
+						{/*{pmLoading && <p>Loading...</p>}*/}
 						{pmError && <p style={{ color: "red" }}>{pmError}</p>}
 						{pmSuccess && <p style={{ color: "green" }}>{pmSuccess}</p>}
 						<ul className="payment-method-list">
@@ -299,7 +310,7 @@ const Payment = ({ user }) => {
 											</button>
 										)}
 										{!pm.is_default && (
-											<button onClick={() => handleDeletePaymentMethod(pm.id)} disabled={pmLoading} className="delete-btn">
+											<button onClick={() => openDeleteModal(pm.id)} disabled={pmLoading} className="delete-btn">
 												Delete
 											</button>
 										)}
@@ -328,10 +339,20 @@ const Payment = ({ user }) => {
 						<p>Are you sure you want to delete this payment method?</p>
 						<div className="confirm-buttons">
 							<button onClick={() => setShowDeleteConfirm(false)} className="cancel-btn">Cancel</button>
-							<button onClick={confirmDeletePaymentMethod} className="delete-btn" disabled={pmLoading}>
+							<button onClick={() => handleDeletePaymentMethod(pmToDelete)} className="delete-btn" disabled={pmLoading}>
 								{pmLoading ? "Deleting..." : "Delete"}
 							</button>
 						</div>
+					</div>
+				</div>
+			)}
+
+			{/* Success message for adding payment method */}
+			{showAddPmSuccess && (
+				<div className="modal-overlay">
+					<div className="modal-content">
+						<h2>Payment Method Added!</h2>
+						<p>Your new payment method was successfully added.</p>
 					</div>
 				</div>
 			)}

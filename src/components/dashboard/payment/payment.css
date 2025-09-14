@@ -67,7 +67,7 @@
 }
 
 .cancel-btn {
-  background: #d32f2f;
+  background: #883cf3;
   color: #fff;
   border: none;
   padding: 0.6em 1.2em;
@@ -84,6 +84,8 @@
 .cancel-btn:hover:not(:disabled) {
   background: #b71c1c;
 }
+
+
 
 .payment-methods-btn {
   background: #512da8;
