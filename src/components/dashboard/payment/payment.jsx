@@ -94,7 +94,6 @@ const Payment = ({ user }) => {
 		setCancelLoading(false);
 	};
 
-	// Payment method actions
 	//delete payment method
 	const handleDeletePaymentMethod = async (pmId) => {
 		setShowDeleteConfirm(false);
@@ -229,48 +228,72 @@ const Payment = ({ user }) => {
 					<>
 						{subscription ? (
 							<div className="subscription-info">
-								<p>Status: {subscription.status}</p>
-								<p>Amount: {(subscription.amount / 100).toFixed(2)} {subscription.currency?.toUpperCase()}</p>
-								<p>Next Billing Date: {subscription.next_billing_date ? new Date(subscription.next_billing_date).toLocaleString() : "N/A"}</p>
-								<p>Latest Invoice Status: {subscription.latest_invoice_status}</p>
-								<button
-									className="cancel-btn"
-									onClick={handleCancelSubscription}
-									disabled={cancelLoading}
-								>
-									{cancelLoading ? "Cancelling..." : "Cancel Subscription"}
-								</button>
+								<div className="subscription-info-container">
+									<p><span>Status:</span> {subscription.status}</p>
+									<p><span>Amount:</span> {(subscription.amount / 100).toFixed(2)} {subscription.currency?.toUpperCase()}</p>
+									<p><span>Next Billing Date:</span> {subscription.next_billing_date ? new Date(subscription.next_billing_date).toLocaleString() : "N/A"}</p>
+									<p><span>Latest Invoice Status:</span> {subscription.latest_invoice_status}</p>
+								</div>
+								<div className="subscription-info-buttons">
+									<button
+										className="cancel-btn"
+										onClick={handleCancelSubscription}
+										disabled={cancelLoading}
+									>
+										{cancelLoading ? "Cancelling..." : "Cancel Subscription"}
+									</button>
+									<button className="payment-methods-btn" onClick={openPaymentModal}>
+										Payment Methods
+									</button>
+								</div>
 							</div>
+
 						) : (
 							<p>No active subscription found.</p>
 						)}
-						<button className="payment-methods-btn" onClick={openPaymentModal}>
-							Payment Methods
-						</button>
 						<h2>Invoices</h2>
-						<div className="invoice-list">
+						<div className="invoice-table-wrapper">
 							{invoices.length > 0 ? (
-								invoices.map(inv => (
-									<div className="invoice-card" key={inv.id}>
-										<div className="invoice-header">
-											<a href={inv.hosted_invoice_url} target="_blank" rel="noopener noreferrer">
-												Invoice #{inv.id.slice(-8)}
-											</a>
-											<span className={`invoice-status ${inv.status}`}>{inv.status}</span>
-										</div>
-										<div className="invoice-details">
-											<div>
-												<strong>Paid:</strong> ${(inv.amount_paid / 100).toFixed(2)}
-											</div>
-											<div>
-												<strong>Due:</strong> ${(inv.amount_due / 100).toFixed(2)}
-											</div>
-											<div>
-												<strong>Date:</strong> {new Date(inv.created).toLocaleString()}
-											</div>
-										</div>
-									</div>
-								))
+								<table className="invoice-table">
+									<thead>
+										<tr>
+											<th>Invoice #</th>
+											<th>Issued</th>
+											<th>Total Amount</th>
+											<th>Amount Remaining</th>
+											<th>Status</th>
+											<th></th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										{invoices.map(inv => (
+											<tr key={inv.id}>
+												<td>
+													<a href={inv.hosted_invoice_url} target="_blank" rel="noopener noreferrer">
+														{inv.id.slice(-8)}
+													</a>
+												</td>
+												<td>{new Date(inv.created).toLocaleDateString()}</td>
+												<td>${(inv.amount_paid / 100).toFixed(2)}</td>
+												<td>${(inv.amount_due / 100).toFixed(2)}</td>
+												<td>
+													<span className={`invoice-status ${inv.status}`}>{inv.status}</span>
+												</td>
+												<td>
+													<button className="pay-btn">
+														Pay
+													</button>
+												</td>
+												<td>
+													<button className="invoice-menu-btn">
+														&#8942;
+													</button>
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
 							) : (
 								<p>No invoices found.</p>
 							)}
@@ -339,7 +362,7 @@ const Payment = ({ user }) => {
 						<p>Are you sure you want to delete this payment method?</p>
 						<div className="confirm-buttons">
 							<button onClick={() => setShowDeleteConfirm(false)} className="cancel-btn">Cancel</button>
-							<button onClick={() => handleDeletePaymentMethod(pmToDelete)} className="delete-btn" disabled={pmLoading}>
+							<button onClick={() => handleDeletePaymentMethod(pmToDelete)} className="lara-btn" disabled={pmLoading}>
 								{pmLoading ? "Deleting..." : "Delete"}
 							</button>
 						</div>
